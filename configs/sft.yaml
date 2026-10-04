@@ -1,0 +1,54 @@
+experiment:
+  name: dolci-16k-packed-1k
+
+model:
+  name_or_path: /p/scratch/rcfd/kowanietz1/models/Olmo-3-7B
+  tokenizer_name_or_path: /p/scratch/rcfd/kowanietz1/models/Olmo-3-7B-Think-SFT
+  trust_remote_code: true
+  attention_implementation: sdpa
+
+data:
+  path: /p/scratch/rcfd/kowanietz1/datasets/Dolci-Think-SFT-7B/data/*.parquet
+
+  max_length: 16384
+  overlength_strategy: drop
+
+  packing: true
+  packing_batch_size: 256
+
+  shuffle: true
+  max_examples: 25000
+  num_proc: 8
+
+training:
+  output_dir: /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-1k
+
+  precision: bf16
+
+  learning_rate: 2.5e-5
+  warmup_ratio: 0.03
+  weight_decay: 0.0
+  max_grad_norm: 1.0
+
+  per_device_batch_size: 1
+  gradient_accumulation_steps: 1
+
+  max_steps: 1000
+  resume_from_checkpoint: null
+
+  gradient_checkpointing: true
+  use_cache: false
+
+  seed: 73
+
+distributed:
+  strategy: fsdp
+  fsdp_sharding: full_shard
+
+logging:
+  logging_steps: 10
+
+  save_steps: 100
+  save_total_limit: 2
+
+  report_to: none
