@@ -6,7 +6,7 @@
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:4
 #SBATCH --time=05:30:00
-#SBATCH --job-name=dolci-sft-1k
+#SBATCH --job-name=dolci-sft-stage1
 #SBATCH --output=logs/%x-%j.log
 #SBATCH --error=logs/%x-%j.log
 
@@ -14,11 +14,13 @@ set -euo pipefail
 
 ROOT="/p/scratch/rcfd/kowanietz1"
 REPO="$ROOT/projects/reasoning-posttraining"
-CONFIG="$REPO/configs/sft.yaml"
+CONFIG="$REPO/configs/sft-stage1.yaml"
 
 module load uv
 
 cd "$REPO"
+
+mkdir -p logs
 
 echo "Job ID:  $SLURM_JOB_ID"
 echo "Node:    $(hostname)"
