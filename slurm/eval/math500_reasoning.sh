@@ -6,7 +6,7 @@
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:4
 #SBATCH --time=02:00:00
-#SBATCH --job-name=math500-reasoning
+#SBATCH --job-name=math500-stage2
 #SBATCH --output=logs/%x-%j.log
 #SBATCH --error=logs/%x-%j.log
 
@@ -16,9 +16,9 @@ ROOT="/p/scratch/rcfd/kowanietz1"
 REPO="$ROOT/projects/reasoning-posttraining"
 OLMES="$ROOT/olmes"
 
-MODEL="$ROOT/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-1k"
+MODEL="$ROOT/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-stage2"
 TOKENIZER="$MODEL"
-OUTPUT="$REPO/results/math500-reasoning-32k"
+OUTPUT="$REPO/results/dolci-16k-packed-stage2/math500-reasoning-32k"
 
 module load uv
 

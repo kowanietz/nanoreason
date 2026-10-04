@@ -6,6 +6,7 @@ import shutil
 from pathlib import Path
 
 # TODO create issue on hf?
+# TODO also add a fix tokneizer config
 
 PRESERVE_FROM_BASE = [
     "rope_theta",
