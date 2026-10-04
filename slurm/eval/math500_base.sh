@@ -58,4 +58,8 @@ uv run \
   --num-workers 1 \
   --output-dir "$OUTPUT"
 
+# format results
+jq . "$OUTPUT/metrics.json" > "$OUTPUT/metrics.json.tmp"
+mv "$OUTPUT/metrics.json.tmp" "$OUTPUT/metrics.json"
+
 echo "Finished: $(date)"
