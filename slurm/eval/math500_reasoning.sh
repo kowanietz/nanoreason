@@ -45,7 +45,7 @@ export CUDA_VISIBLE_DEVICES=0,1,2,3
 MODEL_ARGS='{"trust_remote_code":false,"dtype":"bfloat16","tokenizer":"'"$TOKENIZER"'","max_length":32768}'
 TASK_ARGS='{"generation_kwargs":{"max_gen_toks":32768,"truncate_context":false}}'
 
-uv run \
+srun uv run \
   --project "$OLMES" \
   --frozen \
   --offline \
