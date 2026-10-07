@@ -6,7 +6,7 @@
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:4
 #SBATCH --time=03:00:00
-#SBATCH --job-name=gpqa-stage2
+#SBATCH --job-name=gpqa-stage1
 #SBATCH --output=logs/%x-%j.log
 #SBATCH --error=logs/%x-%j.log
 
@@ -16,9 +16,9 @@ ROOT="/p/scratch/rcfd/kowanietz1"
 REPO="$ROOT/projects/reasoning-posttraining"
 OLMES="$ROOT/olmes"
 
-MODEL="$ROOT/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-stage2"
+MODEL="$ROOT/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-stage1-final"
 TOKENIZER="$MODEL"
-OUTPUT="$REPO/results/dolci-16k-packed-stage2/gpqa"
+OUTPUT="$REPO/results/dolci-16k-packed-stage1-final/gpqa"
 
 module load uv
 
