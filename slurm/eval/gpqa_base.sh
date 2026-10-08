@@ -5,8 +5,8 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:4
-#SBATCH --time=02:00:00
-#SBATCH --job-name=math500-stage2
+#SBATCH --time=04:00:00
+#SBATCH --job-name=gpqa-base
 #SBATCH --output=logs/%x-%j.log
 #SBATCH --error=logs/%x-%j.log
 
@@ -16,9 +16,9 @@ ROOT="/p/scratch/rcfd/kowanietz1"
 REPO="$ROOT/projects/reasoning-posttraining"
 OLMES="$ROOT/olmes"
 
-MODEL="$ROOT/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-stage2"
-TOKENIZER="$MODEL"
-OUTPUT="$REPO/results/dolci-16k-packed-stage2/math500-reasoning-32k"
+MODEL="$ROOT/models/Olmo-3-7B"
+TOKENIZER="$ROOT/models/Olmo-3-7B-Think-SFT"
+OUTPUT="$REPO/results/base/gpqa"
 
 module load uv
 
@@ -43,6 +43,7 @@ export SRUN_CPUS_PER_TASK=$SLURM_CPUS_PER_TASK
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 
 MODEL_ARGS='{"trust_remote_code":false,"dtype":"bfloat16","tokenizer":"'"$TOKENIZER"'","max_length":32768}'
+
 TASK_ARGS='{"generation_kwargs":{"max_gen_toks":32768,"truncate_context":false}}'
 
 srun uv run \
@@ -53,14 +54,13 @@ srun uv run \
   --model "$MODEL" \
   --model-type vllm \
   --model-args "$MODEL_ARGS" \
-  --task minerva_math_500::hamish_zs_reasoning \
+  --task gpqa::olmo3:adapt \
   --task-args "$TASK_ARGS" \
   --batch-size auto \
   --gpus 4 \
   --num-workers 1 \
   --output-dir "$OUTPUT"
 
-# format results
 jq . "$OUTPUT/metrics.json" > "$OUTPUT/metrics.json.tmp"
 mv "$OUTPUT/metrics.json.tmp" "$OUTPUT/metrics.json"
 

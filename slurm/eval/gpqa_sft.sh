@@ -6,7 +6,7 @@
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:4
 #SBATCH --time=04:00:00
-#SBATCH --job-name=aime-stage1
+#SBATCH --job-name=gpqa-stage1
 #SBATCH --output=logs/%x-%j.log
 #SBATCH --error=logs/%x-%j.log
 
@@ -18,7 +18,7 @@ OLMES="$ROOT/olmes"
 
 MODEL="$ROOT/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-stage1-final"
 TOKENIZER="$MODEL"
-OUTPUT="$REPO/results/dolci-16k-packed-stage1-final/aime-2024-2025-r8"
+OUTPUT="$REPO/results/dolci-16k-packed-stage1-final/gpqa"
 
 module load uv
 
@@ -44,7 +44,7 @@ export CUDA_VISIBLE_DEVICES=0,1,2,3
 
 MODEL_ARGS='{"trust_remote_code":false,"dtype":"bfloat16","tokenizer":"'"$TOKENIZER"'","max_length":32768}'
 
-TASK_ARGS='{"generation_kwargs":{"repeats":8},"metric_kwargs":{"pass_at_ks":[1,4,8]}}'
+TASK_ARGS='{"generation_kwargs":{"max_gen_toks":32768,"truncate_context":false}}'
 
 srun uv run \
   --project "$OLMES" \
@@ -54,9 +54,7 @@ srun uv run \
   --model "$MODEL" \
   --model-type vllm \
   --model-args "$MODEL_ARGS" \
-  --task \
-    aime:2024::olmo3:adapt \
-    aime:2025::olmo3:adapt \
+  --task gpqa::olmo3:adapt \
   --task-args "$TASK_ARGS" \
   --batch-size auto \
   --gpus 4 \
