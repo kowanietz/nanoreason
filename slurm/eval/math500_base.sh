@@ -4,8 +4,8 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
-#SBATCH --gres=gpu:1
-#SBATCH --time=00:30:00
+#SBATCH --gres=gpu:4
+#SBATCH --time=01:00:00
 #SBATCH --job-name=math500-base
 #SBATCH --output=logs/%x-%j.log
 #SBATCH --error=logs/%x-%j.log
@@ -17,8 +17,8 @@ REPO="$ROOT/projects/reasoning-posttraining"
 OLMES="$ROOT/olmes"
 
 MODEL="$ROOT/models/Olmo-3-7B"
-TOKENIZER="$MODEL"
-OUTPUT="$REPO/results/base/math500-olmes-bf16"
+TOKENIZER="$ROOT/models/Olmo-3-7B-Think-SFT"
+OUTPUT="$REPO/results/base/math500-reasoning-32k"
 
 module load uv
 
@@ -40,11 +40,13 @@ export TRANSFORMERS_OFFLINE=1
 export HF_DATASETS_OFFLINE=1
 
 export SRUN_CPUS_PER_TASK=$SLURM_CPUS_PER_TASK
-export CUDA_VISIBLE_DEVICES=0
+export CUDA_VISIBLE_DEVICES=0,1,2,3
 
-MODEL_ARGS='{"trust_remote_code":false,"dtype":"bfloat16","tokenizer":"'"$TOKENIZER"'"}'
+MODEL_ARGS='{"trust_remote_code":false,"dtype":"bfloat16","tokenizer":"'"$TOKENIZER"'","max_length":32768}'
 
-uv run \
+TASK_ARGS='{"generation_kwargs":{"max_gen_toks":32768,"truncate_context":false}}'
+
+srun uv run \
   --project "$OLMES" \
   --frozen \
   --offline \
@@ -52,13 +54,13 @@ uv run \
   --model "$MODEL" \
   --model-type vllm \
   --model-args "$MODEL_ARGS" \
-  --task minerva_math_500::olmes \
+  --task minerva_math_500::hamish_zs_reasoning \
+  --task-args "$TASK_ARGS" \
   --batch-size auto \
-  --gpus 1 \
+  --gpus 4 \
   --num-workers 1 \
   --output-dir "$OUTPUT"
 
-# format results
 jq . "$OUTPUT/metrics.json" > "$OUTPUT/metrics.json.tmp"
 mv "$OUTPUT/metrics.json.tmp" "$OUTPUT/metrics.json"
 
