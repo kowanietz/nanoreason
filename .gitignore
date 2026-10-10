@@ -11,3 +11,4 @@ checkpoints/
 
 .cache/
 .ruff_cache/
+.juice-tmp/

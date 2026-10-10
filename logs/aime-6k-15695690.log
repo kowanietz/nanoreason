@@ -1,0 +1,735 @@
+Job ID:   15695690
+Node:     jrc0346
+Model:    /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k-vllm011
+Output:   /p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/results/dolci-16k-packed-6k/aime-2024-2025-r8
+Started:  Sat Oct 10 12:47:22 PM CEST 2026
+Sat Oct 10 12:47:22 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 595.71.05              Driver Version: 595.71.05      CUDA Version: 13.2     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A100-SXM4-40GB          On  |   00000000:03:00.0 Off |                    0 |
+| N/A   45C    P0             61W /  400W |       0MiB /  40960MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA A100-SXM4-40GB          On  |   00000000:44:00.0 Off |                    0 |
+| N/A   45C    P0             58W /  400W |       0MiB /  40960MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA A100-SXM4-40GB          On  |   00000000:84:00.0 Off |                    0 |
+| N/A   46C    P0             64W /  400W |       0MiB /  40960MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA A100-SXM4-40GB          On  |   00000000:C4:00.0 Off |                    0 |
+| N/A   46C    P0             64W /  400W |       0MiB /  40960MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+2026-10-10 12:47:26,363 [WARNING] No config found for model:/p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k-vllm011, using raw model
+2026-10-10 12:47:26,363 [INFO] Running eval locally on 2 tasks!
+2026-10-10 12:47:26,363 [INFO] Command: python -m oe_eval.run_eval --task '{"task_name": "aime", "split": "test", "primary_metric": "pass_at_1", "use_chat_format": true, "num_shots": 0, "generation_kwargs": {"max_gen_toks": 16384, "temperature": 0.6, "top_p": 0.95, "do_sample": true, "stop_sequences": [], "repeats": 8}, "metric_kwargs": {"pass_at_ks": [1, 4, 8]}, "metadata": {"years": [2024], "alias": "aime:2024::olmo3:adapt"}}' '{"task_name": "aime", "split": "test", "primary_metric": "pass_at_1", "use_chat_format": true, "num_shots": 0, "generation_kwargs": {"max_gen_toks": 16384, "temperature": 0.6, "top_p": 0.95, "do_sample": true, "stop_sequences": [], "repeats": 8}, "metric_kwargs": {"pass_at_ks": [1, 4, 8]}, "metadata": {"years": [2025], "alias": "aime:2025::olmo3:adapt"}}' --batch-size auto --output-dir /p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/results/dolci-16k-packed-6k/aime-2024-2025-r8 --save-raw-requests true --num-workers 1 --gpus 4 --model /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k-vllm011 --model-args '{"trust_remote_code": false, "dtype": "bfloat16", "tokenizer": "/p/scratch/rcfd/kowanietz1/models/Olmo-3-7B-Think-SFT", "max_length": 32768, "model_type": "vllm"}'
+Skipping import of cpp extensions due to incompatible torch version 2.8.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+INFO 10-10 12:47:51 [__init__.py:216] Automatically detected platform cuda.
+12:47:57 - LiteLLM:WARNING: get_model_cost_map.py:264 - LiteLLM: model cost map fetch attempt 1/3 failed (ConnectError fetching https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: [Errno 97] Address family not supported by protocol); retrying in 2.6s
+2026-10-10:12:47:57,290 WARNING  [get_model_cost_map.py:264] LiteLLM: model cost map fetch attempt 1/3 failed (ConnectError fetching https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: [Errno 97] Address family not supported by protocol); retrying in 2.6s
+12:47:59 - LiteLLM:WARNING: get_model_cost_map.py:264 - LiteLLM: model cost map fetch attempt 2/3 failed (ConnectError fetching https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: [Errno 97] Address family not supported by protocol); retrying in 4.6s
+2026-10-10:12:47:59,957 WARNING  [get_model_cost_map.py:264] LiteLLM: model cost map fetch attempt 2/3 failed (ConnectError fetching https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: [Errno 97] Address family not supported by protocol); retrying in 4.6s
+12:48:04 - LiteLLM:WARNING: get_model_cost_map.py:509 - LiteLLM: Failed to fetch remote model cost map from https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: ConnectError fetching https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: [Errno 97] Address family not supported by protocol (after 3 attempts). Falling back to local backup.
+2026-10-10:12:48:04,589 WARNING  [get_model_cost_map.py:509] LiteLLM: Failed to fetch remote model cost map from https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: ConnectError fetching https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: [Errno 97] Address family not supported by protocol (after 3 attempts). Falling back to local backup.
+2026-10-10:12:48:09,114 INFO     [rouge_scorer.py:83] Using default tokenizer.
+INFO 10-10 12:48:12 [arg_utils.py:504] HF_HUB_OFFLINE is True, replace model_id [/p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k-vllm011] to model_path [/p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k-vllm011]
+INFO 10-10 12:48:12 [arg_utils.py:504] HF_HUB_OFFLINE is True, replace model_id [/p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k-vllm011] to model_path [/p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k-vllm011]
+INFO 10-10 12:48:12 [utils.py:233] non-default args: {'tokenizer': '/p/scratch/rcfd/kowanietz1/models/Olmo-3-7B-Think-SFT', 'dtype': 'bfloat16', 'seed': 1234, 'max_model_len': 32768, 'tensor_parallel_size': 4, 'disable_log_stats': True, 'model': '/p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k-vllm011'}
+INFO 10-10 12:48:12 [model.py:547] Resolved architecture: Olmo2ForCausalLM
+INFO 10-10 12:48:12 [model.py:1730] Downcasting torch.float32 to torch.bfloat16.
+`torch_dtype` is deprecated! Use `dtype` instead!
+INFO 10-10 12:48:12 [model.py:1510] Using max model len 32768
+INFO 10-10 12:48:12 [scheduler.py:205] Chunked prefill is enabled with max_num_batched_tokens=8192.
+WARNING 10-10 12:48:12 [__init__.py:3036] We must use the `spawn` multiprocessing start method. Overriding VLLM_WORKER_MULTIPROC_METHOD to 'spawn'. See https://docs.vllm.ai/en/latest/usage/troubleshooting.html#python-multiprocessing for more information. Reasons: CUDA is initialized
+Skipping import of cpp extensions due to incompatible torch version 2.8.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+INFO 10-10 12:48:21 [__init__.py:216] Automatically detected platform cuda.
+2026-10-10:12:48:25,692 INFO     [rouge_scorer.py:83] Using default tokenizer.
+[1;36m(EngineCore_DP0 pid=2222636)[0;0m INFO 10-10 12:48:27 [core.py:644] Waiting for init message from front-end.
+[1;36m(EngineCore_DP0 pid=2222636)[0;0m INFO 10-10 12:48:27 [core.py:77] Initializing a V1 LLM engine (v0.11.0) with config: model='/p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k-vllm011', speculative_config=None, tokenizer='/p/scratch/rcfd/kowanietz1/models/Olmo-3-7B-Think-SFT', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=32768, download_dir=None, load_format=auto, tensor_parallel_size=4, pipeline_parallel_size=1, data_parallel_size=1, disable_custom_all_reduce=False, quantization=None, enforce_eager=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_fallback=False, disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser=''), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None), seed=1234, served_model_name=/p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k-vllm011, enable_prefix_caching=True, chunked_prefill_enabled=True, pooler_config=None, compilation_config={"level":3,"debug_dump_path":"","cache_dir":"","backend":"","custom_ops":[],"splitting_ops":["vllm.unified_attention","vllm.unified_attention_with_output","vllm.mamba_mixer2","vllm.mamba_mixer","vllm.short_conv","vllm.linear_attention","vllm.plamo2_mamba_mixer","vllm.gdn_attention","vllm.sparse_attn_indexer"],"use_inductor":true,"compile_sizes":[],"inductor_compile_config":{"enable_auto_functionalized_v2":false},"inductor_passes":{},"cudagraph_mode":[2,1],"use_cudagraph":true,"cudagraph_num_of_warmups":1,"cudagraph_capture_sizes":[512,504,496,488,480,472,464,456,448,440,432,424,416,408,400,392,384,376,368,360,352,344,336,328,320,312,304,296,288,280,272,264,256,248,240,232,224,216,208,200,192,184,176,168,160,152,144,136,128,120,112,104,96,88,80,72,64,56,48,40,32,24,16,8,4,2,1],"cudagraph_copy_inputs":false,"full_cuda_graph":false,"use_inductor_graph_partition":false,"pass_config":{},"max_capture_size":512,"local_cache_dir":null}
+[1;36m(EngineCore_DP0 pid=2222636)[0;0m WARNING 10-10 12:48:27 [multiproc_executor.py:720] Reducing Torch parallelism from 16 threads to 1 to avoid unnecessary CPU contention. Set OMP_NUM_THREADS in the external environment to tune this value as needed.
+[1;36m(EngineCore_DP0 pid=2222636)[0;0m INFO 10-10 12:48:27 [shm_broadcast.py:289] vLLM message queue communication handle: Handle(local_reader_ranks=[0, 1, 2, 3], buffer_handle=(4, 16777216, 10, 'psm_b3a9d276'), local_subscribe_addr='ipc:///tmp/9e6cae72-c09e-4b63-b2b0-bf2cebf7dacb', remote_subscribe_addr=None, remote_addr_ipv6=False)
+Skipping import of cpp extensions due to incompatible torch version 2.8.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+Skipping import of cpp extensions due to incompatible torch version 2.8.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+Skipping import of cpp extensions due to incompatible torch version 2.8.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+Skipping import of cpp extensions due to incompatible torch version 2.8.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+INFO 10-10 12:48:37 [__init__.py:216] Automatically detected platform cuda.
+INFO 10-10 12:48:37 [__init__.py:216] Automatically detected platform cuda.
+INFO 10-10 12:48:37 [__init__.py:216] Automatically detected platform cuda.
+INFO 10-10 12:48:37 [__init__.py:216] Automatically detected platform cuda.
+2026-10-10:12:48:42,774 INFO     [rouge_scorer.py:83] Using default tokenizer.
+2026-10-10:12:48:42,797 INFO     [rouge_scorer.py:83] Using default tokenizer.
+2026-10-10:12:48:42,818 INFO     [rouge_scorer.py:83] Using default tokenizer.
+2026-10-10:12:48:42,849 INFO     [rouge_scorer.py:83] Using default tokenizer.
+INFO 10-10 12:48:47 [shm_broadcast.py:289] vLLM message queue communication handle: Handle(local_reader_ranks=[0], buffer_handle=(1, 10485760, 10, 'psm_64e3b55a'), local_subscribe_addr='ipc:///tmp/933c9eae-64a0-489a-8334-e4116b54cdd4', remote_subscribe_addr=None, remote_addr_ipv6=False)
+INFO 10-10 12:48:47 [shm_broadcast.py:289] vLLM message queue communication handle: Handle(local_reader_ranks=[0], buffer_handle=(1, 10485760, 10, 'psm_9ed9dceb'), local_subscribe_addr='ipc:///tmp/8a021e41-c307-4c3a-be1b-d4c293ad251f', remote_subscribe_addr=None, remote_addr_ipv6=False)
+INFO 10-10 12:48:47 [shm_broadcast.py:289] vLLM message queue communication handle: Handle(local_reader_ranks=[0], buffer_handle=(1, 10485760, 10, 'psm_90eee935'), local_subscribe_addr='ipc:///tmp/c67d32d6-2fce-479c-a18d-2d1337c87dc5', remote_subscribe_addr=None, remote_addr_ipv6=False)
+INFO 10-10 12:48:47 [shm_broadcast.py:289] vLLM message queue communication handle: Handle(local_reader_ranks=[0], buffer_handle=(1, 10485760, 10, 'psm_ce79aa15'), local_subscribe_addr='ipc:///tmp/091c5545-7eaf-4efc-a66f-771d69d39abc', remote_subscribe_addr=None, remote_addr_ipv6=False)
+[W1010 12:48:47.675951891 socket.cpp:755] [c10d] The client socket cannot be initialized to connect to [localhost.localdomain]:36475 (errno: 97 - Address family not supported by protocol).
+[W1010 12:48:47.675980141 socket.cpp:755] [c10d] The client socket cannot be initialized to connect to [localhost.localdomain]:36475 (errno: 97 - Address family not supported by protocol).
+[W1010 12:48:47.676260302 socket.cpp:755] [c10d] The client socket cannot be initialized to connect to [localhost.localdomain]:36475 (errno: 97 - Address family not supported by protocol).
+[W1010 12:48:47.685543876 socket.cpp:755] [c10d] The client socket cannot be initialized to connect to [localhost.localdomain]:36475 (errno: 97 - Address family not supported by protocol).
+[Gloo] Rank 0 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 1 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 3 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 2 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 2 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 1 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 0 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 3 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+INFO 10-10 12:48:48 [__init__.py:1384] Found nccl from library libnccl.so.2
+INFO 10-10 12:48:48 [__init__.py:1384] Found nccl from library libnccl.so.2
+INFO 10-10 12:48:48 [__init__.py:1384] Found nccl from library libnccl.so.2
+INFO 10-10 12:48:48 [__init__.py:1384] Found nccl from library libnccl.so.2
+INFO 10-10 12:48:48 [pynccl.py:103] vLLM is using nccl==2.27.3
+INFO 10-10 12:48:48 [pynccl.py:103] vLLM is using nccl==2.27.3
+INFO 10-10 12:48:48 [pynccl.py:103] vLLM is using nccl==2.27.3
+INFO 10-10 12:48:48 [pynccl.py:103] vLLM is using nccl==2.27.3
+WARNING 10-10 12:48:49 [symm_mem.py:58] SymmMemCommunicator: Device capability 8.0 not supported, communicator is not available.
+WARNING 10-10 12:48:49 [symm_mem.py:58] SymmMemCommunicator: Device capability 8.0 not supported, communicator is not available.
+WARNING 10-10 12:48:49 [symm_mem.py:58] SymmMemCommunicator: Device capability 8.0 not supported, communicator is not available.
+WARNING 10-10 12:48:49 [symm_mem.py:58] SymmMemCommunicator: Device capability 8.0 not supported, communicator is not available.
+INFO 10-10 12:48:49 [custom_all_reduce.py:35] Skipping P2P check and trusting the driver's P2P report.
+INFO 10-10 12:48:49 [custom_all_reduce.py:35] Skipping P2P check and trusting the driver's P2P report.
+INFO 10-10 12:48:49 [custom_all_reduce.py:35] Skipping P2P check and trusting the driver's P2P report.
+INFO 10-10 12:48:49 [custom_all_reduce.py:35] Skipping P2P check and trusting the driver's P2P report.
+INFO 10-10 12:48:49 [shm_broadcast.py:289] vLLM message queue communication handle: Handle(local_reader_ranks=[1, 2, 3], buffer_handle=(3, 4194304, 6, 'psm_08df3734'), local_subscribe_addr='ipc:///tmp/cc2efd21-6924-4770-8462-93afcfb25fa6', remote_subscribe_addr=None, remote_addr_ipv6=False)
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 2 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 0 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 1 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 3 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+INFO 10-10 12:48:49 [__init__.py:1384] Found nccl from library libnccl.so.2
+INFO 10-10 12:48:49 [pynccl.py:103] vLLM is using nccl==2.27.3
+INFO 10-10 12:48:49 [__init__.py:1384] Found nccl from library libnccl.so.2
+INFO 10-10 12:48:49 [pynccl.py:103] vLLM is using nccl==2.27.3
+INFO 10-10 12:48:49 [__init__.py:1384] Found nccl from library libnccl.so.2
+INFO 10-10 12:48:49 [__init__.py:1384] Found nccl from library libnccl.so.2
+INFO 10-10 12:48:49 [pynccl.py:103] vLLM is using nccl==2.27.3
+INFO 10-10 12:48:49 [pynccl.py:103] vLLM is using nccl==2.27.3
+INFO 10-10 12:48:49 [parallel_state.py:1208] rank 0 in world size 4 is assigned as DP rank 0, PP rank 0, TP rank 0, EP rank 0
+INFO 10-10 12:48:49 [parallel_state.py:1208] rank 3 in world size 4 is assigned as DP rank 0, PP rank 0, TP rank 3, EP rank 3
+INFO 10-10 12:48:49 [parallel_state.py:1208] rank 1 in world size 4 is assigned as DP rank 0, PP rank 0, TP rank 1, EP rank 1
+INFO 10-10 12:48:49 [parallel_state.py:1208] rank 2 in world size 4 is assigned as DP rank 0, PP rank 0, TP rank 2, EP rank 2
+WARNING 10-10 12:48:49 [topk_topp_sampler.py:66] FlashInfer is not available. Falling back to the PyTorch-native implementation of top-p & top-k sampling. For the best performance, please install FlashInfer.
+WARNING 10-10 12:48:49 [topk_topp_sampler.py:66] FlashInfer is not available. Falling back to the PyTorch-native implementation of top-p & top-k sampling. For the best performance, please install FlashInfer.
+WARNING 10-10 12:48:49 [topk_topp_sampler.py:66] FlashInfer is not available. Falling back to the PyTorch-native implementation of top-p & top-k sampling. For the best performance, please install FlashInfer.
+WARNING 10-10 12:48:49 [topk_topp_sampler.py:66] FlashInfer is not available. Falling back to the PyTorch-native implementation of top-p & top-k sampling. For the best performance, please install FlashInfer.
+[1;36m(Worker_TP1 pid=2222732)[0;0m INFO 10-10 12:48:50 [gpu_model_runner.py:2602] Starting to load model /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k-vllm011...
+[1;36m(Worker_TP2 pid=2222733)[0;0m INFO 10-10 12:48:50 [gpu_model_runner.py:2602] Starting to load model /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k-vllm011...
+[1;36m(Worker_TP3 pid=2222734)[0;0m INFO 10-10 12:48:50 [gpu_model_runner.py:2602] Starting to load model /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k-vllm011...
+[1;36m(Worker_TP0 pid=2222731)[0;0m INFO 10-10 12:48:50 [gpu_model_runner.py:2602] Starting to load model /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k-vllm011...
+[1;36m(Worker_TP2 pid=2222733)[0;0m INFO 10-10 12:48:50 [gpu_model_runner.py:2634] Loading model from scratch...
+[1;36m(Worker_TP3 pid=2222734)[0;0m INFO 10-10 12:48:50 [gpu_model_runner.py:2634] Loading model from scratch...
+[1;36m(Worker_TP1 pid=2222732)[0;0m INFO 10-10 12:48:50 [gpu_model_runner.py:2634] Loading model from scratch...
+[1;36m(Worker_TP2 pid=2222733)[0;0m INFO 10-10 12:48:50 [cuda.py:366] Using Flash Attention backend on V1 engine.
+[1;36m(Worker_TP0 pid=2222731)[0;0m INFO 10-10 12:48:50 [gpu_model_runner.py:2634] Loading model from scratch...
+[1;36m(Worker_TP3 pid=2222734)[0;0m INFO 10-10 12:48:50 [cuda.py:366] Using Flash Attention backend on V1 engine.
+[1;36m(Worker_TP1 pid=2222732)[0;0m INFO 10-10 12:48:50 [cuda.py:366] Using Flash Attention backend on V1 engine.
+[1;36m(Worker_TP0 pid=2222731)[0;0m INFO 10-10 12:48:50 [cuda.py:366] Using Flash Attention backend on V1 engine.
+[1;36m(Worker_TP0 pid=2222731)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/1 [00:00<?, ?it/s]
+[1;36m(Worker_TP0 pid=2222731)[0;0m Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:42<00:00, 42.39s/it]
+[1;36m(Worker_TP0 pid=2222731)[0;0m Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:42<00:00, 42.39s/it]
+[1;36m(Worker_TP0 pid=2222731)[0;0m 
+[1;36m(Worker_TP2 pid=2222733)[0;0m INFO 10-10 12:49:33 [default_loader.py:267] Loading weights took 42.68 seconds
+[1;36m(Worker_TP1 pid=2222732)[0;0m INFO 10-10 12:49:33 [default_loader.py:267] Loading weights took 42.72 seconds
+[1;36m(Worker_TP0 pid=2222731)[0;0m INFO 10-10 12:49:33 [default_loader.py:267] Loading weights took 42.74 seconds
+[1;36m(Worker_TP3 pid=2222734)[0;0m INFO 10-10 12:49:33 [default_loader.py:267] Loading weights took 42.77 seconds
+[1;36m(Worker_TP2 pid=2222733)[0;0m INFO 10-10 12:49:34 [gpu_model_runner.py:2653] Model loading took 3.4767 GiB and 42.997590 seconds
+[1;36m(Worker_TP1 pid=2222732)[0;0m INFO 10-10 12:49:34 [gpu_model_runner.py:2653] Model loading took 3.4767 GiB and 43.031304 seconds
+[1;36m(Worker_TP0 pid=2222731)[0;0m INFO 10-10 12:49:34 [gpu_model_runner.py:2653] Model loading took 3.4767 GiB and 43.051629 seconds
+[1;36m(Worker_TP3 pid=2222734)[0;0m INFO 10-10 12:49:34 [gpu_model_runner.py:2653] Model loading took 3.4767 GiB and 43.081566 seconds
+[1;36m(Worker_TP2 pid=2222733)[0;0m INFO 10-10 12:49:41 [backends.py:548] Using cache directory: /p/home/jusers/kowanietz1/jureca/.cache/vllm/torch_compile_cache/405bc2f897/rank_2_0/backbone for vLLM's torch.compile
+[1;36m(Worker_TP0 pid=2222731)[0;0m INFO 10-10 12:49:41 [backends.py:548] Using cache directory: /p/home/jusers/kowanietz1/jureca/.cache/vllm/torch_compile_cache/405bc2f897/rank_0_0/backbone for vLLM's torch.compile
+[1;36m(Worker_TP1 pid=2222732)[0;0m INFO 10-10 12:49:41 [backends.py:548] Using cache directory: /p/home/jusers/kowanietz1/jureca/.cache/vllm/torch_compile_cache/405bc2f897/rank_1_0/backbone for vLLM's torch.compile
+[1;36m(Worker_TP3 pid=2222734)[0;0m INFO 10-10 12:49:41 [backends.py:548] Using cache directory: /p/home/jusers/kowanietz1/jureca/.cache/vllm/torch_compile_cache/405bc2f897/rank_3_0/backbone for vLLM's torch.compile
+[1;36m(Worker_TP3 pid=2222734)[0;0m INFO 10-10 12:49:41 [backends.py:559] Dynamo bytecode transform time: 7.05 s
+[1;36m(Worker_TP2 pid=2222733)[0;0m INFO 10-10 12:49:41 [backends.py:559] Dynamo bytecode transform time: 7.05 s
+[1;36m(Worker_TP1 pid=2222732)[0;0m INFO 10-10 12:49:41 [backends.py:559] Dynamo bytecode transform time: 7.05 s
+[1;36m(Worker_TP0 pid=2222731)[0;0m INFO 10-10 12:49:41 [backends.py:559] Dynamo bytecode transform time: 7.05 s
+[1;36m(Worker_TP0 pid=2222731)[0;0m INFO 10-10 12:49:44 [backends.py:164] Directly load the compiled graph(s) for dynamic shape from the cache, took 2.227 s
+[1;36m(Worker_TP3 pid=2222734)[0;0m INFO 10-10 12:49:44 [backends.py:164] Directly load the compiled graph(s) for dynamic shape from the cache, took 2.229 s
+[1;36m(Worker_TP2 pid=2222733)[0;0m INFO 10-10 12:49:44 [backends.py:164] Directly load the compiled graph(s) for dynamic shape from the cache, took 2.235 s
+[1;36m(Worker_TP1 pid=2222732)[0;0m INFO 10-10 12:49:44 [backends.py:164] Directly load the compiled graph(s) for dynamic shape from the cache, took 2.243 s
+[1;36m(Worker_TP1 pid=2222732)[0;0m INFO 10-10 12:49:46 [monitor.py:34] torch.compile takes 7.05 s in total
+[1;36m(Worker_TP2 pid=2222733)[0;0m INFO 10-10 12:49:46 [monitor.py:34] torch.compile takes 7.05 s in total
+[1;36m(Worker_TP0 pid=2222731)[0;0m INFO 10-10 12:49:46 [monitor.py:34] torch.compile takes 7.05 s in total
+[1;36m(Worker_TP3 pid=2222734)[0;0m INFO 10-10 12:49:46 [monitor.py:34] torch.compile takes 7.05 s in total
+[1;36m(Worker_TP0 pid=2222731)[0;0m INFO 10-10 12:49:47 [gpu_worker.py:298] Available KV cache memory: 30.57 GiB
+[1;36m(Worker_TP2 pid=2222733)[0;0m INFO 10-10 12:49:47 [gpu_worker.py:298] Available KV cache memory: 30.57 GiB
+[1;36m(Worker_TP1 pid=2222732)[0;0m INFO 10-10 12:49:47 [gpu_worker.py:298] Available KV cache memory: 30.57 GiB
+[1;36m(Worker_TP3 pid=2222734)[0;0m INFO 10-10 12:49:47 [gpu_worker.py:298] Available KV cache memory: 30.57 GiB
+[1;36m(EngineCore_DP0 pid=2222636)[0;0m INFO 10-10 12:49:48 [kv_cache_utils.py:1087] GPU KV cache size: 250,416 tokens
+[1;36m(EngineCore_DP0 pid=2222636)[0;0m INFO 10-10 12:49:48 [kv_cache_utils.py:1091] Maximum concurrency for 32,768 tokens per request: 14.38x
+[1;36m(EngineCore_DP0 pid=2222636)[0;0m INFO 10-10 12:49:48 [kv_cache_utils.py:1087] GPU KV cache size: 250,416 tokens
+[1;36m(EngineCore_DP0 pid=2222636)[0;0m INFO 10-10 12:49:48 [kv_cache_utils.py:1091] Maximum concurrency for 32,768 tokens per request: 14.38x
+[1;36m(EngineCore_DP0 pid=2222636)[0;0m INFO 10-10 12:49:48 [kv_cache_utils.py:1087] GPU KV cache size: 250,416 tokens
+[1;36m(EngineCore_DP0 pid=2222636)[0;0m INFO 10-10 12:49:48 [kv_cache_utils.py:1091] Maximum concurrency for 32,768 tokens per request: 14.38x
+[1;36m(EngineCore_DP0 pid=2222636)[0;0m INFO 10-10 12:49:48 [kv_cache_utils.py:1087] GPU KV cache size: 250,416 tokens
+[1;36m(EngineCore_DP0 pid=2222636)[0;0m INFO 10-10 12:49:48 [kv_cache_utils.py:1091] Maximum concurrency for 32,768 tokens per request: 14.38x
+[1;36m(Worker_TP0 pid=2222731)[0;0m Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   0%|          | 0/67 [00:00<?, ?it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   1%|▏         | 1/67 [00:00<00:07,  9.29it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   4%|▍         | 3/67 [00:00<00:05, 12.13it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   7%|▋         | 5/67 [00:00<00:04, 12.76it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  10%|█         | 7/67 [00:00<00:04, 13.03it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  13%|█▎        | 9/67 [00:00<00:04, 13.13it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  16%|█▋        | 11/67 [00:00<00:04, 13.19it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  19%|█▉        | 13/67 [00:01<00:04, 13.16it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  22%|██▏       | 15/67 [00:01<00:03, 13.07it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  25%|██▌       | 17/67 [00:01<00:03, 13.02it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  28%|██▊       | 19/67 [00:01<00:03, 13.01it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  31%|███▏      | 21/67 [00:01<00:03, 12.97it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  34%|███▍      | 23/67 [00:01<00:03, 12.93it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  37%|███▋      | 25/67 [00:01<00:03, 12.78it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  40%|████      | 27/67 [00:02<00:03, 12.69it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  43%|████▎     | 29/67 [00:02<00:03, 12.65it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  46%|████▋     | 31/67 [00:02<00:02, 12.57it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  49%|████▉     | 33/67 [00:02<00:02, 12.55it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  52%|█████▏    | 35/67 [00:02<00:02, 12.59it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  55%|█████▌    | 37/67 [00:02<00:02, 12.61it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  58%|█████▊    | 39/67 [00:03<00:02, 12.65it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  61%|██████    | 41/67 [00:03<00:02, 12.61it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  64%|██████▍   | 43/67 [00:03<00:01, 12.61it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  67%|██████▋   | 45/67 [00:03<00:01, 12.57it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  70%|███████   | 47/67 [00:03<00:01, 12.49it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  73%|███████▎  | 49/67 [00:03<00:01, 12.19it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  76%|███████▌  | 51/67 [00:04<00:01, 12.16it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  79%|███████▉  | 53/67 [00:04<00:01, 12.15it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  82%|████████▏ | 55/67 [00:04<00:00, 12.07it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  85%|████████▌ | 57/67 [00:04<00:00, 12.07it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  88%|████████▊ | 59/67 [00:04<00:00, 12.10it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  91%|█████████ | 61/67 [00:04<00:00, 12.08it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  94%|█████████▍| 63/67 [00:05<00:00, 12.08it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  97%|█████████▋| 65/67 [00:05<00:00, 11.79it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 67/67 [00:05<00:00, 11.40it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 67/67 [00:05<00:00, 12.41it/s]
+[1;36m(Worker_TP0 pid=2222731)[0;0m Capturing CUDA graphs (decode, FULL):   0%|          | 0/35 [00:00<?, ?it/s]Capturing CUDA graphs (decode, FULL):   3%|▎         | 1/35 [00:00<00:04,  8.47it/s]Capturing CUDA graphs (decode, FULL):   9%|▊         | 3/35 [00:00<00:02, 11.42it/s]Capturing CUDA graphs (decode, FULL):  14%|█▍        | 5/35 [00:00<00:02, 12.18it/s]Capturing CUDA graphs (decode, FULL):  20%|██        | 7/35 [00:00<00:02, 12.56it/s]Capturing CUDA graphs (decode, FULL):  26%|██▌       | 9/35 [00:00<00:02, 12.73it/s]Capturing CUDA graphs (decode, FULL):  31%|███▏      | 11/35 [00:00<00:01, 12.81it/s]Capturing CUDA graphs (decode, FULL):  37%|███▋      | 13/35 [00:01<00:01, 12.84it/s]Capturing CUDA graphs (decode, FULL):  43%|████▎     | 15/35 [00:01<00:01, 12.89it/s]Capturing CUDA graphs (decode, FULL):  49%|████▊     | 17/35 [00:01<00:01, 12.91it/s]Capturing CUDA graphs (decode, FULL):  54%|█████▍    | 19/35 [00:01<00:01, 12.91it/s]Capturing CUDA graphs (decode, FULL):  60%|██████    | 21/35 [00:01<00:01, 12.91it/s]Capturing CUDA graphs (decode, FULL):  66%|██████▌   | 23/35 [00:01<00:00, 12.82it/s]Capturing CUDA graphs (decode, FULL):  71%|███████▏  | 25/35 [00:01<00:00, 12.88it/s]Capturing CUDA graphs (decode, FULL):  77%|███████▋  | 27/35 [00:02<00:00, 12.97it/s]Capturing CUDA graphs (decode, FULL):  83%|████████▎ | 29/35 [00:02<00:00, 13.04it/s]Capturing CUDA graphs (decode, FULL):  89%|████████▊ | 31/35 [00:02<00:00, 13.09it/s]Capturing CUDA graphs (decode, FULL):  94%|█████████▍| 33/35 [00:02<00:00, 13.12it/s]Capturing CUDA graphs (decode, FULL): 100%|██████████| 35/35 [00:02<00:00, 13.15it/s]Capturing CUDA graphs (decode, FULL): 100%|██████████| 35/35 [00:02<00:00, 12.82it/s]
+[1;36m(Worker_TP2 pid=2222733)[0;0m INFO 10-10 12:49:56 [custom_all_reduce.py:203] Registering 6630 cuda graph addresses
+[1;36m(Worker_TP0 pid=2222731)[0;0m INFO 10-10 12:49:56 [custom_all_reduce.py:203] Registering 6630 cuda graph addresses
+[1;36m(Worker_TP1 pid=2222732)[0;0m INFO 10-10 12:49:56 [custom_all_reduce.py:203] Registering 6630 cuda graph addresses
+[1;36m(Worker_TP3 pid=2222734)[0;0m INFO 10-10 12:49:56 [custom_all_reduce.py:203] Registering 6630 cuda graph addresses
+[1;36m(Worker_TP0 pid=2222731)[0;0m INFO 10-10 12:49:57 [gpu_model_runner.py:3480] Graph capturing finished in 9 secs, took 0.97 GiB
+[1;36m(Worker_TP2 pid=2222733)[0;0m INFO 10-10 12:49:57 [gpu_model_runner.py:3480] Graph capturing finished in 9 secs, took 0.97 GiB
+[1;36m(Worker_TP1 pid=2222732)[0;0m INFO 10-10 12:49:57 [gpu_model_runner.py:3480] Graph capturing finished in 9 secs, took 0.97 GiB
+[1;36m(Worker_TP3 pid=2222734)[0;0m INFO 10-10 12:49:57 [gpu_model_runner.py:3480] Graph capturing finished in 9 secs, took 0.97 GiB
+[1;36m(EngineCore_DP0 pid=2222636)[0;0m INFO 10-10 12:49:57 [core.py:210] init engine (profile, create kv cache, warmup model) took 23.03 seconds
+INFO 10-10 12:49:58 [llm.py:306] Supported_tasks: ['generate']
+2026-10-10:12:49:58,509 INFO     [run_eval.py:689] Model loaded. Model hash: 12bfe684d427fe9fd6110f272c878d4b
+2026-10-10:12:49:59,482 INFO     [run_eval.py:692] GPU memory:
+GPU-0: 0.89 GB free of 39.49 GB
+GPU-1: 0.89 GB free of 39.49 GB
+GPU-2: 0.89 GB free of 39.49 GB
+GPU-3: 0.89 GB free of 39.49 GB
+2026-10-10:12:49:59,482 INFO     [run_eval.py:751] **** Processing task: aime ({'task_name': 'aime', 'task_core': 'aime', 'split': 'test', 'primary_metric': 'pass_at_1', 'generation_kwargs': {'max_gen_toks': 16384, 'temperature': 0.6, 'truncate_context': False, 'do_sample': True, 'stop_sequences': [], 'top_p': 0.95, 'repeats': 8}, 'metric_kwargs': {'maj_at_ks': [], 'pass_at_ks': [1, 4, 8]}, 'native_id_field': 'index', 'dataset_path': 'allenai/aime-2021-2025', 'use_chat_format': True, 'version': 0, 'metadata': {'years': [2024], 'alias': 'aime:2024::olmo3:adapt'}}) ****
+2026-10-10:12:49:59,482 INFO     [run_eval.py:752]   Task hash: 80e4ba2275672260f8fceb9b705fedfd, starting download...
+Using the latest cached version of the dataset since allenai/aime-2021-2025 couldn't be found on the Hugging Face Hub (offline mode is enabled).
+2026-10-10:12:49:59,489 WARNING  [load.py:1377] Using the latest cached version of the dataset since allenai/aime-2021-2025 couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /p/scratch/rcfd/kowanietz1/.cache/huggingface/datasets/allenai___aime-2021-2025/default/0.0.0/73e1eba765ad5847cdb5d1e2e7aaf7b22b585798 (last modified on Wed Oct  7 16:47:23 2026).
+2026-10-10:12:49:59,509 WARNING  [cache.py:94] Found the latest cached dataset configuration 'default' at /p/scratch/rcfd/kowanietz1/.cache/huggingface/datasets/allenai___aime-2021-2025/default/0.0.0/73e1eba765ad5847cdb5d1e2e7aaf7b22b585798 (last modified on Wed Oct  7 16:47:23 2026).
+2026-10-10:12:49:59,576 INFO     [datasets_wrapper.py:500] Non-HF cache (for datasets) case: NonHfCacheCase.NOT_USED_BC_CACHE_UNAVAILABLE
+2026-10-10:12:49:59,576 INFO     [run_eval.py:755]   Task finished downloading!
+2026-10-10:12:49:59,582 INFO     [run_eval.py:783] Number of requests: 240
+2026-10-10:12:49:59,582 INFO     [run_eval.py:791] First request: {'request_type': 'generate_until', 'doc': {'index': 60, 'problem': 'Every morning Aya goes for a $9$-kilometer-long walk and stops at a coffee shop afterwards. When she walks at a constant speed of $s$ kilometers per hour, the walk takes her 4 hours, including $t$ minutes spent in the coffee shop. When she walks $s+2$ kilometers per hour, the walk takes her 2 hours and 24 minutes, including $t$ minutes spent in the coffee shop. Suppose Aya walks at $s+\\frac{1}{2}$ kilometers per hour. Find the number of minutes the walk takes her, including the $t$ minutes spent in the coffee shop.', 'query': 'Every morning Aya goes for a $9$-kilometer-long walk and stops at a coffee shop afterwards. When she walks at a constant speed of $s$ kilometers per hour, the walk takes her 4 hours, including $t$ minutes spent in the coffee shop. When she walks $s+2$ kilometers per hour, the walk takes her 2 hours and 24 minutes, including $t$ minutes spent in the coffee shop. Suppose Aya walks at $s+\\frac{1}{2}$ kilometers per hour. Find the number of minutes the walk takes her, including the $t$ minutes spent in the coffee shop.\n\nPresent the answer in LaTex format: \\boxed{Your answer}', 'year': '2024', 'aime_number': 'AIME_I', 'solution': '$\\frac{9}{s} + t = 4$ in hours and $\\frac{9}{s+2} + t = 2.4$ in hours.\nSubtracting the second equation from the first, we get, \n$\\frac{9}{s} - \\frac{9}{s+2} = 1.6$\nMultiplying by $(s)(s+2)$, we get \n$9s+18-9s=18=1.6s^{2} + 3.2s$\nMultiplying by 5/2 on both sides, we get\n$0 = 4s^{2} + 8s - 45$\nFactoring gives us \n$(2s-5)(2s+9) = 0$, of which the solution we want is $s=2.5$.\nSubstituting this back to the first equation, we can find that $t = 0.4$ hours.\nLastly, $s + \\frac{1}{2} = 3$ kilometers per hour, so\n$\\frac{9}{3} + 0.4 = 3.4$ hours, or $\\framebox{204}$ minutes\n-Failure.net\nThe amount of hours spent while walking on the first travel is $\\frac{240-t}{6}$. Thus, we have the equation $(240-t)(s) = 540$, and by the same logic, the second equation yields $(144-t)(s+2) = 540$. We have $240s-st = 540$, and $288+144s-2t-st = 540$. We subtract the two equations to get $96s+2t-288 = 0$, so we have $48s+t = 144$, so $t = 144-48s$, and now we have $(96+48s)(s) = 540$. The numerator of $s$ must evenly divide 540, however, $s$ must be less than 3. We can guess that $s = 2.5$. Now, $2.5+0.5 = 3$. Taking $\\frac{9}{3} = 3$, we find that it will take three hours for the 9 kilometers to be traveled. The t minutes spent at the coffeeshop can be written as $144-48(2.5)$, so t = 24. $180 + 24 = 204$. -sepehr2010', 'answer': '204', 'choices': ['$\\frac{9}{s} + t = 4$ in hours and $\\frac{9}{s+2} + t = 2.4$ in hours.\nSubtracting the second equation from the first, we get, \n$\\frac{9}{s} - \\frac{9}{s+2} = 1.6$\nMultiplying by $(s)(s+2)$, we get \n$9s+18-9s=18=1.6s^{2} + 3.2s$\nMultiplying by 5/2 on both sides, we get\n$0 = 4s^{2} + 8s - 45$\nFactoring gives us \n$(2s-5)(2s+9) = 0$, of which the solution we want is $s=2.5$.\nSubstituting this back to the first equation, we can find that $t = 0.4$ hours.\nLastly, $s + \\frac{1}{2} = 3$ kilometers per hour, so\n$\\frac{9}{3} + 0.4 = 3.4$ hours, or $\\framebox{204}$ minutes\n-Failure.net\nThe amount of hours spent while walking on the first travel is $\\frac{240-t}{6}$. Thus, we have the equation $(240-t)(s) = 540$, and by the same logic, the second equation yields $(144-t)(s+2) = 540$. We have $240s-st = 540$, and $288+144s-2t-st = 540$. We subtract the two equations to get $96s+2t-288 = 0$, so we have $48s+t = 144$, so $t = 144-48s$, and now we have $(96+48s)(s) = 540$. The numerator of $s$ must evenly divide 540, however, $s$ must be less than 3. We can guess that $s = 2.5$. Now, $2.5+0.5 = 3$. Taking $\\frac{9}{3} = 3$, we find that it will take three hours for the 9 kilometers to be traveled. The t minutes spent at the coffeeshop can be written as $144-48(2.5)$, so t = 24. $180 + 24 = 204$. -sepehr2010']}, 'request': {'context': {'messages': [{'role': 'user', 'content': 'Every morning Aya goes for a $9$-kilometer-long walk and stops at a coffee shop afterwards. When she walks at a constant speed of $s$ kilometers per hour, the walk takes her 4 hours, including $t$ minutes spent in the coffee shop. When she walks $s+2$ kilometers per hour, the walk takes her 2 hours and 24 minutes, including $t$ minutes spent in the coffee shop. Suppose Aya walks at $s+\\frac{1}{2}$ kilometers per hour. Find the number of minutes the walk takes her, including the $t$ minutes spent in the coffee shop.\n\nPresent the answer in LaTex format: \\boxed{Your answer}'}], 'assistant_prefix': ''}, 'stop_sequences': [], 'generation_kwargs': {'max_gen_toks': 16384, 'temperature': 0.6, 'truncate_context': False, 'do_sample': True, 'top_p': 0.95}}, 'idx': 0, 'task_name': 'aime', 'doc_id': 0, 'native_id': 60, 'label': '204'}
+2026-10-10:12:49:59,582 INFO     [run_eval.py:801] Saving raw requests in /p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/results/dolci-16k-packed-6k/aime-2024-2025-r8/task-000-aime-requests.jsonl...
+2026-10-10:12:49:59,621 INFO     [run_eval.py:883] First instance: {'request_type': 'generate_until', 'doc': {'index': 60, 'problem': 'Every morning Aya goes for a $9$-kilometer-long walk and stops at a coffee shop afterwards. When she walks at a constant speed of $s$ kilometers per hour, the walk takes her 4 hours, including $t$ minutes spent in the coffee shop. When she walks $s+2$ kilometers per hour, the walk takes her 2 hours and 24 minutes, including $t$ minutes spent in the coffee shop. Suppose Aya walks at $s+\\frac{1}{2}$ kilometers per hour. Find the number of minutes the walk takes her, including the $t$ minutes spent in the coffee shop.', 'query': 'Every morning Aya goes for a $9$-kilometer-long walk and stops at a coffee shop afterwards. When she walks at a constant speed of $s$ kilometers per hour, the walk takes her 4 hours, including $t$ minutes spent in the coffee shop. When she walks $s+2$ kilometers per hour, the walk takes her 2 hours and 24 minutes, including $t$ minutes spent in the coffee shop. Suppose Aya walks at $s+\\frac{1}{2}$ kilometers per hour. Find the number of minutes the walk takes her, including the $t$ minutes spent in the coffee shop.\n\nPresent the answer in LaTex format: \\boxed{Your answer}', 'year': '2024', 'aime_number': 'AIME_I', 'solution': '$\\frac{9}{s} + t = 4$ in hours and $\\frac{9}{s+2} + t = 2.4$ in hours.\nSubtracting the second equation from the first, we get, \n$\\frac{9}{s} - \\frac{9}{s+2} = 1.6$\nMultiplying by $(s)(s+2)$, we get \n$9s+18-9s=18=1.6s^{2} + 3.2s$\nMultiplying by 5/2 on both sides, we get\n$0 = 4s^{2} + 8s - 45$\nFactoring gives us \n$(2s-5)(2s+9) = 0$, of which the solution we want is $s=2.5$.\nSubstituting this back to the first equation, we can find that $t = 0.4$ hours.\nLastly, $s + \\frac{1}{2} = 3$ kilometers per hour, so\n$\\frac{9}{3} + 0.4 = 3.4$ hours, or $\\framebox{204}$ minutes\n-Failure.net\nThe amount of hours spent while walking on the first travel is $\\frac{240-t}{6}$. Thus, we have the equation $(240-t)(s) = 540$, and by the same logic, the second equation yields $(144-t)(s+2) = 540$. We have $240s-st = 540$, and $288+144s-2t-st = 540$. We subtract the two equations to get $96s+2t-288 = 0$, so we have $48s+t = 144$, so $t = 144-48s$, and now we have $(96+48s)(s) = 540$. The numerator of $s$ must evenly divide 540, however, $s$ must be less than 3. We can guess that $s = 2.5$. Now, $2.5+0.5 = 3$. Taking $\\frac{9}{3} = 3$, we find that it will take three hours for the 9 kilometers to be traveled. The t minutes spent at the coffeeshop can be written as $144-48(2.5)$, so t = 24. $180 + 24 = 204$. -sepehr2010', 'answer': '204', 'choices': ['$\\frac{9}{s} + t = 4$ in hours and $\\frac{9}{s+2} + t = 2.4$ in hours.\nSubtracting the second equation from the first, we get, \n$\\frac{9}{s} - \\frac{9}{s+2} = 1.6$\nMultiplying by $(s)(s+2)$, we get \n$9s+18-9s=18=1.6s^{2} + 3.2s$\nMultiplying by 5/2 on both sides, we get\n$0 = 4s^{2} + 8s - 45$\nFactoring gives us \n$(2s-5)(2s+9) = 0$, of which the solution we want is $s=2.5$.\nSubstituting this back to the first equation, we can find that $t = 0.4$ hours.\nLastly, $s + \\frac{1}{2} = 3$ kilometers per hour, so\n$\\frac{9}{3} + 0.4 = 3.4$ hours, or $\\framebox{204}$ minutes\n-Failure.net\nThe amount of hours spent while walking on the first travel is $\\frac{240-t}{6}$. Thus, we have the equation $(240-t)(s) = 540$, and by the same logic, the second equation yields $(144-t)(s+2) = 540$. We have $240s-st = 540$, and $288+144s-2t-st = 540$. We subtract the two equations to get $96s+2t-288 = 0$, so we have $48s+t = 144$, so $t = 144-48s$, and now we have $(96+48s)(s) = 540$. The numerator of $s$ must evenly divide 540, however, $s$ must be less than 3. We can guess that $s = 2.5$. Now, $2.5+0.5 = 3$. Taking $\\frac{9}{3} = 3$, we find that it will take three hours for the 9 kilometers to be traveled. The t minutes spent at the coffeeshop can be written as $144-48(2.5)$, so t = 24. $180 + 24 = 204$. -sepehr2010']}, 'idx': 0, 'task_name': 'aime', 'doc_id': 0, 'native_id': 60, 'label': '204'}
+
+  ** Completion prompt: **
+<|im_start|>system
+You are Olmo, a helpful AI assistant built by Ai2. Your date cutoff is December 2024, and your model weights are available at https://huggingface.co/allenai.<|im_end|>
+<|im_start|>user
+Every morning Aya goes for a $9$-kilometer-long walk and stops at a coffee shop afterwards. When she walks at a constant speed of $s$ kilometers per hour, the walk takes her 4 hours, including $t$ minutes spent in the coffee shop. When she walks $s+2$ kilometers per hour, the walk takes her 2 hours and 24 minutes, including $t$ minutes spent in the coffee shop. Suppose Aya walks at $s+\frac{1}{2}$ kilometers per hour. Find the number of minutes the walk takes her, including the $t$ minutes spent in the coffee shop.
+
+Present the answer in LaTex format: \boxed{Your answer}<|im_end|>
+<|im_start|>assistant
+<think>
+
+  ** Generate until: **
+    
+
+Running generate_until requests:   0%|          | 0/240 [00:00<?, ?it/s]
+Adding requests:   0%|          | 0/240 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 240/240 [00:00<00:00, 9390.41it/s]
+
+Processed prompts:   0%|          | 0/240 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
+Processed prompts:   0%|          | 1/240 [02:02<8:07:59, 122.51s/it, est. speed input: 1.65 toks/s, output: 22.56 toks/s][A
+Processed prompts:   1%|          | 2/240 [02:14<3:48:20, 57.57s/it, est. speed input: 3.00 toks/s, output: 43.24 toks/s] [A
+Processed prompts:   1%|▏         | 3/240 [02:19<2:12:24, 33.52s/it, est. speed input: 4.34 toks/s, output: 64.51 toks/s][A
+Processed prompts:   2%|▏         | 4/240 [02:20<1:22:01, 20.85s/it, est. speed input: 5.73 toks/s, output: 86.67 toks/s][A
+Processed prompts:   2%|▏         | 5/240 [02:58<1:45:38, 26.97s/it, est. speed input: 5.65 toks/s, output: 91.80 toks/s][A
+Processed prompts:   2%|▎         | 6/240 [03:03<1:15:22, 19.33s/it, est. speed input: 6.61 toks/s, output: 113.05 toks/s][A
+Processed prompts:   3%|▎         | 7/240 [03:14<1:04:31, 16.62s/it, est. speed input: 7.28 toks/s, output: 130.22 toks/s][A
+Processed prompts:   3%|▎         | 8/240 [03:33<1:08:02, 17.60s/it, est. speed input: 7.55 toks/s, output: 141.96 toks/s][A
+Processed prompts:   4%|▍         | 9/240 [04:22<1:44:50, 27.23s/it, est. speed input: 6.97 toks/s, output: 139.96 toks/s][A
+Processed prompts:   4%|▍         | 10/240 [04:24<1:14:47, 19.51s/it, est. speed input: 7.72 toks/s, output: 163.00 toks/s][A
+Processed prompts:   5%|▍         | 11/240 [04:54<1:27:03, 22.81s/it, est. speed input: 7.66 toks/s, output: 170.87 toks/s][A
+Processed prompts:   5%|▌         | 12/240 [05:12<1:21:07, 21.35s/it, est. speed input: 7.90 toks/s, output: 185.86 toks/s][A
+Processed prompts:   5%|▌         | 13/240 [05:42<1:30:09, 23.83s/it, est. speed input: 7.84 toks/s, output: 194.95 toks/s][A
+Processed prompts:   6%|▌         | 14/240 [05:49<1:10:15, 18.65s/it, est. speed input: 8.31 toks/s, output: 216.39 toks/s][A
+Processed prompts:   6%|▋         | 15/240 [05:59<1:01:04, 16.29s/it, est. speed input: 8.61 toks/s, output: 234.85 toks/s][A
+Processed prompts:   7%|▋         | 16/240 [06:05<48:26, 12.97s/it, est. speed input: 9.07 toks/s, output: 256.78 toks/s]  [A
+Processed prompts:   7%|▋         | 17/240 [06:55<1:29:56, 24.20s/it, est. speed input: 8.49 toks/s, output: 251.42 toks/s][A
+Processed prompts:   8%|▊         | 18/240 [08:21<2:38:18, 42.79s/it, est. speed input: 7.57 toks/s, output: 234.48 toks/s][A
+Processed prompts:   8%|▊         | 19/240 [10:13<3:53:53, 63.50s/it, est. speed input: 6.54 toks/s, output: 218.20 toks/s][A
+Processed prompts:   8%|▊         | 20/240 [10:13<2:43:25, 44.57s/it, est. speed input: 6.91 toks/s, output: 244.48 toks/s][A
+Processed prompts:   9%|▉         | 21/240 [10:19<2:00:33, 33.03s/it, est. speed input: 7.56 toks/s, output: 268.50 toks/s][A
+Processed prompts:  10%|▉         | 23/240 [10:20<1:04:32, 17.84s/it, est. speed input: 8.99 toks/s, output: 321.21 toks/s][A
+Processed prompts:  22%|██▎       | 54/240 [10:53<07:56,  2.56s/it, est. speed input: 21.16 toks/s, output: 1062.98 toks/s][A
+Processed prompts:  23%|██▎       | 55/240 [10:59<08:19,  2.70s/it, est. speed input: 21.29 toks/s, output: 1078.20 toks/s][A
+Processed prompts:  23%|██▎       | 56/240 [11:17<10:55,  3.56s/it, est. speed input: 21.00 toks/s, output: 1067.41 toks/s][A
+Processed prompts:  24%|██▍       | 57/240 [11:32<13:13,  4.34s/it, est. speed input: 20.86 toks/s, output: 1055.63 toks/s][A
+Processed prompts:  24%|██▍       | 58/240 [11:36<13:02,  4.30s/it, est. speed input: 21.05 toks/s, output: 1073.17 toks/s][A
+Processed prompts:  25%|██▍       | 59/240 [12:03<21:22,  7.08s/it, est. speed input: 20.53 toks/s, output: 1054.36 toks/s][A
+Processed prompts:  25%|██▌       | 60/240 [12:07<19:31,  6.51s/it, est. speed input: 20.71 toks/s, output: 1060.02 toks/s][A
+Processed prompts:  25%|██▌       | 61/240 [12:15<20:10,  6.76s/it, est. speed input: 20.74 toks/s, output: 1057.11 toks/s][A
+Processed prompts:  26%|██▌       | 62/240 [12:16<17:08,  5.78s/it, est. speed input: 20.97 toks/s, output: 1070.17 toks/s][A
+Processed prompts:  26%|██▋       | 63/240 [12:29<21:11,  7.19s/it, est. speed input: 20.89 toks/s, output: 1066.04 toks/s][A
+Processed prompts:  27%|██▋       | 64/240 [12:29<16:35,  5.66s/it, est. speed input: 21.13 toks/s, output: 1074.22 toks/s][A
+Processed prompts:  27%|██▋       | 65/240 [12:32<14:24,  4.94s/it, est. speed input: 21.31 toks/s, output: 1079.39 toks/s][A
+Processed prompts:  28%|██▊       | 66/240 [12:54<27:15,  9.40s/it, est. speed input: 20.98 toks/s, output: 1070.31 toks/s][A
+Processed prompts:  28%|██▊       | 67/240 [13:08<30:31, 10.59s/it, est. speed input: 20.87 toks/s, output: 1061.62 toks/s][A
+Processed prompts:  28%|██▊       | 68/240 [13:17<29:18, 10.23s/it, est. speed input: 20.87 toks/s, output: 1069.78 toks/s][A
+Processed prompts:  29%|██▉       | 69/240 [13:28<30:08, 10.57s/it, est. speed input: 20.78 toks/s, output: 1063.29 toks/s][A
+Processed prompts:  29%|██▉       | 70/240 [13:39<30:27, 10.75s/it, est. speed input: 20.70 toks/s, output: 1057.72 toks/s][A
+Processed prompts:  30%|██▉       | 71/240 [14:10<46:46, 16.60s/it, est. speed input: 20.19 toks/s, output: 1038.83 toks/s][A
+Processed prompts:  30%|███       | 72/240 [14:13<35:14, 12.58s/it, est. speed input: 20.32 toks/s, output: 1045.25 toks/s][A
+Processed prompts:  30%|███       | 73/240 [15:23<1:22:19, 29.58s/it, est. speed input: 18.96 toks/s, output: 977.13 toks/s][A
+Processed prompts:  31%|███       | 74/240 [15:24<58:11, 21.04s/it, est. speed input: 19.12 toks/s, output: 987.20 toks/s]  [A
+Processed prompts:  31%|███▏      | 75/240 [15:42<55:51, 20.31s/it, est. speed input: 18.92 toks/s, output: 979.29 toks/s][A
+Processed prompts:  32%|███▏      | 76/240 [15:58<51:58, 19.01s/it, est. speed input: 18.78 toks/s, output: 975.12 toks/s][A
+Processed prompts:  32%|███▏      | 77/240 [16:08<43:37, 16.06s/it, est. speed input: 18.77 toks/s, output: 977.59 toks/s][A
+Processed prompts:  32%|███▎      | 78/240 [16:17<37:38, 13.94s/it, est. speed input: 18.77 toks/s, output: 980.89 toks/s][A
+Processed prompts:  33%|███▎      | 79/240 [16:17<26:31,  9.88s/it, est. speed input: 18.93 toks/s, output: 992.29 toks/s][A
+Processed prompts:  33%|███▎      | 80/240 [16:24<24:10,  9.07s/it, est. speed input: 18.97 toks/s, output: 998.22 toks/s][A
+Processed prompts:  34%|███▍      | 81/240 [16:57<43:09, 16.29s/it, est. speed input: 18.55 toks/s, output: 981.80 toks/s][A
+Processed prompts:  34%|███▍      | 82/240 [17:29<55:04, 20.92s/it, est. speed input: 18.15 toks/s, output: 962.94 toks/s][A
+Processed prompts:  35%|███▍      | 83/240 [17:36<43:51, 16.76s/it, est. speed input: 18.19 toks/s, output: 970.43 toks/s][A
+Processed prompts:  35%|███▌      | 84/240 [18:08<55:07, 21.20s/it, est. speed input: 17.84 toks/s, output: 957.34 toks/s][A
+Processed prompts:  35%|███▌      | 85/240 [18:12<41:41, 16.14s/it, est. speed input: 17.95 toks/s, output: 968.54 toks/s][A
+Processed prompts:  36%|███▌      | 86/240 [18:21<35:57, 14.01s/it, est. speed input: 17.98 toks/s, output: 975.48 toks/s][A
+Processed prompts:  36%|███▋      | 87/240 [18:25<28:09, 11.04s/it, est. speed input: 18.07 toks/s, output: 986.65 toks/s][A
+Processed prompts:  37%|███▋      | 88/240 [18:27<21:21,  8.43s/it, est. speed input: 18.19 toks/s, output: 999.37 toks/s][A
+Processed prompts:  37%|███▋      | 89/240 [18:30<16:25,  6.53s/it, est. speed input: 18.31 toks/s, output: 1012.24 toks/s][A
+Processed prompts:  38%|███▊      | 90/240 [18:33<14:19,  5.73s/it, est. speed input: 18.41 toks/s, output: 1023.44 toks/s][A
+Processed prompts:  38%|███▊      | 91/240 [18:35<11:24,  4.60s/it, est. speed input: 18.53 toks/s, output: 1036.33 toks/s][A
+Processed prompts:  38%|███▊      | 92/240 [18:37<09:17,  3.76s/it, est. speed input: 18.66 toks/s, output: 1049.30 toks/s][A
+Processed prompts:  39%|███▉      | 93/240 [18:41<09:07,  3.72s/it, est. speed input: 18.75 toks/s, output: 1060.41 toks/s][A
+Processed prompts:  39%|███▉      | 94/240 [18:44<08:44,  3.59s/it, est. speed input: 18.85 toks/s, output: 1071.87 toks/s][A
+Processed prompts:  40%|███▉      | 95/240 [18:48<09:15,  3.83s/it, est. speed input: 18.92 toks/s, output: 1081.51 toks/s][A
+Processed prompts:  40%|████      | 96/240 [18:50<07:39,  3.19s/it, est. speed input: 19.04 toks/s, output: 1094.38 toks/s][A
+Processed prompts:  40%|████      | 97/240 [18:52<06:31,  2.74s/it, est. speed input: 19.16 toks/s, output: 1107.22 toks/s][A
+Processed prompts:  41%|████      | 98/240 [18:53<05:39,  2.39s/it, est. speed input: 19.28 toks/s, output: 1120.12 toks/s][A
+Processed prompts:  41%|████▏     | 99/240 [18:55<05:02,  2.14s/it, est. speed input: 19.40 toks/s, output: 1133.01 toks/s][A
+Processed prompts:  42%|████▏     | 100/240 [18:58<05:32,  2.37s/it, est. speed input: 19.50 toks/s, output: 1144.50 toks/s][A
+Processed prompts:  42%|████▏     | 101/240 [19:03<07:30,  3.24s/it, est. speed input: 19.56 toks/s, output: 1153.57 toks/s][A
+Processed prompts:  42%|████▎     | 102/240 [19:05<06:11,  2.69s/it, est. speed input: 19.68 toks/s, output: 1166.45 toks/s][A
+Processed prompts:  43%|████▎     | 103/240 [19:06<05:06,  2.24s/it, est. speed input: 19.81 toks/s, output: 1179.54 toks/s][A
+Processed prompts:  43%|████▎     | 104/240 [19:07<04:31,  1.99s/it, est. speed input: 19.93 toks/s, output: 1192.36 toks/s][A
+Processed prompts:  44%|████▍     | 105/240 [19:10<04:50,  2.15s/it, est. speed input: 20.03 toks/s, output: 1203.98 toks/s][A
+Processed prompts:  44%|████▍     | 106/240 [19:11<04:11,  1.88s/it, est. speed input: 20.15 toks/s, output: 1216.92 toks/s][A
+Processed prompts:  45%|████▍     | 107/240 [19:12<03:48,  1.72s/it, est. speed input: 20.27 toks/s, output: 1229.72 toks/s][A
+Processed prompts:  45%|████▌     | 108/240 [19:13<03:21,  1.53s/it, est. speed input: 20.40 toks/s, output: 1242.75 toks/s][A
+Processed prompts:  45%|████▌     | 109/240 [19:15<03:14,  1.48s/it, est. speed input: 20.51 toks/s, output: 1255.45 toks/s][A
+Processed prompts:  46%|████▌     | 110/240 [19:16<02:57,  1.37s/it, est. speed input: 20.64 toks/s, output: 1268.44 toks/s][A
+Processed prompts:  46%|████▋     | 111/240 [19:20<04:50,  2.25s/it, est. speed input: 20.70 toks/s, output: 1277.83 toks/s][A
+Processed prompts:  47%|████▋     | 112/240 [19:21<04:08,  1.94s/it, est. speed input: 20.82 toks/s, output: 1290.58 toks/s][A
+Processed prompts:  47%|████▋     | 113/240 [19:32<09:50,  4.65s/it, est. speed input: 20.77 toks/s, output: 1292.49 toks/s][A
+Processed prompts:  48%|████▊     | 114/240 [19:52<19:27,  9.27s/it, est. speed input: 20.56 toks/s, output: 1284.51 toks/s][A
+Processed prompts:  48%|████▊     | 115/240 [20:17<29:01, 13.93s/it, est. speed input: 20.27 toks/s, output: 1271.79 toks/s][A
+Processed prompts:  48%|████▊     | 116/240 [20:36<31:43, 15.35s/it, est. speed input: 20.09 toks/s, output: 1265.84 toks/s][A
+Processed prompts:  49%|████▉     | 117/240 [21:28<54:00, 26.35s/it, est. speed input: 19.41 toks/s, output: 1227.47 toks/s][A
+Processed prompts:  49%|████▉     | 118/240 [21:38<43:42, 21.50s/it, est. speed input: 19.37 toks/s, output: 1222.12 toks/s][A
+Processed prompts:  50%|████▉     | 119/240 [22:44<1:10:02, 34.73s/it, est. speed input: 18.55 toks/s, output: 1175.35 toks/s][A
+Processed prompts:  50%|█████     | 120/240 [23:02<59:19, 29.67s/it, est. speed input: 18.42 toks/s, output: 1165.75 toks/s]  [A
+Processed prompts:  50%|█████     | 121/240 [23:06<43:57, 22.16s/it, est. speed input: 18.47 toks/s, output: 1172.82 toks/s][A
+Processed prompts:  51%|█████     | 122/240 [24:05<1:05:16, 33.19s/it, est. speed input: 17.82 toks/s, output: 1131.67 toks/s][A
+Processed prompts:  51%|█████▏    | 123/240 [24:35<1:02:53, 32.26s/it, est. speed input: 17.56 toks/s, output: 1119.71 toks/s][A
+Processed prompts:  52%|█████▏    | 124/240 [24:45<49:06, 25.40s/it, est. speed input: 17.56 toks/s, output: 1122.71 toks/s]  [A
+Processed prompts:  52%|█████▏    | 125/240 [25:00<43:11, 22.54s/it, est. speed input: 17.46 toks/s, output: 1118.22 toks/s][A
+Processed prompts:  52%|█████▎    | 126/240 [25:23<42:49, 22.54s/it, est. speed input: 17.31 toks/s, output: 1110.33 toks/s][A
+Processed prompts:  53%|█████▎    | 127/240 [25:53<46:27, 24.67s/it, est. speed input: 17.07 toks/s, output: 1097.54 toks/s][A
+Processed prompts:  53%|█████▎    | 128/240 [26:23<49:02, 26.27s/it, est. speed input: 16.84 toks/s, output: 1087.09 toks/s][A
+Processed prompts:  54%|█████▍    | 129/240 [26:42<44:47, 24.21s/it, est. speed input: 16.73 toks/s, output: 1083.61 toks/s][A
+Processed prompts:  54%|█████▍    | 130/240 [26:55<38:00, 20.73s/it, est. speed input: 16.70 toks/s, output: 1085.29 toks/s][A
+Processed prompts:  55%|█████▍    | 131/240 [27:05<32:16, 17.76s/it, est. speed input: 16.68 toks/s, output: 1088.13 toks/s][A
+Processed prompts:  55%|█████▌    | 132/240 [27:22<31:16, 17.38s/it, est. speed input: 16.60 toks/s, output: 1087.17 toks/s][A
+Processed prompts:  55%|█████▌    | 133/240 [27:27<24:31, 13.75s/it, est. speed input: 16.64 toks/s, output: 1093.63 toks/s][A
+Processed prompts:  56%|█████▌    | 134/240 [27:29<18:05, 10.24s/it, est. speed input: 16.71 toks/s, output: 1102.19 toks/s][A
+Processed prompts:  56%|█████▋    | 135/240 [27:33<14:14,  8.14s/it, est. speed input: 16.77 toks/s, output: 1109.94 toks/s][A
+Processed prompts:  57%|█████▋    | 136/240 [27:35<11:14,  6.48s/it, est. speed input: 16.84 toks/s, output: 1118.09 toks/s][A
+Processed prompts:  57%|█████▋    | 137/240 [27:37<08:39,  5.05s/it, est. speed input: 16.91 toks/s, output: 1126.83 toks/s][A
+Processed prompts:  57%|█████▊    | 138/240 [27:39<07:04,  4.16s/it, est. speed input: 16.98 toks/s, output: 1135.29 toks/s][A
+Processed prompts:  58%|█████▊    | 139/240 [27:42<06:27,  3.84s/it, est. speed input: 17.04 toks/s, output: 1143.03 toks/s][A
+Processed prompts:  58%|█████▊    | 140/240 [27:43<04:50,  2.91s/it, est. speed input: 17.12 toks/s, output: 1152.37 toks/s][A
+Processed prompts:  59%|█████▉    | 141/240 [27:44<04:10,  2.53s/it, est. speed input: 17.20 toks/s, output: 1161.08 toks/s][A
+Processed prompts:  59%|█████▉    | 142/240 [27:48<04:29,  2.75s/it, est. speed input: 17.25 toks/s, output: 1168.63 toks/s][A
+Processed prompts:  60%|█████▉    | 143/240 [27:48<03:24,  2.11s/it, est. speed input: 17.34 toks/s, output: 1178.02 toks/s][A
+Processed prompts:  60%|██████    | 144/240 [27:49<02:43,  1.71s/it, est. speed input: 17.42 toks/s, output: 1187.29 toks/s][A
+Processed prompts:  60%|██████    | 145/240 [27:51<02:59,  1.88s/it, est. speed input: 17.48 toks/s, output: 1195.46 toks/s][A
+Processed prompts:  61%|██████    | 146/240 [27:52<02:25,  1.55s/it, est. speed input: 17.57 toks/s, output: 1204.70 toks/s][A
+Processed prompts:  61%|██████▏   | 147/240 [27:53<01:57,  1.26s/it, est. speed input: 17.65 toks/s, output: 1214.07 toks/s][A
+Processed prompts:  62%|██████▏   | 148/240 [27:55<02:15,  1.47s/it, est. speed input: 17.72 toks/s, output: 1222.43 toks/s][A
+Processed prompts:  62%|██████▏   | 149/240 [27:56<02:00,  1.32s/it, est. speed input: 17.80 toks/s, output: 1231.49 toks/s][A
+Processed prompts:  62%|██████▎   | 150/240 [27:57<01:53,  1.26s/it, est. speed input: 17.87 toks/s, output: 1240.44 toks/s][A
+Processed prompts:  63%|██████▎   | 151/240 [28:01<03:15,  2.19s/it, est. speed input: 17.91 toks/s, output: 1246.96 toks/s][A
+Processed prompts:  63%|██████▎   | 152/240 [28:03<03:00,  2.05s/it, est. speed input: 17.98 toks/s, output: 1255.42 toks/s][A
+Processed prompts:  64%|██████▍   | 153/240 [28:06<03:15,  2.25s/it, est. speed input: 18.04 toks/s, output: 1263.12 toks/s][A
+Processed prompts:  64%|██████▍   | 154/240 [28:07<03:00,  2.10s/it, est. speed input: 18.11 toks/s, output: 1271.51 toks/s][A
+Processed prompts:  65%|██████▍   | 155/240 [28:10<03:12,  2.27s/it, est. speed input: 18.16 toks/s, output: 1279.20 toks/s][A
+Processed prompts:  65%|██████▌   | 156/240 [28:11<02:36,  1.87s/it, est. speed input: 18.24 toks/s, output: 1288.05 toks/s][A
+Processed prompts:  65%|██████▌   | 157/240 [28:12<02:22,  1.71s/it, est. speed input: 18.31 toks/s, output: 1296.69 toks/s][A
+Processed prompts:  66%|██████▌   | 158/240 [28:13<01:50,  1.35s/it, est. speed input: 18.39 toks/s, output: 1305.99 toks/s][A
+Processed prompts:  66%|██████▋   | 159/240 [28:15<02:05,  1.55s/it, est. speed input: 18.45 toks/s, output: 1314.09 toks/s][A
+Processed prompts:  67%|██████▋   | 160/240 [28:15<01:38,  1.23s/it, est. speed input: 18.53 toks/s, output: 1323.38 toks/s][A
+Processed prompts:  67%|██████▋   | 161/240 [28:16<01:14,  1.06it/s, est. speed input: 18.62 toks/s, output: 1332.82 toks/s][A
+Processed prompts:  68%|██████▊   | 162/240 [28:17<01:20,  1.03s/it, est. speed input: 18.69 toks/s, output: 1341.51 toks/s][A
+Processed prompts:  68%|██████▊   | 163/240 [28:19<01:39,  1.30s/it, est. speed input: 18.75 toks/s, output: 1349.64 toks/s][A
+Processed prompts:  68%|██████▊   | 164/240 [28:21<01:53,  1.49s/it, est. speed input: 18.81 toks/s, output: 1357.73 toks/s][A
+Processed prompts:  69%|██████▉   | 165/240 [28:43<09:30,  7.61s/it, est. speed input: 18.66 toks/s, output: 1350.00 toks/s][A
+Processed prompts:  69%|██████▉   | 166/240 [29:00<13:07, 10.64s/it, est. speed input: 18.53 toks/s, output: 1337.73 toks/s][A
+Processed prompts:  70%|██████▉   | 167/240 [30:08<33:50, 27.81s/it, est. speed input: 17.92 toks/s, output: 1293.02 toks/s][A
+Processed prompts:  70%|███████   | 168/240 [30:08<23:27, 19.55s/it, est. speed input: 17.98 toks/s, output: 1295.86 toks/s][A
+Processed prompts:  70%|███████   | 169/240 [30:43<28:35, 24.17s/it, est. speed input: 17.72 toks/s, output: 1275.12 toks/s][A
+Processed prompts:  71%|███████   | 170/240 [31:10<28:56, 24.81s/it, est. speed input: 17.54 toks/s, output: 1265.94 toks/s][A
+Processed prompts:  71%|███████▏  | 171/240 [31:29<26:31, 23.07s/it, est. speed input: 17.44 toks/s, output: 1257.54 toks/s][A
+Processed prompts:  72%|███████▏  | 172/240 [31:32<19:18, 17.03s/it, est. speed input: 17.48 toks/s, output: 1260.08 toks/s][A
+Processed prompts:  72%|███████▏  | 173/240 [32:01<23:02, 20.63s/it, est. speed input: 17.29 toks/s, output: 1245.51 toks/s][A
+Processed prompts:  72%|███████▎  | 174/240 [32:28<24:57, 22.69s/it, est. speed input: 17.10 toks/s, output: 1232.18 toks/s][A
+Processed prompts:  73%|███████▎  | 175/240 [32:34<19:13, 17.74s/it, est. speed input: 17.12 toks/s, output: 1233.34 toks/s][A
+Processed prompts:  73%|███████▎  | 176/240 [32:39<14:37, 13.70s/it, est. speed input: 17.15 toks/s, output: 1239.01 toks/s][A
+Processed prompts:  74%|███████▍  | 177/240 [32:42<11:14, 10.71s/it, est. speed input: 17.19 toks/s, output: 1242.05 toks/s][A
+Processed prompts:  74%|███████▍  | 178/240 [32:43<08:01,  7.77s/it, est. speed input: 17.24 toks/s, output: 1245.91 toks/s][A
+Processed prompts:  75%|███████▍  | 179/240 [32:48<06:53,  6.77s/it, est. speed input: 17.27 toks/s, output: 1248.20 toks/s][A
+Processed prompts:  75%|███████▌  | 180/240 [33:02<09:01,  9.03s/it, est. speed input: 17.21 toks/s, output: 1244.31 toks/s][A
+Processed prompts:  75%|███████▌  | 181/240 [33:04<06:56,  7.06s/it, est. speed input: 17.25 toks/s, output: 1247.46 toks/s][A
+Processed prompts:  76%|███████▌  | 182/240 [33:07<05:26,  5.64s/it, est. speed input: 17.29 toks/s, output: 1250.70 toks/s][A
+Processed prompts:  76%|███████▋  | 183/240 [33:36<11:57, 12.59s/it, est. speed input: 17.11 toks/s, output: 1240.96 toks/s][A
+Processed prompts:  77%|███████▋  | 184/240 [33:47<11:23, 12.20s/it, est. speed input: 17.08 toks/s, output: 1239.63 toks/s][A
+Processed prompts:  77%|███████▋  | 185/240 [34:00<11:28, 12.52s/it, est. speed input: 17.03 toks/s, output: 1236.90 toks/s][A
+Processed prompts:  78%|███████▊  | 186/240 [34:30<16:00, 17.79s/it, est. speed input: 16.85 toks/s, output: 1226.84 toks/s][A
+Processed prompts:  78%|███████▊  | 187/240 [35:06<20:28, 23.18s/it, est. speed input: 16.63 toks/s, output: 1213.80 toks/s][A
+Processed prompts:  78%|███████▊  | 188/240 [35:20<17:48, 20.54s/it, est. speed input: 16.58 toks/s, output: 1213.28 toks/s][A
+Processed prompts:  79%|███████▉  | 189/240 [35:28<14:07, 16.61s/it, est. speed input: 16.59 toks/s, output: 1215.55 toks/s][A
+Processed prompts:  79%|███████▉  | 190/240 [35:31<10:34, 12.68s/it, est. speed input: 16.62 toks/s, output: 1221.24 toks/s][A
+Processed prompts:  80%|███████▉  | 191/240 [35:35<08:08,  9.97s/it, est. speed input: 16.65 toks/s, output: 1225.69 toks/s][A
+Processed prompts:  80%|████████  | 192/240 [35:44<07:42,  9.63s/it, est. speed input: 16.65 toks/s, output: 1228.28 toks/s][A
+Processed prompts:  80%|████████  | 193/240 [35:51<06:56,  8.87s/it, est. speed input: 16.66 toks/s, output: 1231.85 toks/s][A
+Processed prompts:  81%|████████  | 194/240 [35:59<06:36,  8.61s/it, est. speed input: 16.66 toks/s, output: 1234.87 toks/s][A
+Processed prompts:  81%|████████▏ | 195/240 [36:05<05:48,  7.75s/it, est. speed input: 16.68 toks/s, output: 1239.15 toks/s][A
+Processed prompts:  82%|████████▏ | 196/240 [36:10<05:15,  7.18s/it, est. speed input: 16.70 toks/s, output: 1243.36 toks/s][A
+Processed prompts:  82%|████████▏ | 197/240 [36:14<04:18,  6.01s/it, est. speed input: 16.73 toks/s, output: 1249.03 toks/s][A
+Processed prompts:  82%|████████▎ | 198/240 [36:24<05:07,  7.32s/it, est. speed input: 16.72 toks/s, output: 1250.59 toks/s][A
+Processed prompts:  83%|████████▎ | 199/240 [36:36<05:54,  8.65s/it, est. speed input: 16.68 toks/s, output: 1245.88 toks/s][A
+Processed prompts:  83%|████████▎ | 200/240 [36:38<04:23,  6.58s/it, est. speed input: 16.72 toks/s, output: 1252.34 toks/s][A
+Processed prompts:  84%|████████▍ | 201/240 [36:43<04:02,  6.22s/it, est. speed input: 16.74 toks/s, output: 1256.73 toks/s][A
+Processed prompts:  84%|████████▍ | 202/240 [36:53<04:37,  7.29s/it, est. speed input: 16.72 toks/s, output: 1258.57 toks/s][A
+Processed prompts:  85%|████████▍ | 203/240 [36:54<03:25,  5.56s/it, est. speed input: 16.77 toks/s, output: 1265.09 toks/s][A
+Processed prompts:  85%|████████▌ | 204/240 [36:56<02:40,  4.45s/it, est. speed input: 16.81 toks/s, output: 1271.43 toks/s][A
+Processed prompts:  85%|████████▌ | 205/240 [36:57<01:57,  3.37s/it, est. speed input: 16.86 toks/s, output: 1278.10 toks/s][A
+Processed prompts:  86%|████████▌ | 206/240 [36:57<01:21,  2.41s/it, est. speed input: 16.92 toks/s, output: 1285.39 toks/s][A
+Processed prompts:  86%|████████▋ | 207/240 [36:58<01:04,  1.95s/it, est. speed input: 16.97 toks/s, output: 1292.26 toks/s][A
+Processed prompts:  87%|████████▋ | 208/240 [37:03<01:32,  2.90s/it, est. speed input: 16.98 toks/s, output: 1291.41 toks/s][A
+Processed prompts:  87%|████████▋ | 209/240 [37:04<01:09,  2.25s/it, est. speed input: 17.03 toks/s, output: 1298.36 toks/s][A
+Processed prompts:  88%|████████▊ | 210/240 [37:05<01:00,  2.03s/it, est. speed input: 17.08 toks/s, output: 1304.84 toks/s][A
+Processed prompts:  88%|████████▊ | 211/240 [37:07<00:56,  1.96s/it, est. speed input: 17.12 toks/s, output: 1311.13 toks/s][A
+Processed prompts:  88%|████████▊ | 212/240 [37:10<01:00,  2.16s/it, est. speed input: 17.16 toks/s, output: 1316.94 toks/s][A
+Processed prompts:  89%|████████▉ | 213/240 [37:11<00:54,  2.00s/it, est. speed input: 17.20 toks/s, output: 1323.31 toks/s][A
+Processed prompts:  89%|████████▉ | 214/240 [37:14<00:52,  2.01s/it, est. speed input: 17.24 toks/s, output: 1329.45 toks/s][A
+Processed prompts:  90%|████████▉ | 215/240 [37:15<00:43,  1.74s/it, est. speed input: 17.29 toks/s, output: 1336.11 toks/s][A
+Processed prompts:  90%|█████████ | 216/240 [37:16<00:36,  1.53s/it, est. speed input: 17.34 toks/s, output: 1342.83 toks/s][A
+Processed prompts:  90%|█████████ | 217/240 [37:16<00:28,  1.22s/it, est. speed input: 17.39 toks/s, output: 1349.85 toks/s][A
+Processed prompts:  91%|█████████ | 218/240 [37:18<00:29,  1.32s/it, est. speed input: 17.43 toks/s, output: 1356.23 toks/s][A
+Processed prompts:  91%|█████████▏| 219/240 [37:19<00:25,  1.23s/it, est. speed input: 17.48 toks/s, output: 1362.93 toks/s][A
+Processed prompts:  92%|█████████▏| 220/240 [37:19<00:18,  1.05it/s, est. speed input: 17.53 toks/s, output: 1370.07 toks/s][A
+Processed prompts:  92%|█████████▏| 221/240 [37:20<00:17,  1.07it/s, est. speed input: 17.57 toks/s, output: 1371.57 toks/s][A
+Processed prompts:  92%|█████████▎| 222/240 [37:27<00:51,  2.85s/it, est. speed input: 17.57 toks/s, output: 1374.39 toks/s][A
+Processed prompts:  93%|█████████▎| 223/240 [37:35<01:14,  4.36s/it, est. speed input: 17.56 toks/s, output: 1372.13 toks/s][A
+Processed prompts:  93%|█████████▎| 224/240 [37:37<00:59,  3.75s/it, est. speed input: 17.59 toks/s, output: 1373.25 toks/s][A
+Processed prompts:  94%|█████████▍| 225/240 [37:38<00:40,  2.71s/it, est. speed input: 17.64 toks/s, output: 1376.28 toks/s][A
+Processed prompts:  94%|█████████▍| 226/240 [37:41<00:41,  3.00s/it, est. speed input: 17.66 toks/s, output: 1376.52 toks/s][A
+Processed prompts:  95%|█████████▍| 227/240 [37:57<01:28,  6.82s/it, est. speed input: 17.59 toks/s, output: 1371.84 toks/s][A
+Processed prompts:  95%|█████████▌| 228/240 [37:58<01:01,  5.09s/it, est. speed input: 17.63 toks/s, output: 1374.34 toks/s][A
+Processed prompts:  95%|█████████▌| 229/240 [37:59<00:41,  3.77s/it, est. speed input: 17.68 toks/s, output: 1381.12 toks/s][A
+Processed prompts:  96%|█████████▌| 230/240 [38:27<01:49, 10.92s/it, est. speed input: 17.52 toks/s, output: 1371.69 toks/s][A
+Processed prompts:  96%|█████████▋| 231/240 [38:41<01:47, 11.96s/it, est. speed input: 17.46 toks/s, output: 1370.25 toks/s][A
+Processed prompts:  97%|█████████▋| 232/240 [38:49<01:26, 10.78s/it, est. speed input: 17.46 toks/s, output: 1372.55 toks/s][A
+Processed prompts:  97%|█████████▋| 233/240 [38:52<00:58,  8.36s/it, est. speed input: 17.49 toks/s, output: 1377.99 toks/s][A
+Processed prompts:  98%|█████████▊| 234/240 [38:59<00:47,  7.92s/it, est. speed input: 17.49 toks/s, output: 1380.93 toks/s][A
+Processed prompts:  98%|█████████▊| 235/240 [39:05<00:37,  7.51s/it, est. speed input: 17.49 toks/s, output: 1384.05 toks/s][A
+Processed prompts:  98%|█████████▊| 236/240 [39:28<00:48, 12.18s/it, est. speed input: 17.37 toks/s, output: 1376.88 toks/s][A
+Processed prompts:  99%|█████████▉| 237/240 [39:31<00:28,  9.36s/it, est. speed input: 17.40 toks/s, output: 1380.94 toks/s][A
+Processed prompts:  99%|█████████▉| 238/240 [39:41<00:19,  9.70s/it, est. speed input: 17.37 toks/s, output: 1381.00 toks/s][A
+Processed prompts: 100%|█████████▉| 239/240 [40:01<00:12, 12.64s/it, est. speed input: 17.28 toks/s, output: 1376.62 toks/s][A
+Processed prompts: 100%|██████████| 240/240 [40:02<00:00,  9.24s/it, est. speed input: 17.32 toks/s, output: 1382.69 toks/s][A
+Processed prompts: 100%|██████████| 240/240 [40:02<00:00,  9.24s/it, est. speed input: 17.32 toks/s, output: 1382.69 toks/s][AProcessed prompts: 100%|██████████| 240/240 [40:02<00:00, 10.01s/it, est. speed input: 17.32 toks/s, output: 1382.69 toks/s]
+Running generate_until requests:   0%|          | 1/240 [40:02<159:31:02, 2402.77s/it]Running generate_until requests: 100%|██████████| 240/240 [40:02<00:00, 10.01s/it]    
+2026-10-10:13:30:04,214 INFO     [run_eval.py:959] Computing metrics for task name aime (task index 0)
+0it [00:00, ?it/s]1it [00:00,  1.36it/s]4it [00:00,  5.63it/s]6it [00:01,  5.86it/s]9it [00:01,  9.32it/s]12it [00:01, 12.56it/s]14it [00:01, 12.08it/s]16it [00:01, 13.03it/s]18it [00:01, 13.31it/s]20it [00:02, 11.54it/s]22it [00:02, 11.93it/s]25it [00:02, 15.07it/s]27it [00:02, 12.53it/s]30it [00:08,  1.37it/s]30it [00:08,  3.67it/s]
+0it [00:00, ?it/s]2it [00:00, 14.78it/s]4it [00:00,  9.91it/s]6it [00:00,  9.18it/s]7it [00:00,  9.32it/s]9it [00:00,  9.14it/s]12it [00:01, 12.64it/s]14it [00:01, 11.71it/s]16it [00:01,  8.47it/s]18it [00:01,  9.03it/s]20it [00:02,  9.22it/s]22it [00:02, 10.29it/s]25it [00:02, 13.41it/s]28it [00:02, 14.42it/s]30it [00:02, 14.21it/s]30it [00:02, 11.33it/s]
+2026-10-10:13:31:02,610 INFO     [run_eval.py:539] First instance output: ({'doc_id': 0, 'native_id': 60, 'metrics': {'exact_match': 0, 'exact_match_flex': 1, 'model_answer': '204', 'pass_at_1': 1.0, 'pass_at_4': 1.0, 'pass_at_8': 1.0}, 'model_output': ['<<truncated 7 elements>>', {'continuation': 'Okay, let\'s see. Aya goes for a 9-kilometer walk every morning, and after that, she stops at a coffee shop. The problem says that when she walks at a constant speed of s kilometers per hour, the walk takes her 4 hours, including t minutes spent in the coffee shop. Then, when she walks at s+2 km/h, the walk takes 2 hours and 24 minutes, again including t minutes in the coffee shop. We need to find the time when she walks at s + 1/2 km/h, including t minutes, and present the answer in LaTeX.\n\nHmm, so first, I need to figure out the relationship between her walking speed, the time taken for the walk, and the time spent in the coffee shop. Let me break it down.\n\nLet me denote:\n\n- Distance walked: 9 km in all cases.\n\n- Speed when walking at s km/h: time taken for the walk plus t minutes in the coffee shop is 4 hours.\n\nWait, but the time given is 4 hours including t minutes. So the total time is 4 hours, which includes both the walking time and the t minutes in the coffee shop. Similarly, when she walks at s+2 km/h, the total time is 2 hours and 24 minutes, which is 2 + 24/60 hours = 2.4 hours. So, the time for the walk plus t minutes equals the total time given. Therefore, the time spent walking is total time minus t minutes.\n\nBut since we need to relate speed, distance, and time, perhaps I can write equations for the walking time in terms of speed.\n\nLet me define:\n\nLet t be the minutes she spends in the coffee shop. So, the time spent in the coffee shop is t minutes, which is t/60 hours.\n\nThe total time for the walk plus coffee shop is given. So for the first scenario:\n\nTime walked at s km/h plus t/60 hours = 4 hours.\n\nSimilarly, the distance walked is 9 km. So, time walked at s km/h is distance divided by speed: 9/s hours. Therefore:\n\n9/s + t/60 = 4.\n\nSimilarly, for the second scenario:\n\nTime walked at (s+2) km/h plus t/60 hours = 2 hours 24 minutes, which is 2 + 24/60 = 2.4 hours.\n\nSo, 9/(s+2) + t/60 = 2.4.\n\nSo now we have two equations:\n\n1) 9/s + t/60 = 4\n\n2) 9/(s + 2) + t/60 = 2.4\n\nWe need to solve these two equations to find s and t, then compute the time when she walks at s + 0.5 km/h, which would be 9/(s + 0.5) + t/60.\n\nHmm, so we can subtract the two equations to eliminate t/60. Let\'s try that.\n\nSubtract equation 2 from equation 1:\n\n[9/s + t/60] - [9/(s + 2) + t/60] = 4 - 2.4\n\nSimplify left side:\n\n9/s - 9/(s + 2) + (t/60 - t/60) = 1.6\n\nSo, 9/s - 9/(s + 2) = 1.6\n\nLet me compute that left side:\n\n9 [1/s - 1/(s + 2)] = 1.6\n\nCompute the difference inside the brackets:\n\n1/s - 1/(s + 2) = (s + 2 - s)/(s(s + 2)) = 2/(s(s + 2))\n\nTherefore,\n\n9 * [2/(s(s + 2))] = 1.6\n\nSo,\n\n18/(s(s + 2)) = 1.6\n\nMultiply both sides by s(s + 2):\n\n18 = 1.6 * s(s + 2)\n\nLet me write 1.6 as 8/5 to make it easier with fractions:\n\n18 = (8/5) * s(s + 2)\n\nMultiply both sides by 5:\n\n90 = 8s(s + 2)\n\nDivide both sides by 2:\n\n45 = 4s(s + 2)\n\nSo,\n\n4s² + 8s - 45 = 0\n\nHmm, quadratic equation. Let me write it as:\n\n4s² + 8s - 45 = 0\n\nUse quadratic formula:\n\ns = [-8 ± sqrt(64 + 4*4*45)]/(2*4)\n\nCompute discriminant:\n\n64 + 720 = 784\n\nsqrt(784) = 28\n\nTherefore,\n\ns = [ -8 ±28 ] /8\n\nWe can ignore the negative solution because speed can\'t be negative.\n\nSo,\n\ns = ( -8 +28 ) /8 = 20/8 = 2.5 km/h\n\nWait, 20 divided by 8 is 2.5? Wait, 20/8 is 2.5? No, 20 divided by 8 is 2.5? Wait, 8*2.5 is 20, yes. Wait, but 20/8 is 2.5. Hmm, but let me check again.\n\nWait, s = (-8 +28)/8 = 20/8 = 2.5 km/h.\n\nWait, so s is 2.5 km/h? Hmm, let me check that.\n\nWait, but let\'s see, let me check with the equations.\n\nIf s = 2.5 km/h,\n\nFirst equation: 9 / 2.5 + t/60 = 4\n\nCompute 9/2.5: 9 divided by 2.5 is 3.6 hours.\n\nSo 3.6 + t/60 = 4 => t/60 = 0.4 => t = 24 minutes.\n\nSecond equation: 9/(2.5 + 2) + t/60 = 9/4.5 + 24/60 = 2 + 0.4 = 2.4, which is 2 hours 24 minutes. That works.\n\nOkay, so s is 2.5 km/h and t is 24 minutes.\n\nSo now, the question is, when she walks at s + 1/2 km/h, which would be 2.5 + 0.5 = 3 km/h.\n\nSo, time taken for the walk at 3 km/h is 9 / 3 = 3 hours. Then plus t/60 = 24/60 = 0.4 hours = 24 minutes. So total time is 3 + 0.4 = 3.4 hours, which is 3 hours and 24 minutes. But let me verify again.\n\nWait, let me make sure I didn\'t make a mistake here. So s was found to be 2.5 km/h, so s + 1/2 is 3 km/h. So 9 divided by 3 is 3 hours. Then adding the 24 minutes in the coffee shop. So total time is 3 hours and 24 minutes. So the answer would be 3 hours and 24 minutes, which is 3.4 hours, but the question says "number of minutes the walk takes her, including the t minutes". So the total time is 3 hours and 24 minutes, which is 3*60 +24 = 204 minutes. So the answer should be 204 minutes. Let me check again.\n\nAlternatively, maybe I need to present it in LaTeX as \\boxed{204}\n\nWait, but let me see if there is another way to approach this problem, just to confirm.\n\nAlternatively, let me consider the equations again.\n\nWe had:\n\nEquation 1: 9/s + t/60 = 4\n\nEquation 2: 9/(s + 2) + t/60 = 2.4\n\nSubtracting gives:\n\n9/s - 9/(s + 2) = 1.6\n\nWhich led us to s = 2.5, so that seems correct.\n\nAlternatively, maybe I can think of the difference in walking times.\n\nThe time saved when increasing speed by 2 km/h is 4 - 2.4 = 1.6 hours, which is 96 minutes. The difference in walking time is 9/s - 9/(s + 2). Let me compute that difference.\n\nYes, 9/s - 9/(s + 2) = 9[(s + 2 - s)/(s(s + 2))] = 9*(2)/(s(s + 2)) = 18/(s(s + 2)) = 1.6 hours, which is the difference in walking times, so that\'s consistent with the previous calculation.\n\nSo, that seems okay.\n\nTherefore, the time when she walks at s + 1/2 km/h is 9/(s + 0.5) + t/60.\n\nPlugging s = 2.5, so s + 0.5 is 3 km/h. So 9/3 = 3 hours. Then t/60 is 24/60 = 0.4 hours, which is 24 minutes. So total time is 3 hours and 24 minutes, which is 3*60 +24 = 204 minutes.\n\nTherefore, the answer is 204 minutes. So boxed, that would be \\boxed{204}\n\nWait, but just to be thorough, let me check once more.\n\nWait, let me compute the time when walking at 3 km/h.\n\nDistance is 9 km, speed 3 km/h, so time is 3 hours. Then add t =24 minutes. So total time is 3 hours 24 minutes, which is 204 minutes. Correct.\n\nAlternatively, maybe I made a mistake in solving the quadratic equation? Let me check that again.\n\nWe had 4s² +8s -45 =0.\n\nQuadratic formula: s = [-8 ± sqrt(64 + 4*4*45)]/(2*4)\n\nCompute discriminant: 64 + 720 = 784. sqrt(784)=28. So,\n\ns = (-8 +28)/8 = 20/8 = 2.5. That\'s correct.\n\nSo yes, that\'s correct.\n\nAlternatively, perhaps I misread the problem?\n\nWait, the problem says "the walk takes her 4 hours, including t minutes spent in the coffee shop." So the total time is 4 hours, which includes both the walking time and the t minutes. Similarly for the second scenario. So the equations are correct.\n\nAlternatively, perhaps the problem is in the units? Let me check.\n\nFirst equation: 9/s + t/60 =4. Since t is in minutes, so t/60 is in hours. The total time is 4 hours. So that\'s correct.\n\nSecond equation: 9/(s+2) + t/60 = 2.4, which is 2 hours 24 minutes, which is 2.4 hours. Correct.\n\nTherefore, the answer is 204 minutes. So I think that\'s right. I don\'t see any mistakes here. So the final answer is 204.\n\n**Final Answer**\n\\boxed{204}\n</think>\n\nAya walks 9 kilometers at two different speeds, \\( s \\) km/h and \\( s + 2 \\) km/h, with a total time including \\( t \\) minutes in the coffee shop given as 4 hours and 2 hours 24 minutes respectively. We need to find the total time when she walks at \\( s + \\frac{1}{2} \\) km/h.\n\nFirst, we set up the equations for the total time including the coffee shop stop:\n\n1. When walking at \\( s \\) km/h:\n   \\[\n   \\frac{9}{s} + \\frac{t}{60} = 4\n   \\]\n2. When walking at \\( s + 2 \\) km/h:\n   \\[\n   \\frac{9}{s + 2} + \\frac{t}{60} = 2.4\n   \\]\n\nSubtracting the second equation from the first to eliminate \\( \\frac{t}{60} \\):\n\\[\n\\frac{9}{s} - \\frac{9}{s + 2} = 1.6\n\\]\n\nSimplifying the left side:\n\\[\n9 \\left( \\frac{1}{s} - \\frac{1}{s + 2} \\right) = 1.6\n\\]\n\\[\n9 \\left( \\frac{2}{s(s + 2)} \\right) = 1.6\n\\]\n\\[\n\\frac{18}{s(s + 2)} = 1.6\n\\]\n\\[\ns(s + 2) = \\frac{18}{1.6} = 11.25\n\\]\n\nSolving the quadratic equation \\( s^2 + 2s - 11.25 = 0 \\):\n\\[\ns = \\frac{-2 \\pm \\sqrt{4 + 45}}{2} = \\frac{-2 \\pm 7}{2}\n\\]\n\nTaking the positive root:\n\\[\ns = \\frac{5}{2} = 2.5 \\text{ km/h}\n\\]\n\nSubstituting \\( s = 2.5 \\) back into the first equation to find \\( t \\):\n\\[\n\\frac{9}{2.5} + \\frac{t}{60} = 4\n\\]\n\\[\n3.6 + \\frac{t}{60} = 4\n\\]\n\\[\n\\frac{t}{60} = 0.4 \\implies t = 24 \\text{ minutes}\n\\]\n\nNow, calculating the time when walking at \\( s + \\frac{1}{2} = 3 \\) km/h:\n\\[\n\\text{Walking time} = \\frac{9}{3} = 3 \\text{ hours}\n\\]\n\\[\n\\text{Total time} = 3 \\text{ hours} + 24 \\text{ minutes} = 3.4 \\text{ hours} = 204 \\text{ minutes}\n\\]\n\nThus, the number of minutes the walk takes her, including the \\( t \\) minutes spent in the coffee shop, is \\(\\boxed{204}\\).', 'num_tokens': 3056, 'context_tokens': 202, 'sum_logits': -744.3143779336602, 'model_answer': ['204']}], 'label': '204', 'task_hash': '80e4ba2275672260f8fceb9b705fedfd', 'model_hash': '12bfe684d427fe9fd6110f272c878d4b'}, True)
+2026-10-10:13:31:02,610 INFO     [run_eval.py:540] Task aime processing time: 58.52 seconds
+2026-10-10:13:31:02,610 INFO     [run_eval.py:545] Saving predictions in /p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/results/dolci-16k-packed-6k/aime-2024-2025-r8/task-000-aime-predictions.jsonl...
+2026-10-10:13:31:02,673 INFO     [run_eval.py:548] Saving metrics in /p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/results/dolci-16k-packed-6k/aime-2024-2025-r8/task-000-aime-metrics.json...
+2026-10-10:13:31:02,674 INFO     [run_eval.py:554] Saving recorded inputs in /p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/results/dolci-16k-packed-6k/aime-2024-2025-r8/task-000-aime-recorded-inputs.jsonl...
+2026-10-10:13:31:02,675 INFO     [run_eval.py:574] 
+
+** Task metrics: **
+{'task_name': 'aime', 'task_hash': '80e4ba2275672260f8fceb9b705fedfd', 'model_hash': '12bfe684d427fe9fd6110f272c878d4b', 'model_config': {'model': '/p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k-vllm011', 'revision': None, 'trust_remote_code': False, 'max_length': 32768, 'model_path': None, 'model_type': 'vllm', 'dtype': 'bfloat16', 'tokenizer': '/p/scratch/rcfd/kowanietz1/models/Olmo-3-7B-Think-SFT'}, 'task_config': {'task_name': 'aime', 'task_core': 'aime', 'limit': None, 'split': 'test', 'num_shots': 0, 'fewshot_seed': 1234, 'primary_metric': 'pass_at_1', 'random_subsample_seed': 1234, 'context_kwargs': None, 'generation_kwargs': {'max_gen_toks': 16384, 'temperature': 0.6, 'truncate_context': False, 'do_sample': True, 'stop_sequences': [], 'top_p': 0.95, 'repeats': 8}, 'metric_kwargs': {'maj_at_ks': [], 'pass_at_ks': [1, 4, 8]}, 'native_id_field': 'index', 'fewshot_source': None, 'dataset_path': 'allenai/aime-2021-2025', 'dataset_name': None, 'use_chat_format': True, 'version': 0, 'revision': None, 'compute_gold_bpb': False, 'external_eval': None, 'custom_kwargs': None, 'skip_model_judges': None, 'model_max_length': None, 'metadata': {'years': [2024], 'alias': 'aime:2024::olmo3:adapt'}}, 'compute_config': {'batch_size': 'auto', 'max_batch_size': 32, 'output_dir': '/p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/results/dolci-16k-packed-6k/aime-2024-2025-r8', 'num_recorded_inputs': 3, 'save_raw_requests': True, 'recompute_metrics': False}, 'processing_time': 58.51963496208191, 'current_date': '2026-10-10 10:49:59 UTC', 'num_instances': 30, 'beaker_info': {}, 'metrics': {'exact_match': 0.0, 'exact_match_sub_2024': 0.0, 'exact_match_flex': 0.3, 'exact_match_flex_sub_2024': 0.3, 'pass_at_1': 0.29583333333333334, 'pass_at_4': 0.5423809523809524, 'pass_at_8': 0.6666666666666666, 'primary_score': 0.29583333333333334}, 'task_idx': 0}
+2026-10-10:13:31:02,675 INFO     [run_eval.py:751] **** Processing task: aime ({'task_name': 'aime', 'task_core': 'aime', 'split': 'test', 'primary_metric': 'pass_at_1', 'generation_kwargs': {'max_gen_toks': 16384, 'temperature': 0.6, 'truncate_context': False, 'do_sample': True, 'stop_sequences': [], 'top_p': 0.95, 'repeats': 8}, 'metric_kwargs': {'maj_at_ks': [], 'pass_at_ks': [1, 4, 8]}, 'native_id_field': 'index', 'dataset_path': 'allenai/aime-2021-2025', 'use_chat_format': True, 'version': 0, 'metadata': {'years': [2025], 'alias': 'aime:2025::olmo3:adapt'}}) ****
+2026-10-10:13:31:02,675 INFO     [run_eval.py:752]   Task hash: 80e4ba2275672260f8fceb9b705fedfd, starting download...
+Using the latest cached version of the dataset since allenai/aime-2021-2025 couldn't be found on the Hugging Face Hub (offline mode is enabled).
+2026-10-10:13:31:02,679 WARNING  [load.py:1377] Using the latest cached version of the dataset since allenai/aime-2021-2025 couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /p/scratch/rcfd/kowanietz1/.cache/huggingface/datasets/allenai___aime-2021-2025/default/0.0.0/73e1eba765ad5847cdb5d1e2e7aaf7b22b585798 (last modified on Wed Oct  7 16:47:23 2026).
+2026-10-10:13:31:02,680 WARNING  [cache.py:94] Found the latest cached dataset configuration 'default' at /p/scratch/rcfd/kowanietz1/.cache/huggingface/datasets/allenai___aime-2021-2025/default/0.0.0/73e1eba765ad5847cdb5d1e2e7aaf7b22b585798 (last modified on Wed Oct  7 16:47:23 2026).
+2026-10-10:13:31:02,687 INFO     [datasets_wrapper.py:500] Non-HF cache (for datasets) case: NonHfCacheCase.NOT_USED_BC_CACHE_UNAVAILABLE
+2026-10-10:13:31:02,687 INFO     [run_eval.py:755]   Task finished downloading!
+2026-10-10:13:31:02,693 INFO     [run_eval.py:783] Number of requests: 240
+2026-10-10:13:31:02,693 INFO     [run_eval.py:791] First request: {'request_type': 'generate_until', 'doc': {'index': 90, 'problem': 'Find the sum of all integer bases $b>9$ for which $17_b$ is a divisor of $97_b.$', 'query': 'Find the sum of all integer bases $b>9$ for which $17_b$ is a divisor of $97_b.$\n\nPresent the answer in LaTex format: \\boxed{Your answer}', 'year': '2025', 'aime_number': 'AIME_I', 'solution': 'We are tasked with finding the number of integer bases $b>9$ such that $\\cfrac{9b+7}{b+7}\\in\textbf{Z}$. Notice that\\[\\cfrac{9b+7}{b+7}=\\cfrac{9b+63-56}{b+7}=\\cfrac{9(b+7)-56}{b+7}=9-\\cfrac{56}{b+7}\\]so we need only $\\cfrac{56}{b+7}\\in\textbf{Z}$. Then $b+7$ is a factor of $56$.\nThe factors of $56$ are $1,2,4,7,8,14,28,56$. Of these, only $8,14,28,56$ produce a positive $b$, namely $b=1,7,21,49$ respectively. However, we are given that $b>9$, so only $b=21,49$ are solutions. Thus the answer is $21+49=\\boxed{070}$.', 'answer': '70', 'choices': ['We are tasked with finding the number of integer bases $b>9$ such that $\\cfrac{9b+7}{b+7}\\in\textbf{Z}$. Notice that\\[\\cfrac{9b+7}{b+7}=\\cfrac{9b+63-56}{b+7}=\\cfrac{9(b+7)-56}{b+7}=9-\\cfrac{56}{b+7}\\]so we need only $\\cfrac{56}{b+7}\\in\textbf{Z}$. Then $b+7$ is a factor of $56$.\nThe factors of $56$ are $1,2,4,7,8,14,28,56$. Of these, only $8,14,28,56$ produce a positive $b$, namely $b=1,7,21,49$ respectively. However, we are given that $b>9$, so only $b=21,49$ are solutions. Thus the answer is $21+49=\\boxed{070}$.']}, 'request': {'context': {'messages': [{'role': 'user', 'content': 'Find the sum of all integer bases $b>9$ for which $17_b$ is a divisor of $97_b.$\n\nPresent the answer in LaTex format: \\boxed{Your answer}'}], 'assistant_prefix': ''}, 'stop_sequences': [], 'generation_kwargs': {'max_gen_toks': 16384, 'temperature': 0.6, 'truncate_context': False, 'do_sample': True, 'top_p': 0.95}}, 'idx': 0, 'task_name': 'aime', 'doc_id': 0, 'native_id': 90, 'label': '70'}
+2026-10-10:13:31:02,693 INFO     [run_eval.py:801] Saving raw requests in /p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/results/dolci-16k-packed-6k/aime-2024-2025-r8/task-001-aime-requests.jsonl...
+2026-10-10:13:31:02,701 INFO     [run_eval.py:883] First instance: {'request_type': 'generate_until', 'doc': {'index': 90, 'problem': 'Find the sum of all integer bases $b>9$ for which $17_b$ is a divisor of $97_b.$', 'query': 'Find the sum of all integer bases $b>9$ for which $17_b$ is a divisor of $97_b.$\n\nPresent the answer in LaTex format: \\boxed{Your answer}', 'year': '2025', 'aime_number': 'AIME_I', 'solution': 'We are tasked with finding the number of integer bases $b>9$ such that $\\cfrac{9b+7}{b+7}\\in\textbf{Z}$. Notice that\\[\\cfrac{9b+7}{b+7}=\\cfrac{9b+63-56}{b+7}=\\cfrac{9(b+7)-56}{b+7}=9-\\cfrac{56}{b+7}\\]so we need only $\\cfrac{56}{b+7}\\in\textbf{Z}$. Then $b+7$ is a factor of $56$.\nThe factors of $56$ are $1,2,4,7,8,14,28,56$. Of these, only $8,14,28,56$ produce a positive $b$, namely $b=1,7,21,49$ respectively. However, we are given that $b>9$, so only $b=21,49$ are solutions. Thus the answer is $21+49=\\boxed{070}$.', 'answer': '70', 'choices': ['We are tasked with finding the number of integer bases $b>9$ such that $\\cfrac{9b+7}{b+7}\\in\textbf{Z}$. Notice that\\[\\cfrac{9b+7}{b+7}=\\cfrac{9b+63-56}{b+7}=\\cfrac{9(b+7)-56}{b+7}=9-\\cfrac{56}{b+7}\\]so we need only $\\cfrac{56}{b+7}\\in\textbf{Z}$. Then $b+7$ is a factor of $56$.\nThe factors of $56$ are $1,2,4,7,8,14,28,56$. Of these, only $8,14,28,56$ produce a positive $b$, namely $b=1,7,21,49$ respectively. However, we are given that $b>9$, so only $b=21,49$ are solutions. Thus the answer is $21+49=\\boxed{070}$.']}, 'idx': 0, 'task_name': 'aime', 'doc_id': 0, 'native_id': 90, 'label': '70'}
+
+  ** Completion prompt: **
+<|im_start|>system
+You are Olmo, a helpful AI assistant built by Ai2. Your date cutoff is December 2024, and your model weights are available at https://huggingface.co/allenai.<|im_end|>
+<|im_start|>user
+Find the sum of all integer bases $b>9$ for which $17_b$ is a divisor of $97_b.$
+
+Present the answer in LaTex format: \boxed{Your answer}<|im_end|>
+<|im_start|>assistant
+<think>
+
+  ** Generate until: **
+    
+
+Running generate_until requests:   0%|          | 0/240 [00:00<?, ?it/s]
+Adding requests:   0%|          | 0/240 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 240/240 [00:00<00:00, 9264.23it/s]
+
+Processed prompts:   0%|          | 0/240 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
+Processed prompts:   0%|          | 1/240 [04:15<16:57:53, 255.54s/it, est. speed input: 2.50 toks/s, output: 23.94 toks/s][A
+Processed prompts:   1%|          | 2/240 [07:17<14:01:00, 212.02s/it, est. speed input: 2.92 toks/s, output: 39.81 toks/s][A
+Processed prompts:   1%|▏         | 3/240 [07:27<7:54:17, 120.08s/it, est. speed input: 3.55 toks/s, output: 64.75 toks/s] [A
+Processed prompts:   2%|▏         | 4/240 [07:53<5:25:18, 82.70s/it, est. speed input: 4.71 toks/s, output: 87.28 toks/s] [A
+Processed prompts:   2%|▏         | 5/240 [09:55<6:19:29, 96.89s/it, est. speed input: 4.71 toks/s, output: 95.72 toks/s][A
+Processed prompts:   2%|▎         | 6/240 [10:22<4:45:50, 73.29s/it, est. speed input: 5.90 toks/s, output: 117.81 toks/s][A
+Processed prompts:   3%|▎         | 7/240 [10:22<3:11:55, 49.42s/it, est. speed input: 7.30 toks/s, output: 144.05 toks/s][A
+Processed prompts:  17%|█▋        | 40/240 [11:09<14:28,  4.34s/it, est. speed input: 35.21 toks/s, output: 941.30 toks/s][A
+Processed prompts:  17%|█▋        | 41/240 [11:38<17:35,  5.30s/it, est. speed input: 34.17 toks/s, output: 925.68 toks/s][A
+Processed prompts:  18%|█▊        | 42/240 [12:05<21:14,  6.44s/it, est. speed input: 33.32 toks/s, output: 914.15 toks/s][A
+Processed prompts:  18%|█▊        | 43/240 [12:20<23:09,  7.06s/it, est. speed input: 32.89 toks/s, output: 902.85 toks/s][A
+Processed prompts:  18%|█▊        | 44/240 [12:30<23:56,  7.33s/it, est. speed input: 32.84 toks/s, output: 912.55 toks/s][A
+Processed prompts:  19%|█▉        | 45/240 [12:32<21:54,  6.74s/it, est. speed input: 33.07 toks/s, output: 919.51 toks/s][A
+Processed prompts:  19%|█▉        | 46/240 [12:40<21:55,  6.78s/it, est. speed input: 33.09 toks/s, output: 921.79 toks/s][A
+Processed prompts:  20%|█▉        | 47/240 [13:30<45:34, 14.17s/it, est. speed input: 31.38 toks/s, output: 884.30 toks/s][A
+Processed prompts:  20%|██        | 48/240 [14:17<1:05:23, 20.44s/it, est. speed input: 30.01 toks/s, output: 855.38 toks/s][A
+Processed prompts:  20%|██        | 49/240 [14:20<53:05, 16.68s/it, est. speed input: 30.15 toks/s, output: 863.01 toks/s]  [A
+Processed prompts:  21%|██        | 50/240 [14:25<43:54, 13.87s/it, est. speed input: 30.24 toks/s, output: 869.58 toks/s][A
+Processed prompts:  21%|██▏       | 51/240 [14:36<41:18, 13.12s/it, est. speed input: 30.20 toks/s, output: 877.46 toks/s][A
+Processed prompts:  22%|██▏       | 52/240 [14:38<32:11, 10.27s/it, est. speed input: 30.37 toks/s, output: 886.47 toks/s][A
+Processed prompts:  22%|██▏       | 53/240 [14:49<32:38, 10.47s/it, est. speed input: 30.25 toks/s, output: 887.14 toks/s][A
+Processed prompts:  22%|██▎       | 54/240 [14:53<27:12,  8.78s/it, est. speed input: 30.42 toks/s, output: 901.05 toks/s][A
+Processed prompts:  23%|██▎       | 55/240 [15:10<33:40, 10.92s/it, est. speed input: 30.13 toks/s, output: 897.34 toks/s][A
+Processed prompts:  23%|██▎       | 56/240 [15:11<24:32,  8.00s/it, est. speed input: 30.42 toks/s, output: 914.44 toks/s][A
+Processed prompts:  24%|██▍       | 57/240 [15:27<31:58, 10.48s/it, est. speed input: 30.15 toks/s, output: 915.90 toks/s][A
+Processed prompts:  24%|██▍       | 58/240 [15:29<24:09,  7.96s/it, est. speed input: 30.35 toks/s, output: 928.10 toks/s][A
+Processed prompts:  25%|██▍       | 59/240 [15:36<23:00,  7.63s/it, est. speed input: 30.39 toks/s, output: 938.63 toks/s][A
+Processed prompts:  25%|██▌       | 60/240 [15:40<19:52,  6.62s/it, est. speed input: 30.51 toks/s, output: 947.34 toks/s][A
+Processed prompts:  25%|██▌       | 61/240 [15:58<29:56, 10.03s/it, est. speed input: 30.20 toks/s, output: 946.59 toks/s][A
+Processed prompts:  26%|██▌       | 62/240 [15:58<21:05,  7.11s/it, est. speed input: 30.45 toks/s, output: 960.25 toks/s][A
+Processed prompts:  26%|██▋       | 63/240 [16:06<21:06,  7.16s/it, est. speed input: 30.41 toks/s, output: 964.80 toks/s][A
+Processed prompts:  27%|██▋       | 64/240 [16:09<17:22,  5.92s/it, est. speed input: 30.55 toks/s, output: 974.72 toks/s][A
+Processed prompts:  27%|██▋       | 65/240 [16:14<16:23,  5.62s/it, est. speed input: 30.65 toks/s, output: 986.61 toks/s][A
+Processed prompts:  28%|██▊       | 66/240 [16:27<22:44,  7.84s/it, est. speed input: 30.47 toks/s, output: 986.93 toks/s][A
+Processed prompts:  28%|██▊       | 67/240 [16:28<16:50,  5.84s/it, est. speed input: 30.68 toks/s, output: 1002.35 toks/s][A
+Processed prompts:  28%|██▊       | 68/240 [16:41<23:23,  8.16s/it, est. speed input: 30.52 toks/s, output: 1005.12 toks/s][A
+Processed prompts:  29%|██▉       | 69/240 [17:07<38:03, 13.35s/it, est. speed input: 30.00 toks/s, output: 996.15 toks/s] [A
+Processed prompts:  29%|██▉       | 70/240 [17:19<36:39, 12.94s/it, est. speed input: 29.89 toks/s, output: 1000.44 toks/s][A
+Processed prompts:  30%|██▉       | 71/240 [18:03<1:02:35, 22.22s/it, est. speed input: 28.91 toks/s, output: 975.03 toks/s][A
+Processed prompts:  30%|███       | 72/240 [18:11<50:29, 18.04s/it, est. speed input: 28.86 toks/s, output: 977.03 toks/s]  [A
+Processed prompts:  30%|███       | 73/240 [18:14<37:21, 13.42s/it, est. speed input: 29.02 toks/s, output: 989.64 toks/s][A
+Processed prompts:  31%|███       | 74/240 [18:19<30:19, 10.96s/it, est. speed input: 29.11 toks/s, output: 999.84 toks/s][A
+Processed prompts:  31%|███▏      | 75/240 [18:24<25:08,  9.14s/it, est. speed input: 29.18 toks/s, output: 1010.24 toks/s][A
+Processed prompts:  32%|███▏      | 76/240 [18:28<21:07,  7.73s/it, est. speed input: 29.26 toks/s, output: 1020.98 toks/s][A
+Processed prompts:  32%|███▏      | 77/240 [18:38<22:36,  8.32s/it, est. speed input: 29.20 toks/s, output: 1026.77 toks/s][A
+Processed prompts:  32%|███▎      | 78/240 [18:40<17:18,  6.41s/it, est. speed input: 29.34 toks/s, output: 1039.62 toks/s][A
+Processed prompts:  33%|███▎      | 79/240 [18:42<13:34,  5.06s/it, est. speed input: 29.48 toks/s, output: 1052.45 toks/s][A
+Processed prompts:  33%|███▎      | 80/240 [18:43<10:53,  4.08s/it, est. speed input: 29.62 toks/s, output: 1065.34 toks/s][A
+Processed prompts:  34%|███▍      | 81/240 [18:45<08:54,  3.36s/it, est. speed input: 29.77 toks/s, output: 1078.30 toks/s][A
+Processed prompts:  34%|███▍      | 82/240 [18:47<07:47,  2.96s/it, est. speed input: 29.91 toks/s, output: 1090.91 toks/s][A
+Processed prompts:  35%|███▍      | 83/240 [18:51<08:01,  3.07s/it, est. speed input: 30.01 toks/s, output: 1102.19 toks/s][A
+Processed prompts:  35%|███▌      | 84/240 [18:52<06:45,  2.60s/it, est. speed input: 30.14 toks/s, output: 1115.19 toks/s][A
+Processed prompts:  35%|███▌      | 85/240 [18:54<06:09,  2.38s/it, est. speed input: 30.27 toks/s, output: 1127.78 toks/s][A
+Processed prompts:  36%|███▌      | 86/240 [18:55<05:15,  2.05s/it, est. speed input: 30.39 toks/s, output: 1134.08 toks/s][A
+Processed prompts:  36%|███▋      | 87/240 [18:56<04:06,  1.61s/it, est. speed input: 30.55 toks/s, output: 1147.90 toks/s][A
+Processed prompts:  37%|███▋      | 88/240 [18:57<04:00,  1.59s/it, est. speed input: 30.68 toks/s, output: 1160.77 toks/s][A
+Processed prompts:  37%|███▋      | 89/240 [18:59<04:01,  1.60s/it, est. speed input: 30.81 toks/s, output: 1173.49 toks/s][A
+Processed prompts:  38%|███▊      | 90/240 [19:00<03:58,  1.59s/it, est. speed input: 30.94 toks/s, output: 1186.22 toks/s][A
+Processed prompts:  38%|███▊      | 91/240 [19:02<03:56,  1.58s/it, est. speed input: 31.08 toks/s, output: 1198.94 toks/s][A
+Processed prompts:  38%|███▊      | 92/240 [19:04<04:01,  1.63s/it, est. speed input: 31.20 toks/s, output: 1211.43 toks/s][A
+Processed prompts:  39%|███▉      | 93/240 [19:05<03:46,  1.54s/it, est. speed input: 31.32 toks/s, output: 1217.43 toks/s][A
+Processed prompts:  39%|███▉      | 94/240 [19:06<02:55,  1.20s/it, est. speed input: 31.48 toks/s, output: 1231.30 toks/s][A
+Processed prompts:  40%|███▉      | 95/240 [19:08<04:05,  1.69s/it, est. speed input: 31.56 toks/s, output: 1236.18 toks/s][A
+Processed prompts:  40%|████      | 96/240 [19:21<11:53,  4.96s/it, est. speed input: 31.37 toks/s, output: 1230.15 toks/s][A
+Processed prompts:  40%|████      | 97/240 [19:55<32:31, 13.65s/it, est. speed input: 30.64 toks/s, output: 1208.93 toks/s][A
+Processed prompts:  41%|████      | 98/240 [20:06<30:34, 12.92s/it, est. speed input: 30.48 toks/s, output: 1200.44 toks/s][A
+Processed prompts:  41%|████▏     | 99/240 [20:31<39:03, 16.62s/it, est. speed input: 29.98 toks/s, output: 1179.07 toks/s][A
+Processed prompts:  42%|████▏     | 100/240 [20:46<37:34, 16.10s/it, est. speed input: 29.74 toks/s, output: 1168.60 toks/s][A
+Processed prompts:  42%|████▏     | 101/240 [21:18<48:23, 20.89s/it, est. speed input: 29.14 toks/s, output: 1152.12 toks/s][A
+Processed prompts:  42%|████▎     | 102/240 [21:32<42:51, 18.64s/it, est. speed input: 28.96 toks/s, output: 1144.57 toks/s][A
+Processed prompts:  43%|████▎     | 103/240 [21:44<38:00, 16.65s/it, est. speed input: 28.81 toks/s, output: 1138.50 toks/s][A
+Processed prompts:  43%|████▎     | 104/240 [21:56<34:34, 15.26s/it, est. speed input: 28.66 toks/s, output: 1132.92 toks/s][A
+Processed prompts:  44%|████▍     | 105/240 [22:19<39:43, 17.65s/it, est. speed input: 28.30 toks/s, output: 1124.25 toks/s][A
+Processed prompts:  44%|████▍     | 106/240 [22:30<35:04, 15.70s/it, est. speed input: 28.20 toks/s, output: 1125.83 toks/s][A
+Processed prompts:  45%|████▍     | 107/240 [22:41<31:46, 14.34s/it, est. speed input: 28.11 toks/s, output: 1128.65 toks/s][A
+Processed prompts:  45%|████▌     | 108/240 [22:56<31:46, 14.44s/it, est. speed input: 27.92 toks/s, output: 1119.87 toks/s][A
+Processed prompts:  45%|████▌     | 109/240 [23:07<29:17, 13.41s/it, est. speed input: 27.83 toks/s, output: 1122.79 toks/s][A
+Processed prompts:  46%|████▌     | 110/240 [23:26<32:41, 15.09s/it, est. speed input: 27.58 toks/s, output: 1118.36 toks/s][A
+Processed prompts:  46%|████▋     | 111/240 [23:41<32:38, 15.18s/it, est. speed input: 27.40 toks/s, output: 1112.75 toks/s][A
+Processed prompts:  47%|████▋     | 112/240 [24:01<35:14, 16.52s/it, est. speed input: 27.13 toks/s, output: 1104.49 toks/s][A
+Processed prompts:  47%|████▋     | 113/240 [24:13<32:02, 15.14s/it, est. speed input: 27.02 toks/s, output: 1102.57 toks/s][A
+Processed prompts:  48%|████▊     | 114/240 [24:23<28:38, 13.64s/it, est. speed input: 26.95 toks/s, output: 1106.13 toks/s][A
+Processed prompts:  48%|████▊     | 115/240 [24:31<24:51, 11.93s/it, est. speed input: 26.93 toks/s, output: 1111.29 toks/s][A
+Processed prompts:  48%|████▊     | 116/240 [24:43<24:34, 11.89s/it, est. speed input: 26.84 toks/s, output: 1113.50 toks/s][A
+Processed prompts:  49%|████▉     | 117/240 [24:49<20:44, 10.12s/it, est. speed input: 26.85 toks/s, output: 1120.03 toks/s][A
+Processed prompts:  49%|████▉     | 118/240 [24:53<17:11,  8.46s/it, est. speed input: 26.89 toks/s, output: 1127.57 toks/s][A
+Processed prompts:  50%|████▉     | 119/240 [24:56<13:49,  6.85s/it, est. speed input: 26.95 toks/s, output: 1136.17 toks/s][A
+Processed prompts:  50%|█████     | 120/240 [25:02<12:51,  6.43s/it, est. speed input: 26.98 toks/s, output: 1142.96 toks/s][A
+Processed prompts:  50%|█████     | 121/240 [25:05<10:58,  5.53s/it, est. speed input: 27.03 toks/s, output: 1151.23 toks/s][A
+Processed prompts:  51%|█████     | 122/240 [25:07<08:36,  4.38s/it, est. speed input: 27.12 toks/s, output: 1160.80 toks/s][A
+Processed prompts:  51%|█████▏    | 123/240 [25:28<18:08,  9.30s/it, est. speed input: 26.87 toks/s, output: 1155.74 toks/s][A
+Processed prompts:  52%|█████▏    | 124/240 [25:47<23:51, 12.34s/it, est. speed input: 26.64 toks/s, output: 1149.47 toks/s][A
+Processed prompts:  52%|█████▏    | 125/240 [25:48<16:44,  8.73s/it, est. speed input: 26.73 toks/s, output: 1151.79 toks/s][A
+Processed prompts:  52%|█████▎    | 126/240 [25:57<17:00,  8.96s/it, est. speed input: 26.66 toks/s, output: 1147.13 toks/s][A
+Processed prompts:  53%|█████▎    | 127/240 [25:58<12:26,  6.61s/it, est. speed input: 26.74 toks/s, output: 1148.82 toks/s][A
+Processed prompts:  53%|█████▎    | 128/240 [26:01<09:59,  5.35s/it, est. speed input: 26.79 toks/s, output: 1149.87 toks/s][A
+Processed prompts:  54%|█████▍    | 129/240 [26:06<10:11,  5.51s/it, est. speed input: 26.81 toks/s, output: 1156.02 toks/s][A
+Processed prompts:  54%|█████▍    | 130/240 [26:13<10:57,  5.97s/it, est. speed input: 26.78 toks/s, output: 1153.31 toks/s][A
+Processed prompts:  55%|█████▍    | 131/240 [26:17<09:43,  5.36s/it, est. speed input: 26.81 toks/s, output: 1153.32 toks/s][A
+Processed prompts:  55%|█████▌    | 132/240 [26:31<14:07,  7.84s/it, est. speed input: 26.67 toks/s, output: 1146.33 toks/s][A
+Processed prompts:  55%|█████▌    | 133/240 [26:37<12:53,  7.23s/it, est. speed input: 26.68 toks/s, output: 1151.11 toks/s][A
+Processed prompts:  56%|█████▌    | 134/240 [26:39<10:09,  5.75s/it, est. speed input: 26.75 toks/s, output: 1159.70 toks/s][A
+Processed prompts:  56%|█████▋    | 135/240 [26:54<14:50,  8.48s/it, est. speed input: 26.60 toks/s, output: 1155.07 toks/s][A
+Processed prompts:  57%|█████▋    | 136/240 [27:00<13:23,  7.73s/it, est. speed input: 26.61 toks/s, output: 1160.93 toks/s][A
+Processed prompts:  57%|█████▋    | 137/240 [27:06<12:27,  7.26s/it, est. speed input: 26.60 toks/s, output: 1160.17 toks/s][A
+Processed prompts:  57%|█████▊    | 138/240 [27:12<11:22,  6.69s/it, est. speed input: 26.62 toks/s, output: 1166.39 toks/s][A
+Processed prompts:  58%|█████▊    | 139/240 [27:23<13:48,  8.20s/it, est. speed input: 26.54 toks/s, output: 1168.03 toks/s][A
+Processed prompts:  58%|█████▊    | 140/240 [27:24<10:03,  6.04s/it, est. speed input: 26.63 toks/s, output: 1177.29 toks/s][A
+Processed prompts:  59%|█████▉    | 141/240 [27:28<08:48,  5.34s/it, est. speed input: 26.68 toks/s, output: 1184.58 toks/s][A
+Processed prompts:  59%|█████▉    | 142/240 [27:31<07:32,  4.62s/it, est. speed input: 26.74 toks/s, output: 1192.39 toks/s][A
+Processed prompts:  60%|█████▉    | 143/240 [27:32<05:41,  3.52s/it, est. speed input: 26.83 toks/s, output: 1201.62 toks/s][A
+Processed prompts:  60%|██████    | 144/240 [27:37<06:27,  4.04s/it, est. speed input: 26.85 toks/s, output: 1207.70 toks/s][A
+Processed prompts:  60%|██████    | 145/240 [27:42<06:40,  4.22s/it, est. speed input: 26.88 toks/s, output: 1214.20 toks/s][A
+Processed prompts:  61%|██████    | 146/240 [27:47<06:54,  4.41s/it, est. speed input: 26.91 toks/s, output: 1220.47 toks/s][A
+Processed prompts:  61%|██████▏   | 147/240 [27:50<06:18,  4.07s/it, est. speed input: 26.96 toks/s, output: 1227.90 toks/s][A
+Processed prompts:  62%|██████▏   | 148/240 [27:53<05:39,  3.69s/it, est. speed input: 27.02 toks/s, output: 1235.64 toks/s][A
+Processed prompts:  62%|██████▏   | 149/240 [27:53<04:17,  2.83s/it, est. speed input: 27.11 toks/s, output: 1244.82 toks/s][A
+Processed prompts:  62%|██████▎   | 150/240 [27:54<03:19,  2.22s/it, est. speed input: 27.19 toks/s, output: 1254.01 toks/s][A
+Processed prompts:  63%|██████▎   | 151/240 [27:57<03:34,  2.41s/it, est. speed input: 27.24 toks/s, output: 1261.64 toks/s][A
+Processed prompts:  63%|██████▎   | 152/240 [27:58<02:44,  1.87s/it, est. speed input: 27.33 toks/s, output: 1270.95 toks/s][A
+Processed prompts:  64%|██████▍   | 153/240 [27:58<02:11,  1.52s/it, est. speed input: 27.41 toks/s, output: 1280.18 toks/s][A
+Processed prompts:  64%|██████▍   | 154/240 [28:00<02:17,  1.60s/it, est. speed input: 27.47 toks/s, output: 1288.56 toks/s][A
+Processed prompts:  65%|██████▍   | 155/240 [28:02<02:24,  1.70s/it, est. speed input: 27.54 toks/s, output: 1296.81 toks/s][A
+Processed prompts:  65%|██████▌   | 156/240 [28:03<01:57,  1.40s/it, est. speed input: 27.62 toks/s, output: 1306.01 toks/s][A
+Processed prompts:  65%|██████▌   | 157/240 [28:05<02:20,  1.69s/it, est. speed input: 27.67 toks/s, output: 1313.90 toks/s][A
+Processed prompts:  66%|██████▌   | 158/240 [28:06<01:50,  1.35s/it, est. speed input: 27.76 toks/s, output: 1323.18 toks/s][A
+Processed prompts:  66%|██████▋   | 159/240 [28:08<02:16,  1.69s/it, est. speed input: 27.81 toks/s, output: 1330.93 toks/s][A
+Processed prompts:  67%|██████▋   | 160/240 [28:12<03:16,  2.45s/it, est. speed input: 27.83 toks/s, output: 1337.28 toks/s][A
+Processed prompts:  67%|██████▋   | 161/240 [28:31<09:31,  7.23s/it, est. speed input: 27.62 toks/s, output: 1327.82 toks/s][A
+Processed prompts:  68%|██████▊   | 162/240 [29:30<29:46, 22.90s/it, est. speed input: 26.78 toks/s, output: 1292.48 toks/s][A
+Processed prompts:  68%|██████▊   | 163/240 [30:12<36:32, 28.47s/it, est. speed input: 26.25 toks/s, output: 1269.75 toks/s][A
+Processed prompts:  68%|██████▊   | 164/240 [30:48<39:02, 30.83s/it, est. speed input: 25.82 toks/s, output: 1252.58 toks/s][A
+Processed prompts:  69%|██████▉   | 165/240 [30:49<27:09, 21.72s/it, est. speed input: 25.89 toks/s, output: 1259.16 toks/s][A
+Processed prompts:  69%|██████▉   | 166/240 [31:10<26:38, 21.60s/it, est. speed input: 25.68 toks/s, output: 1251.59 toks/s][A
+Processed prompts:  70%|██████▉   | 167/240 [32:33<48:52, 40.17s/it, est. speed input: 24.65 toks/s, output: 1203.86 toks/s][A
+Processed prompts:  70%|███████   | 168/240 [32:46<38:26, 32.03s/it, est. speed input: 24.57 toks/s, output: 1204.21 toks/s][A
+Processed prompts:  70%|███████   | 169/240 [33:13<36:07, 30.52s/it, est. speed input: 24.31 toks/s, output: 1196.12 toks/s][A
+Processed prompts:  71%|███████   | 170/240 [33:25<28:49, 24.71s/it, est. speed input: 24.25 toks/s, output: 1195.60 toks/s][A
+Processed prompts:  71%|███████▏  | 171/240 [34:17<38:00, 33.05s/it, est. speed input: 23.70 toks/s, output: 1173.06 toks/s][A
+Processed prompts:  72%|███████▏  | 172/240 [34:31<30:54, 27.28s/it, est. speed input: 23.61 toks/s, output: 1173.14 toks/s][A
+Processed prompts:  72%|███████▏  | 173/240 [34:47<26:48, 24.00s/it, est. speed input: 23.50 toks/s, output: 1171.80 toks/s][A
+Processed prompts:  72%|███████▎  | 174/240 [34:57<21:35, 19.63s/it, est. speed input: 23.46 toks/s, output: 1174.35 toks/s][A
+Processed prompts:  73%|███████▎  | 175/240 [35:04<17:18, 15.98s/it, est. speed input: 23.45 toks/s, output: 1177.96 toks/s][A
+Processed prompts:  73%|███████▎  | 176/240 [35:14<14:55, 14.00s/it, est. speed input: 23.42 toks/s, output: 1180.49 toks/s][A
+Processed prompts:  74%|███████▍  | 177/240 [35:18<11:50, 11.28s/it, est. speed input: 23.43 toks/s, output: 1185.47 toks/s][A
+Processed prompts:  74%|███████▍  | 178/240 [35:21<08:59,  8.70s/it, est. speed input: 23.47 toks/s, output: 1190.54 toks/s][A
+Processed prompts:  75%|███████▍  | 179/240 [35:26<07:31,  7.40s/it, est. speed input: 23.49 toks/s, output: 1195.81 toks/s][A
+Processed prompts:  75%|███████▌  | 180/240 [35:50<12:33, 12.56s/it, est. speed input: 23.29 toks/s, output: 1189.75 toks/s][A
+Processed prompts:  75%|███████▌  | 181/240 [35:59<11:24, 11.60s/it, est. speed input: 23.26 toks/s, output: 1192.17 toks/s][A
+Processed prompts:  76%|███████▌  | 182/240 [36:06<09:39,  9.98s/it, est. speed input: 23.26 toks/s, output: 1196.32 toks/s][A
+Processed prompts:  76%|███████▋  | 183/240 [36:09<07:41,  8.10s/it, est. speed input: 23.28 toks/s, output: 1201.27 toks/s][A
+Processed prompts:  77%|███████▋  | 184/240 [36:13<06:24,  6.86s/it, est. speed input: 23.31 toks/s, output: 1206.60 toks/s][A
+Processed prompts:  77%|███████▋  | 185/240 [36:20<06:12,  6.77s/it, est. speed input: 23.31 toks/s, output: 1210.49 toks/s][A
+Processed prompts:  78%|███████▊  | 186/240 [36:26<05:51,  6.51s/it, est. speed input: 23.31 toks/s, output: 1214.70 toks/s][A
+Processed prompts:  78%|███████▊  | 187/240 [36:35<06:29,  7.34s/it, est. speed input: 23.28 toks/s, output: 1217.04 toks/s][A
+Processed prompts:  78%|███████▊  | 188/240 [36:37<04:53,  5.64s/it, est. speed input: 23.32 toks/s, output: 1223.18 toks/s][A
+Processed prompts:  79%|███████▉  | 189/240 [36:42<04:48,  5.65s/it, est. speed input: 23.33 toks/s, output: 1227.47 toks/s][A
+Processed prompts:  79%|███████▉  | 190/240 [36:46<04:15,  5.11s/it, est. speed input: 23.35 toks/s, output: 1232.75 toks/s][A
+Processed prompts:  80%|███████▉  | 191/240 [36:49<03:33,  4.35s/it, est. speed input: 23.39 toks/s, output: 1238.73 toks/s][A
+Processed prompts:  80%|████████  | 192/240 [36:51<03:00,  3.75s/it, est. speed input: 23.43 toks/s, output: 1244.82 toks/s][A
+Processed prompts:  80%|████████  | 193/240 [36:53<02:31,  3.23s/it, est. speed input: 23.47 toks/s, output: 1251.08 toks/s][A
+Processed prompts:  81%|████████  | 194/240 [36:54<01:47,  2.35s/it, est. speed input: 23.53 toks/s, output: 1258.32 toks/s][A
+Processed prompts:  81%|████████▏ | 195/240 [36:54<01:23,  1.86s/it, est. speed input: 23.59 toks/s, output: 1265.31 toks/s][A
+Processed prompts:  82%|████████▏ | 196/240 [36:58<01:41,  2.31s/it, est. speed input: 23.62 toks/s, output: 1270.78 toks/s][A
+Processed prompts:  82%|████████▏ | 197/240 [36:58<01:12,  1.70s/it, est. speed input: 23.68 toks/s, output: 1278.01 toks/s][A
+Processed prompts:  82%|████████▎ | 198/240 [36:59<00:58,  1.39s/it, est. speed input: 23.73 toks/s, output: 1285.02 toks/s][A
+Processed prompts:  83%|████████▎ | 199/240 [37:00<00:56,  1.39s/it, est. speed input: 23.78 toks/s, output: 1291.59 toks/s][A
+Processed prompts:  83%|████████▎ | 200/240 [37:01<00:49,  1.24s/it, est. speed input: 23.83 toks/s, output: 1298.45 toks/s][A
+Processed prompts:  84%|████████▍ | 201/240 [37:01<00:35,  1.09it/s, est. speed input: 23.89 toks/s, output: 1305.73 toks/s][A
+Processed prompts:  84%|████████▍ | 202/240 [37:01<00:27,  1.40it/s, est. speed input: 23.95 toks/s, output: 1312.96 toks/s][A
+Processed prompts:  85%|████████▍ | 203/240 [37:02<00:22,  1.66it/s, est. speed input: 24.01 toks/s, output: 1320.13 toks/s][A
+Processed prompts:  85%|████████▌ | 204/240 [37:02<00:20,  1.72it/s, est. speed input: 24.06 toks/s, output: 1327.18 toks/s][A
+Processed prompts:  85%|████████▌ | 205/240 [37:03<00:18,  1.86it/s, est. speed input: 24.12 toks/s, output: 1334.29 toks/s][A
+Processed prompts:  86%|████████▌ | 206/240 [37:04<00:24,  1.38it/s, est. speed input: 24.16 toks/s, output: 1340.96 toks/s][A
+Processed prompts:  86%|████████▋ | 207/240 [37:05<00:26,  1.26it/s, est. speed input: 24.21 toks/s, output: 1347.75 toks/s][A
+Processed prompts:  87%|████████▋ | 208/240 [37:08<00:52,  1.65s/it, est. speed input: 24.24 toks/s, output: 1352.89 toks/s][A
+Processed prompts:  87%|████████▋ | 209/240 [37:10<00:53,  1.72s/it, est. speed input: 24.27 toks/s, output: 1359.09 toks/s][A
+Processed prompts:  88%|████████▊ | 210/240 [37:18<01:42,  3.42s/it, est. speed input: 24.24 toks/s, output: 1361.92 toks/s][A
+Processed prompts:  88%|████████▊ | 211/240 [37:18<01:15,  2.59s/it, est. speed input: 24.28 toks/s, output: 1363.30 toks/s][A
+Processed prompts:  88%|████████▊ | 212/240 [37:22<01:25,  3.04s/it, est. speed input: 24.28 toks/s, output: 1362.30 toks/s][A
+Processed prompts:  89%|████████▉ | 213/240 [37:25<01:21,  3.03s/it, est. speed input: 24.29 toks/s, output: 1361.92 toks/s][A
+Processed prompts:  89%|████████▉ | 214/240 [37:28<01:17,  2.97s/it, est. speed input: 24.31 toks/s, output: 1362.46 toks/s][A
+Processed prompts:  90%|████████▉ | 215/240 [37:34<01:32,  3.71s/it, est. speed input: 24.30 toks/s, output: 1361.05 toks/s][A
+Processed prompts:  90%|█████████ | 216/240 [37:36<01:22,  3.43s/it, est. speed input: 24.31 toks/s, output: 1361.65 toks/s][A
+Processed prompts:  90%|█████████ | 217/240 [37:38<01:09,  3.02s/it, est. speed input: 24.34 toks/s, output: 1363.25 toks/s][A
+Processed prompts:  91%|█████████ | 218/240 [37:39<00:49,  2.24s/it, est. speed input: 24.39 toks/s, output: 1366.57 toks/s][A
+Processed prompts:  91%|█████████▏| 219/240 [37:44<01:02,  3.00s/it, est. speed input: 24.39 toks/s, output: 1366.03 toks/s][A
+Processed prompts:  92%|█████████▏| 220/240 [37:49<01:13,  3.68s/it, est. speed input: 24.37 toks/s, output: 1364.90 toks/s][A
+Processed prompts:  92%|█████████▏| 221/240 [37:50<00:53,  2.83s/it, est. speed input: 24.42 toks/s, output: 1367.75 toks/s][A
+Processed prompts:  92%|█████████▎| 222/240 [37:52<00:48,  2.68s/it, est. speed input: 24.44 toks/s, output: 1368.37 toks/s][A
+Processed prompts:  93%|█████████▎| 223/240 [37:55<00:49,  2.89s/it, est. speed input: 24.45 toks/s, output: 1368.72 toks/s][A
+Processed prompts:  93%|█████████▎| 224/240 [38:02<01:01,  3.85s/it, est. speed input: 24.43 toks/s, output: 1368.08 toks/s][A
+Processed prompts:  94%|█████████▍| 225/240 [38:02<00:43,  2.87s/it, est. speed input: 24.48 toks/s, output: 1370.88 toks/s][A
+Processed prompts:  94%|█████████▍| 226/240 [38:03<00:31,  2.28s/it, est. speed input: 24.53 toks/s, output: 1375.17 toks/s][A
+Processed prompts:  95%|█████████▍| 227/240 [38:03<00:22,  1.71s/it, est. speed input: 24.58 toks/s, output: 1382.12 toks/s][A
+Processed prompts:  95%|█████████▌| 228/240 [38:04<00:15,  1.29s/it, est. speed input: 24.61 toks/s, output: 1384.33 toks/s][A
+Processed prompts:  95%|█████████▌| 229/240 [38:09<00:26,  2.39s/it, est. speed input: 24.61 toks/s, output: 1384.36 toks/s][A
+Processed prompts:  96%|█████████▌| 230/240 [38:19<00:48,  4.88s/it, est. speed input: 24.54 toks/s, output: 1381.33 toks/s][A
+Processed prompts:  96%|█████████▋| 231/240 [38:31<01:03,  7.00s/it, est. speed input: 24.46 toks/s, output: 1377.43 toks/s][A
+Processed prompts:  97%|█████████▋| 232/240 [38:42<01:05,  8.16s/it, est. speed input: 24.39 toks/s, output: 1374.22 toks/s][A
+Processed prompts:  97%|█████████▋| 233/240 [38:46<00:47,  6.78s/it, est. speed input: 24.40 toks/s, output: 1379.15 toks/s][A
+Processed prompts:  98%|█████████▊| 234/240 [38:55<00:45,  7.51s/it, est. speed input: 24.36 toks/s, output: 1380.72 toks/s][A
+Processed prompts:  98%|█████████▊| 235/240 [38:58<00:30,  6.17s/it, est. speed input: 24.38 toks/s, output: 1384.23 toks/s][A
+Processed prompts:  98%|█████████▊| 236/240 [39:09<00:30,  7.55s/it, est. speed input: 24.32 toks/s, output: 1384.87 toks/s][A
+Processed prompts:  99%|█████████▉| 237/240 [39:42<00:45, 15.15s/it, est. speed input: 24.03 toks/s, output: 1372.61 toks/s][A
+Processed prompts:  99%|█████████▉| 238/240 [40:04<00:34, 17.21s/it, est. speed input: 23.86 toks/s, output: 1366.52 toks/s][A
+Processed prompts: 100%|█████████▉| 239/240 [40:10<00:13, 13.92s/it, est. speed input: 23.85 toks/s, output: 1369.78 toks/s][A
+Processed prompts: 100%|██████████| 240/240 [40:33<00:00, 16.66s/it, est. speed input: 23.67 toks/s, output: 1363.54 toks/s][A
+Processed prompts: 100%|██████████| 240/240 [40:33<00:00, 16.66s/it, est. speed input: 23.67 toks/s, output: 1363.54 toks/s][AProcessed prompts: 100%|██████████| 240/240 [40:33<00:00, 10.14s/it, est. speed input: 23.67 toks/s, output: 1363.54 toks/s]
+Running generate_until requests:   0%|          | 1/240 [40:33<161:33:34, 2433.53s/it]Running generate_until requests: 100%|██████████| 240/240 [40:33<00:00, 10.14s/it]    
+2026-10-10:14:11:38,087 INFO     [run_eval.py:959] Computing metrics for task name aime (task index 1)
+0it [00:00, ?it/s]3it [00:00, 24.74it/s]6it [00:00, 24.71it/s]9it [00:00,  8.30it/s]11it [00:01,  7.94it/s]13it [00:01,  7.79it/s]16it [00:01, 10.72it/s]19it [00:01, 13.50it/s]21it [00:01, 14.70it/s]24it [00:01, 17.24it/s]27it [00:02, 17.04it/s]29it [00:02, 17.59it/s]30it [00:02, 13.12it/s]
+0it [00:00, ?it/s]3it [00:00, 28.77it/s]6it [00:00, 26.87it/s]9it [00:00, 11.99it/s]11it [00:01,  8.52it/s]13it [00:01,  6.80it/s]14it [00:01,  6.40it/s]15it [00:01,  6.73it/s]18it [00:01, 10.12it/s]20it [00:02, 11.31it/s]23it [00:02, 12.31it/s]25it [00:02, 12.48it/s]27it [00:02, 11.34it/s]29it [00:02,  9.83it/s]30it [00:03,  8.76it/s]
+2026-10-10:14:12:05,079 INFO     [run_eval.py:539] First instance output: ({'doc_id': 0, 'native_id': 90, 'metrics': {'exact_match': 0, 'exact_match_flex': 1, 'model_answer': '70', 'pass_at_1': 0.875, 'pass_at_4': 1.0, 'pass_at_8': 1.0}, 'model_output': ['<<truncated 7 elements>>', {'continuation': ' Okay, so I need to find all integer bases \\( b > 9 \\) such that \\( 17_b \\) divides \\( 97_b \\), and then sum those bases. Hmm, let\'s break this down step by step. \n\nFirst, I remember that numbers in base \\( b \\) are represented with digits that are less than the base. So, \\( 17_b \\) means 1 times \\( b \\) plus 7, right? So in decimal, that would be \\( 1 \\times b + 7 = b + 7 \\). Similarly, \\( 97_b \\) would be \\( 9 \\times b + 7 \\). \n\nSo the problem is asking for bases \\( b > 9 \\) where \\( b + 7 \\) divides \\( 9b + 7 \\). That is, \\( (9b + 7) \\mod (b + 7) = 0 \\). \n\nLet me write that out as an equation: \\( (9b + 7) \\div (b + 7) \\) must be an integer. To find when this division is exact, I can perform the division. Let me see, dividing \\( 9b + 7 \\) by \\( b + 7 \\). \n\nLet me recall that when you divide a linear polynomial by another linear polynomial, you can write it as \\( 9b + 7 = 9(b + 7) - 63 + 7 \\). Wait, let me check that. \n\nAlternatively, maybe using polynomial division: divide \\( 9b + 7 \\) by \\( b + 7 \\). \n\nSo, \\( 9b + 7 = 9 \\times (b + 7) + (9 \\times 7 + 7) \\). Wait, no, that\'s not right. Let me do it step by step. \n\nLet me write \\( 9b + 7 = q \\times (b + 7) + r \\), where \\( q \\) is the quotient and \\( r \\) is the remainder. Since the divisor is degree 1, the remainder should be a constant. Let me compute \\( q \\) and \\( r \\). \n\nLet me suppose that \\( 9b + 7 = q \\times (b + 7) + r \\). Then, equate coefficients:\n\nThe coefficient of \\( b \\) on the left is 9, on the right is \\( q \\). Therefore, \\( q = 9 \\).\n\nThen, the constant term on the left is 7, and on the right is \\( 7q + r \\). So, 7 = 7*9 + r => 7 = 63 + r => r = 7 - 63 = -56.\n\nHmm, so the remainder is -56. So, \\( 9b + 7 = 9(b + 7) - 56 \\). \n\nTherefore, \\( (9b + 7) \\div (b + 7) = 9 - \\frac{56}{b + 7} \\). \n\nFor this to be an integer, the fraction \\( \\frac{56}{b + 7} \\) must also be an integer. Therefore, \\( b + 7 \\) must be a positive divisor of 56. \n\nBut since \\( b > 9 \\), then \\( b + 7 > 16 \\). So, the divisors of 56 that are greater than 16. Let me list all positive divisors of 56 first. \n\nThe prime factors of 56 are 2^3 * 7^1, so the divisors are:\n\n1, 2, 4, 7, 8, 14, 28, 56.\n\nBut since \\( b + 7 \\) must be a divisor of 56 and greater than 16 (since \\( b > 9 \\implies b +7 >16 \\)), the possible divisors are 28 and 56. \n\nTherefore, \\( b +7 = 28 \\) or \\( b +7 = 56 \\). \n\nSolving for \\( b \\):\n\nIf \\( b +7 = 28 \\), then \\( b = 21 \\).\n\nIf \\( b +7 = 56 \\), then \\( b = 49 \\).\n\nWait, but hold on, let me check if these bases are valid. Since in base \\( b \\), the digits must be less than the base. So, in \\( 17_b \\), the digit 7 must be less than \\( b \\), so \\( b >7 \\), which is already satisfied since \\( b >9 \\). Similarly, in \\( 97_b \\), the digit 9 must be less than \\( b \\), so \\( b >9 \\), which is also satisfied. So both bases 21 and 49 are valid. \n\nTherefore, the sum of these bases is 21 + 49 = 70. \n\nWait, but let me confirm this with an example. Let\'s take base 21 first. \n\nIn base 21, \\( 17_{21} = 1*21 +7 =28 \\).\n\n\\( 97_{21} = 9*21 +7 = 189 +7 =196 \\).\n\nIs 28 a divisor of 196? Yes, because 196 ÷28=7. So that works. \n\nSimilarly, base 49: \n\n\\( 17_{49}=1*49 +7=56 \\).\n\n\\( 97_{49}=9*49 +7=441 +7=448 \\).\n\nDoes 56 divide 448? Yes, because 448 ÷56=8. So that also works. \n\nTherefore, the bases are 21 and 49, sum is 70. \n\nBut hold on, the problem says "integer bases b>9". So, are there any other divisors? Let me check again the divisors of 56. \n\nDivisors of 56 are 1,2,4,7,8,14,28,56. \n\nThe ones greater than 16 are 28 and 56. So only those two. \n\nHmm, so that seems correct. \n\nBut just to be thorough, let me check if there are any negative divisors. But since b>9, b+7 is positive, so we don\'t need to consider negative divisors. \n\nAlternatively, maybe I made a mistake in the polynomial division. Let me check again. \n\nWe had \\( 9b +7 = 9*(b +7) -56 \\). So, \\( 9b +7 = 9*(b +7) -56 \\). \n\nTherefore, \\( 9b +7 = (9)*(b +7) -56 \\). So, then, to have \\( 9*(b +7) -56 \\) divisible by \\( b +7 \\), the remainder is -56, so the remainder when dividing by \\( b +7 \\) is -56. \n\nTherefore, for \\( (9b +7) \\) to be divisible by \\( b +7 \\), the remainder must be zero, so -56 must be congruent to 0 mod \\( b +7 \\). Therefore, \\( b +7 \\) divides 56. \n\nYes, that\'s exactly what I did. So that part is correct. \n\nTherefore, the possible bases are 21 and 49. Sum is 70. \n\nWait, but hold on, let me check if there are any other divisors. For example, maybe 7 divides 56, but 7 is less than 16, so \\( b +7 =7 \\implies b=0 \\), which is invalid. Similarly, 8,14, etc., but those would give b=1,7,7, which are less than 9. So, indeed, only 28 and 56. \n\nTherefore, the answer is 70. \n\nBut let me see if there\'s another way to approach this problem, just to verify. \n\nAlternatively, since \\( b +7 \\) divides \\( 9b +7 \\), then \\( 9b +7 = k(b +7) \\), where k is an integer. \n\nSo, rearranging: \\( 9b +7 =k b +7k \\implies 9b -k b =7k -7 \\implies b(9 -k) =7(k -1) \\).\n\nTherefore, \\( b = \\frac{7(k -1)}{9 -k} \\).\n\nWe need b to be an integer greater than 9, and also, since in base b, the digits 9 and 7 must be less than b, so b>9. \n\nSo, let\'s let me denote \\( d =9 -k \\), then \\( k =9 -d \\). \n\nThen, substituting back, \\( b = \\frac{7( (9 -d) -1 )}{d} = \\frac{7(8 -d)}{d} \\).\n\nSo, \\( b =7*(8 - d)/d \\). \n\nSince b must be positive, the numerator and denominator must have the same sign. Since d is in the denominator, and 8 -d must be positive (since otherwise, if 8 -d is negative, then numerator is negative and denominator d must also be negative for b positive). \n\nBut let me see, since k must be an integer, and also, since \\( b = \\frac{7(k -1)}{9 -k} \\), the denominator 9 -k must divide 7(k -1). \n\nAlternatively, perhaps better to think of possible k. Let\'s see, since \\( b = \\frac{7(k -1)}{9 -k} \\), then 9 -k must divide 7(k -1). Let me denote \\( m =9 -k \\), so then \\( k =9 -m \\), so substituting back, \\( b = \\frac{7(9 -m -1)}{m} = \\frac{7(8 -m)}{m} \\). \n\nSo, \\( b = \\frac{56 -7m}{m} = \\frac{56}{m} -7 \\). \n\nTherefore, \\( b = \\frac{56}{m} -7 \\). \n\nSince \\( m =9 -k \\), and \\( k \\) is an integer. Also, since \\( b \\) must be greater than 9, so:\n\n\\( \\frac{56}{m} -7 >9 \\implies \\frac{56}{m} >16 \\implies 56/m >16 \\implies m <56/16=3.5 \\). \n\nSo, m must be less than 3.5. Since m is an integer (because k is integer, m=9 -k is integer), so m can be 1,2,3. \n\nBut also, m must divide 56, since \\( b = \\frac{56}{m} -7 \\) must be integer. Wait, actually, m must divide 56, because \\( \\frac{56}{m} \\) must be an integer. \n\nTherefore, m must be a positive divisor of 56, and m <3.5. \n\nThe positive divisors of 56 less than 3.5 are 1,2. \n\nTherefore, m=1 or m=2. \n\nLet me check m=1:\n\nThen, b=56/1 -7=56-7=49. \n\nm=2:\n\nb=56/2 -7=28 -7=21. \n\nSo, that gives the same bases as before. \n\nSo, that\'s another way to get the same answer. \n\nTherefore, the possible bases are 21 and 49, sum is 70. \n\nHmm, so seems consistent. \n\nAlternatively, let me check m=3. Wait, but m must divide 56, so m=3 is not a divisor of 56, so that\'s invalid. \n\nSo, indeed, only m=1 and m=2. \n\nTherefore, the answer is 70. \n\nBut let me check once again for m= -1, but since m=9 -k, and k must be an integer. Let me see, if m is negative, then k=9 -m would be greater than 9. Then, substituting back into b:\n\nIf m is negative, then \\( b = \\frac{56}{m} -7 \\). But since m is negative, 56/m is negative, so b would be negative, which is invalid because bases are positive integers greater than 1. So, m must be positive. \n\nTherefore, only m=1 and 2. \n\nTherefore, I can\'t find any other solutions. \n\nTherefore, the answer is 70. \n\nWait, but hold on, just to be thorough, let me check for m= -2, but that would give m negative, so same problem. \n\nAlternatively, maybe m=4? But 4 is greater than 3.5, so m=4 would give b=56/4 -7=14 -7=7, which is less than 9, so invalid. \n\nSimilarly, m=7: 56/7 -7=8-7=1, which is invalid. \n\nSo, yeah, only 21 and 49. \n\nTherefore, the sum is 70. \n\nI think that\'s solid. \n\n**Final Answer**\n\\boxed{70}\n</think>\n\nTo find the sum of all integer bases \\( b > 9 \\) for which \\( 17_b \\) is a divisor of \\( 97_b \\), we start by converting these numbers from base \\( b \\) to decimal. \n\nThe number \\( 17_b \\) in decimal is \\( 1 \\cdot b + 7 = b + 7 \\). The number \\( 97_b \\) in decimal is \\( 9 \\cdot b + 7 \\). We need \\( b + 7 \\) to divide \\( 9b + 7 \\).\n\nWe set up the equation:\n\\[\n(9b + 7) \\div (b + 7) = k\n\\]\nwhere \\( k \\) is an integer. Using polynomial division, we find:\n\\[\n9b + 7 = 9(b + 7) - 56\n\\]\nThis implies:\n\\[\n(9b + 7) = 9(b + 7) - 56\n\\]\nFor \\( b + 7 \\) to divide \\( 9b + 7 \\), the remainder \\( -56 \\) must be zero modulo \\( b + 7 \\). Therefore, \\( b + 7 \\) must be a divisor of 56. \n\nThe positive divisors of 56 greater than 16 (since \\( b > 9 \\)) are 28 and 56. Solving for \\( b \\):\n\\[\nb + 7 = 28 \\implies b = 21\n\\]\n\\[\nb + 7 = 56 \\implies b = 49\n\\]\n\nBoth bases 21 and 49 are valid since the digits 7 and 9 in the numbers \\( 17_b \\) and \\( 97_b \\) are less than the base. \n\nSumming these bases:\n\\[\n21 + 49 = 70\n\\]\n\nThus, the sum of all integer bases \\( b > 9 \\) is \\(\\boxed{70}\\).', 'num_tokens': 3253, 'context_tokens': 97, 'sum_logits': -819.8931778836172, 'model_answer': ['70']}], 'label': '70', 'task_hash': '80e4ba2275672260f8fceb9b705fedfd', 'model_hash': '12bfe684d427fe9fd6110f272c878d4b'}, True)
+2026-10-10:14:12:05,080 INFO     [run_eval.py:540] Task aime processing time: 27.01 seconds
+2026-10-10:14:12:05,080 INFO     [run_eval.py:545] Saving predictions in /p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/results/dolci-16k-packed-6k/aime-2024-2025-r8/task-001-aime-predictions.jsonl...
+2026-10-10:14:12:05,157 INFO     [run_eval.py:548] Saving metrics in /p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/results/dolci-16k-packed-6k/aime-2024-2025-r8/task-001-aime-metrics.json...
+2026-10-10:14:12:05,165 INFO     [run_eval.py:554] Saving recorded inputs in /p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/results/dolci-16k-packed-6k/aime-2024-2025-r8/task-001-aime-recorded-inputs.jsonl...
+2026-10-10:14:12:05,167 INFO     [run_eval.py:574] 
+
+** Task metrics: **
+{'task_name': 'aime', 'task_hash': '80e4ba2275672260f8fceb9b705fedfd', 'model_hash': '12bfe684d427fe9fd6110f272c878d4b', 'model_config': {'model': '/p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k-vllm011', 'revision': None, 'trust_remote_code': False, 'max_length': 32768, 'model_path': None, 'model_type': 'vllm', 'dtype': 'bfloat16', 'tokenizer': '/p/scratch/rcfd/kowanietz1/models/Olmo-3-7B-Think-SFT'}, 'task_config': {'task_name': 'aime', 'task_core': 'aime', 'limit': None, 'split': 'test', 'num_shots': 0, 'fewshot_seed': 1234, 'primary_metric': 'pass_at_1', 'random_subsample_seed': 1234, 'context_kwargs': None, 'generation_kwargs': {'max_gen_toks': 16384, 'temperature': 0.6, 'truncate_context': False, 'do_sample': True, 'stop_sequences': [], 'top_p': 0.95, 'repeats': 8}, 'metric_kwargs': {'maj_at_ks': [], 'pass_at_ks': [1, 4, 8]}, 'native_id_field': 'index', 'fewshot_source': None, 'dataset_path': 'allenai/aime-2021-2025', 'dataset_name': None, 'use_chat_format': True, 'version': 0, 'revision': None, 'compute_gold_bpb': False, 'external_eval': None, 'custom_kwargs': None, 'skip_model_judges': None, 'model_max_length': None, 'metadata': {'years': [2025], 'alias': 'aime:2025::olmo3:adapt'}}, 'compute_config': {'batch_size': 'auto', 'max_batch_size': 32, 'output_dir': '/p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/results/dolci-16k-packed-6k/aime-2024-2025-r8', 'num_recorded_inputs': 3, 'save_raw_requests': True, 'recompute_metrics': False}, 'processing_time': 27.010574102401733, 'current_date': '2026-10-10 11:31:02 UTC', 'num_instances': 30, 'beaker_info': {}, 'metrics': {'exact_match': 0.0, 'exact_match_sub_2025': 0.0, 'exact_match_flex': 0.3, 'exact_match_flex_sub_2025': 0.3, 'pass_at_1': 0.2625, 'pass_at_4': 0.4071428571428572, 'pass_at_8': 0.4666666666666667, 'primary_score': 0.2625}, 'task_idx': 1}
+2026-10-10:14:12:05,167 INFO     [run_eval.py:1046] Summary of primary scores: 
+aime:2024::olmo3:adapt: 0.295833
+aime:2025::olmo3:adapt: 0.2625
+2026-10-10:14:12:05,167 INFO     [run_eval.py:1054] Saving final metrics in /p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/results/dolci-16k-packed-6k/aime-2024-2025-r8/metrics-all.jsonl...
+2026-10-10:14:12:05,168 INFO     [run_eval.py:1067] Saving beaker metrics.json so in /p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/results/dolci-16k-packed-6k/aime-2024-2025-r8/metrics.json...
+2026-10-10:14:12:05,170 INFO     [run_eval.py:1092] Explicitly shutting down vLLM EngineCore...
+[1;36m(Worker_TP0 pid=2222731)[0;0m INFO 10-10 14:12:05 [multiproc_executor.py:558] Parent process exited, terminating worker
+[1;36m(Worker_TP0 pid=2222731)[0;0m INFO 10-10 14:12:05 [multiproc_executor.py:599] WorkerProc shutting down.
+[1;36m(Worker_TP1 pid=2222732)[0;0m INFO 10-10 14:12:05 [multiproc_executor.py:558] Parent process exited, terminating worker
+[1;36m(Worker_TP1 pid=2222732)[0;0m INFO 10-10 14:12:05 [multiproc_executor.py:599] WorkerProc shutting down.
+[1;36m(Worker_TP3 pid=2222734)[0;0m INFO 10-10 14:12:05 [multiproc_executor.py:558] Parent process exited, terminating worker
+[1;36m(Worker_TP2 pid=2222733)[0;0m INFO 10-10 14:12:05 [multiproc_executor.py:558] Parent process exited, terminating worker
+2026-10-10:14:12:10,230 INFO     [run_eval.py:1094] vLLM EngineCore shutdown complete.
+/p/home/jusers/kowanietz1/jureca/.local/share/uv/python/cpython-3.12.11-linux-x86_64-gnu/lib/python3.12/multiprocessing/resource_tracker.py:279: UserWarning: resource_tracker: There appear to be 4 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+/p/home/jusers/kowanietz1/jureca/.local/share/uv/python/cpython-3.12.11-linux-x86_64-gnu/lib/python3.12/multiprocessing/resource_tracker.py:279: UserWarning: resource_tracker: There appear to be 1 leaked shared_memory objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+Finished: Sat Oct 10 02:12:19 PM CEST 2026

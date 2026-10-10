@@ -6,7 +6,7 @@
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:4
 #SBATCH --time=04:00:00
-#SBATCH --job-name=gpqa-stage1
+#SBATCH --job-name=gpqa-6k
 #SBATCH --output=logs/%x-%j.log
 #SBATCH --error=logs/%x-%j.log
 
@@ -16,16 +16,14 @@ ROOT="/p/scratch/rcfd/kowanietz1"
 REPO="$ROOT/projects/reasoning-posttraining"
 OLMES="$ROOT/olmes"
 
-MODEL="$ROOT/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-stage1-final"
-TOKENIZER="$MODEL"
-OUTPUT="$REPO/results/dolci-16k-packed-stage1-final/gpqa"
+MODEL="$ROOT/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k-vllm011"
+TOKENIZER="$ROOT/models/Olmo-3-7B-Think-SFT"
+OUTPUT="$REPO/results/dolci-16k-packed-6k/gpqa"
 
 module load uv
 
 cd "$REPO"
-
-mkdir -p logs
-mkdir -p "$OUTPUT"
+mkdir -p logs "$OUTPUT"
 
 echo "Job ID:   $SLURM_JOB_ID"
 echo "Node:     $(hostname)"
