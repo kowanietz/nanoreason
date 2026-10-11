@@ -16,7 +16,7 @@ ROOT="/p/scratch/rcfd/kowanietz1"
 REPO="$ROOT/projects/reasoning-posttraining"
 OLMES="$ROOT/olmes"
 
-# Default preserves the original 6k benchmark. Explicit 4/8 select repetition exports.
+# Default preserves the original 6k benchmark. Explicit 4/8/16 select repetition exports.
 MILESTONE="${1:-6k}"
 case "$MILESTONE" in
     6k)
@@ -27,8 +27,12 @@ case "$MILESTONE" in
         MODEL="$ROOT/checkpoints/reasoning-posttraining/sft/dolci-16k-repetition-3k2/epoch-$MILESTONE-model-vllm011"
         EVAL_TAG="dolci-16k-repetition-3k2-epoch-$MILESTONE"
         ;;
+    16)
+        MODEL="$ROOT/checkpoints/reasoning-posttraining/sft/dolci-16k-repetition-3k2-epoch-16-model-vllm011"
+        EVAL_TAG="dolci-16k-repetition-3k2-epoch-$MILESTONE"
+        ;;
     *)
-        echo "Expected checkpoint 6k, 4, or 8" >&2
+        echo "Expected checkpoint 6k, 4, 8, or 16" >&2
         exit 2
         ;;
 esac
