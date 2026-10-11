@@ -16,9 +16,24 @@ ROOT="/p/scratch/rcfd/kowanietz1"
 REPO="$ROOT/projects/reasoning-posttraining"
 OLMES="$ROOT/olmes"
 
-MODEL="$ROOT/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k-vllm011"
+# Default preserves the original 6k benchmark. Explicit 4/8 select repetition exports.
+MILESTONE="${1:-6k}"
+case "$MILESTONE" in
+    6k)
+        MODEL="$ROOT/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k-vllm011"
+        EVAL_TAG="dolci-16k-packed-6k"
+        ;;
+    4|8)
+        MODEL="$ROOT/checkpoints/reasoning-posttraining/sft/dolci-16k-repetition-3k2/epoch-$MILESTONE-model-vllm011"
+        EVAL_TAG="dolci-16k-repetition-3k2-epoch-$MILESTONE"
+        ;;
+    *)
+        echo "Expected checkpoint 6k, 4, or 8" >&2
+        exit 2
+        ;;
+esac
 TOKENIZER="$ROOT/models/Olmo-3-7B-Think-SFT"
-OUTPUT="$REPO/results/dolci-16k-packed-6k/aime-2024-2025-r8"
+OUTPUT="$REPO/results/$EVAL_TAG/aime-2024-2025-r8"
 
 module load uv
 
