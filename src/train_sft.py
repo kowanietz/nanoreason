@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import argparse
 import glob
 import hashlib
 import json
@@ -12,10 +11,12 @@ import time
 from itertools import chain
 from pathlib import Path
 
+import hydra
 import torch
 import torch.distributed as dist
 import yaml
 from datasets import load_dataset
+from omegaconf import DictConfig, OmegaConf
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
@@ -87,7 +88,8 @@ def verify_manifest(config, files, resuming, rank):
     output_dir = Path(config["training"]["output_dir"])
     manifest_path = output_dir / "run_manifest.json"
     settings = {
-        "model": config["model"],
+        "model": {key: value for key, value in config["model"].items()
+                  if key != "load_dtype" or value != "bf16"},
         "data": config["data"],
         "training": {
             key: value for key, value in config["training"].items()
@@ -523,21 +525,16 @@ def load_training_data(config, tokenizer, files, training_args):
     return dataset
 
 
-def main():
+@hydra.main(version_base="1.3", config_path="../configs", config_name=None)
+def main(config: DictConfig):
     start = time.monotonic()
-    parser = argparse.ArgumentParser()
-    parser.add_argument("config")
-    parser.add_argument("--stop-after-epoch", type=int, choices=(4, 8, 12, 16),
-                        help="Advance repetition only after evaluating the preceding milestone")
-    args = parser.parse_args()
-    config = yaml.safe_load(Path(args.config).read_text())
+    config = OmegaConf.to_container(config, resolve=True)
     model_config = config["model"]
+    load_dtype = {"auto": "auto", "bf16": torch.bfloat16, "fp32": torch.float32}[model_config["load_dtype"]]
     train_config = config["training"]
     log_config = config["logging"]
     repetition = bool(config["data"].get("repetition_manifest"))
     if repetition:
-        if args.stop_after_epoch is not None:
-            train_config["stop_after_epoch"] = args.stop_after_epoch
         guard_repetition_destination(train_config["output_dir"])
         repetition_manifest = configure_repetition(config, int(os.environ.get("WORLD_SIZE", "1")))
 
@@ -644,7 +641,7 @@ def main():
     dataset = load_training_data(config, tokenizer, files, training_args)
     model = AutoModelForCausalLM.from_pretrained(
         model_config["name_or_path"],
-        dtype=torch.bfloat16,
+        dtype=load_dtype,
         trust_remote_code=model_config.get("trust_remote_code", False),
         attn_implementation=model_config.get("attention_implementation", "sdpa"),
         local_files_only=True,

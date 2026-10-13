@@ -23,6 +23,8 @@ import numpy as np
 import pyarrow as pa
 import pyarrow.parquet as pq
 import yaml
+from hydra import compose, initialize_config_dir
+from omegaconf import OmegaConf
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
@@ -493,7 +495,10 @@ def main():
     os.environ["CUDA_VISIBLE_DEVICES"] = ""
     for variable in ("HF_HUB_OFFLINE", "TRANSFORMERS_OFFLINE", "HF_DATASETS_OFFLINE"):
         os.environ[variable] = "1"
-    prepare(yaml.safe_load(Path(args.config).read_text()), args.dry_run)
+    config_path = Path(args.config).resolve()
+    with initialize_config_dir(version_base="1.3", config_dir=str(config_path.parent)):
+        config = compose(config_name=config_path.stem)
+    prepare(OmegaConf.to_container(config, resolve=True), args.dry_run)
 
 
 if __name__ == "__main__":

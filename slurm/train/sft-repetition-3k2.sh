@@ -16,9 +16,9 @@ set -euo pipefail
 
 ROOT="/p/scratch/rcfd/kowanietz1"
 REPO="$ROOT/projects/reasoning-posttraining"
-CONFIG="$REPO/configs/sft-repetition-3k2.yaml"
+CONFIG="sft-repetition-3k2"
 
-MILESTONE="${1:-4}"
+MILESTONE="${1:-}"
 
 case "$MILESTONE" in
     4|8|12|16)
@@ -50,7 +50,7 @@ export SRUN_CPUS_PER_TASK="$SLURM_CPUS_PER_TASK"
 srun uv run --frozen --offline \
     torchrun --standalone --nproc_per_node=4 \
     "$REPO/src/train_sft.py" \
-    "$CONFIG" \
-    --stop-after-epoch "$MILESTONE"
+    --config-name "$CONFIG" \
+    "training.stop_after_epoch=$MILESTONE"
 
 echo "Finished: $(date)"

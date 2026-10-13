@@ -1,11 +1,12 @@
+defaults:
+  - base
+  - _self_
+
 experiment:
   name: dolci-16k-repetition-3k2
 
 model:
   name_or_path: /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k
-  tokenizer_name_or_path: /p/scratch/rcfd/kowanietz1/models/Olmo-3-7B-Think-SFT
-  trust_remote_code: true
-  attention_implementation: sdpa
 
 data:
   source_path: /p/scratch/rcfd/kowanietz1/datasets/Dolci-Think-SFT-7B/data/*.parquet
@@ -15,42 +16,24 @@ data:
   holdout_examples: 1000
   selection_seed: 173
   selection_max_tokens: 10000
-  max_length: 16384
-  overlength_strategy: drop
-  packing: true
   shuffle: false
-  num_proc: 8
   require_single_pass: false
 
 training:
   output_dir: /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-repetition-3k2
   initialization_checkpoint: /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k
   expected_world_size: 4
-  precision: bf16
   learning_rate: 2.0e-6
   warmup_steps: 0
   warmup_ratio: 0.0
-  weight_decay: 0.0
-  max_grad_norm: 1.0
-  per_device_batch_size: 1
-  gradient_accumulation_steps: 1
   num_train_epochs: 16
-  stop_after_epoch: 4  
+  stop_after_epoch: 4
   resume_from_checkpoint: auto
-  gradient_checkpointing: true
-  use_cache: false
   stop_after_minutes: 310
   enable_jit_checkpoint: true
   export_final_model: true
-  seed: 73
-
-distributed:
-  strategy: fsdp
-  fsdp_sharding: full_shard
 
 logging:
-  logging_steps: 10
   save_steps: 1
   save_epochs: [4, 8, 12, 16]
   save_total_limit: null
-  report_to: none

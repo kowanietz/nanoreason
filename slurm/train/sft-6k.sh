@@ -16,7 +16,7 @@ set -euo pipefail
 
 ROOT="/p/scratch/rcfd/kowanietz1"
 REPO="$ROOT/projects/reasoning-posttraining"
-CONFIG="$REPO/configs/sft-6k.yaml"
+CONFIG="sft-6k"
 
 module load uv
 
@@ -44,6 +44,6 @@ srun uv run --frozen --offline \
   --standalone \
   --nproc_per_node=4 \
   "$REPO/src/train_sft.py" \
-  "$CONFIG"
+  --config-name "$CONFIG"
 
 echo "Finished: $(date)"
