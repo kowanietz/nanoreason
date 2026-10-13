@@ -16,3 +16,11 @@ dev = [
     "ruff>=0.16.9",
     "yamllint>=1.38.0",
 ]
+
+notebooks = [
+    "ipykernel",
+    "jupyterlab",
+    "pandas",
+    "matplotlib",
+    "seaborn",
+]
