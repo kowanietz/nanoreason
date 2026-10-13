@@ -1,0 +1,22 @@
+defaults:
+  - base
+  - _self_
+
+experiment:
+  name: dolci-16k-packed-stage2
+
+model:
+  name_or_path: /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-1k
+  tokenizer_name_or_path: /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-1k
+
+data:
+  packing_batch_size: 256
+  max_examples: 25000
+
+training:
+  output_dir: /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-stage2
+  learning_rate: 1.0e-5
+  max_steps: 1000
+
+logging:
+  save_total_limit: 4
