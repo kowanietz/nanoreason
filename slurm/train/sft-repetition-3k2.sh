@@ -42,12 +42,19 @@ echo "Started: $(date)"
 nvidia-smi
 
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+
 export HF_HUB_OFFLINE=1
 export TRANSFORMERS_OFFLINE=1
 export HF_DATASETS_OFFLINE=1
+
 export SRUN_CPUS_PER_TASK="$SLURM_CPUS_PER_TASK"
 
-srun uv run --frozen --offline \
+export UV_PROJECT_ENVIRONMENT="$REPO/.venv"
+
+srun uv run \
+    --group sft \
+    --no-default-groups \
+    --locked --offline \    
     torchrun --standalone --nproc_per_node=4 \
     "$REPO/src/train_sft.py" \
     --config-name "$CONFIG" \
