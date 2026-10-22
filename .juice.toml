@@ -4,9 +4,9 @@ read = [
     "/p/scratch/rcfd/kowanietz1/datasets/Dolci-Think-SFT-7B",
     "/p/scratch/rcfd/kowanietz1/olmes",
     "/p/scratch/rcfd/kowanietz1/cache",
-    "/p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft",
 ]
 
 write = [
     "/p/scratch/rcfd/kowanietz1/.cache",
+    "/p/scratch/rcfd/kowanietz1/checkpoints",
 ]

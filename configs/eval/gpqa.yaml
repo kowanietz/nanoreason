@@ -1,0 +1,17 @@
+olmes_project: /p/scratch/rcfd/kowanietz1/olmes
+
+tasks:
+  - gpqa::olmo3:adapt
+model_type: vllm
+model_args:
+  trust_remote_code: false
+  dtype: bfloat16
+  tokenizer: /p/scratch/rcfd/kowanietz1/models/Olmo-3-7B-Think-SFT
+  max_length: 32768
+task_args:
+  generation_kwargs:
+    max_gen_toks: 32768
+    truncate_context: false
+batch_size: auto
+gpus: 4
+num_workers: 1

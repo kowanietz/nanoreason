@@ -1,5 +1,6 @@
 .venv/
 .venv-grpo/
+.venv-eval/
 __pycache__/
 *.pyc
 
