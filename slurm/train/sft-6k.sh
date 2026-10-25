@@ -44,7 +44,8 @@ export UV_PROJECT_ENVIRONMENT="$REPO/.venv"
 srun uv run \
   --group sft \
   --no-default-groups \
-  --locked --offline \  torchrun \
+  --locked --offline \
+  torchrun \
   --standalone \
   --nproc_per_node=4 \
   "$REPO/src/train_sft.py" \

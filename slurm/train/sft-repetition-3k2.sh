@@ -21,17 +21,18 @@ CONFIG="sft-repetition-3k2"
 MILESTONE="${1:-}"
 
 case "$MILESTONE" in
-    4|8|12|16)
-        ;;
-    *)
-        echo "Expected milestone 4, 8, 12, or 16" >&2
-        exit 2
-        ;;
+  4|8|12|16)
+    ;;
+  *)
+    echo "Expected milestone 4, 8, 12, or 16" >&2
+    exit 2
+    ;;
 esac
 
 module load uv
 
 cd "$REPO"
+
 mkdir -p logs
 
 echo "Job ID: $SLURM_JOB_ID"
@@ -52,12 +53,14 @@ export SRUN_CPUS_PER_TASK="$SLURM_CPUS_PER_TASK"
 export UV_PROJECT_ENVIRONMENT="$REPO/.venv"
 
 srun uv run \
-    --group sft \
-    --no-default-groups \
-    --locked --offline \    
-    torchrun --standalone --nproc_per_node=4 \
-    "$REPO/src/train_sft.py" \
-    --config-name "$CONFIG" \
-    "training.stop_after_epoch=$MILESTONE"
+  --group sft \
+  --no-default-groups \
+  --locked --offline \
+  torchrun \
+  --standalone \
+  --nproc_per_node=4 \
+  "$REPO/src/train_sft.py" \
+  --config-name "$CONFIG" \
+  "training.stop_after_epoch=$MILESTONE"
 
 echo "Finished: $(date)"
