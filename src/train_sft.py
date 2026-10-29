@@ -19,29 +19,13 @@ from datasets import load_dataset
 from omegaconf import DictConfig, OmegaConf
 from transformers import (
     AutoModelForCausalLM,
-    AutoTokenizer,
     DataCollatorForSeq2Seq,
     Trainer,
     TrainerCallback,
     TrainingArguments,
 )
 
-
-class StopAtDeadline(TrainerCallback):
-    def __init__(self, start_time, minutes):
-        self.deadline = start_time + minutes * 60
-
-    def on_step_end(self, args, state, control, **kwargs):
-        expired = time.monotonic() >= self.deadline
-        if dist.is_initialized():
-            flag = torch.tensor(int(expired), device=f"cuda:{torch.cuda.current_device()}")
-            dist.all_reduce(flag, op=dist.ReduceOp.MAX)
-            expired = bool(flag.item())
-
-        if expired:
-            control.should_save = True
-            control.should_training_stop = True
-        return control
+from training_common import StopAtDeadline, make_tokenizer
 
 
 def resolve_checkpoint(output_dir, setting, required_files=(), reject_older=False):
@@ -122,20 +106,6 @@ def verify_manifest(config, files, resuming, rank):
 
     if json.loads(manifest_path.read_text())["sha256"] != digest:
         raise RuntimeError("Dataset or training configuration changed since the first job")
-
-
-def make_tokenizer(model_config):
-    tokenizer = AutoTokenizer.from_pretrained(
-        model_config["tokenizer_name_or_path"],
-        trust_remote_code=model_config.get("trust_remote_code", False),
-        use_fast=True,
-        local_files_only=True,
-    )
-    if not tokenizer.is_fast:
-        raise ValueError("A fast tokenizer is required")
-    if tokenizer.pad_token_id is None:
-        tokenizer.pad_token = tokenizer.eos_token
-    return tokenizer
 
 
 def tokenized_digest(rows):

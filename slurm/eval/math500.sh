@@ -18,13 +18,15 @@ REPO="$ROOT/projects/reasoning-posttraining"
 module load uv
 cd "$REPO"
 
-export UV_PROJECT_ENVIRONMENT="$REPO/.venv-eval"
+echo "Job ID: $SLURM_JOB_ID"
 
 export HF_HUB_OFFLINE=1
 export TRANSFORMERS_OFFLINE=1
 export HF_DATASETS_OFFLINE=1
+export UV_PROJECT_ENVIRONMENT="$REPO/.venv-eval"
+export VLLM_CACHE_ROOT="$ROOT/.cache/vllm"
+export SRUN_CPUS_PER_TASK="$SLURM_CPUS_PER_TASK"
 
-export SRUN_CPUS_PER_TASK=$SLURM_CPUS_PER_TASK
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 
 srun uv run \

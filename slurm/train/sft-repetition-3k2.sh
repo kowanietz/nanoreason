@@ -30,9 +30,7 @@ case "$MILESTONE" in
 esac
 
 module load uv
-
 cd "$REPO"
-
 mkdir -p logs
 
 echo "Job ID: $SLURM_JOB_ID"
@@ -42,23 +40,19 @@ echo "Started: $(date)"
 
 nvidia-smi
 
-export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
-
 export HF_HUB_OFFLINE=1
 export TRANSFORMERS_OFFLINE=1
 export HF_DATASETS_OFFLINE=1
-
+export UV_PROJECT_ENVIRONMENT="$REPO/.venv"
 export SRUN_CPUS_PER_TASK="$SLURM_CPUS_PER_TASK"
 
-export UV_PROJECT_ENVIRONMENT="$REPO/.venv"
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 
 srun uv run \
   --group sft \
   --no-default-groups \
   --locked --offline \
-  torchrun \
-  --standalone \
-  --nproc_per_node=4 \
+  torchrun --standalone --nproc_per_node=4 \
   "$REPO/src/train_sft.py" \
   --config-name "$CONFIG" \
   "training.stop_after_epoch=$MILESTONE"

@@ -1,0 +1,20 @@
+defaults:
+  - rlvr-smoke
+  - _self_
+
+data:
+  max_examples: 1
+  source_id: data/train-00002-of-00009.parquet:5184
+
+grpo:
+  output_dir: /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/rlvr/dr-grpo-smoke-16k-token-is
+  max_steps: 1
+  max_completion_length: 16384
+  vllm_max_model_length: 16896
+  vllm_importance_sampling_mode: token_truncate
+  vllm_importance_sampling_clip_max: 3.0
+  save_steps: 1
+
+runtime:
+  resume_from_checkpoint: false
+  stop_after_step: 1
