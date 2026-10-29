@@ -17,7 +17,7 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from benchmark_exclusions import load_exclusions, normalized, question_hash
-from rlvr_rewards import validate_reference_answers
+from rlvr.rewards import validate_reference_answers
 
 COLUMNS = [
     "prompt",

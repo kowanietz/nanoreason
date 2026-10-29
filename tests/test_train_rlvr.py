@@ -25,15 +25,12 @@ from trl.trainer.utils import add_fused_lm_head
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from benchmark_exclusions import load_exclusions
-from rlvr_rewards import math_rewards
-from train_rlvr import (
-    SmokeDiagnostics,
-    TrainingOlmo3Model,
-    down_proj_sample,
-    load_smoke_data,
-    resume_checkpoint,
-    validate_config,
-)
+from rlvr.checkpoints import resume_checkpoint
+from rlvr.data import load_smoke_data
+from rlvr.diagnostics import SmokeDiagnostics, down_proj_sample
+from rlvr.rewards import math_rewards
+from rlvr.validation import validate_config
+from train_rlvr import TrainingOlmo3Model
 from training_common import make_tokenizer
 
 
@@ -530,10 +527,10 @@ class SingleStepSmokeTest(unittest.TestCase):
         )
         state = TrainerState()
         with (
-            patch("train_rlvr.dist.all_reduce"),
-            patch("train_rlvr.torch.cuda.max_memory_allocated", return_value=0),
-            patch("train_rlvr.torch.cuda.max_memory_reserved", return_value=0),
-            patch("train_rlvr.torch.cuda.device_memory_used", return_value=0),
+            patch("rlvr.diagnostics.dist.all_reduce"),
+            patch("rlvr.diagnostics.torch.cuda.max_memory_allocated", return_value=0),
+            patch("rlvr.diagnostics.torch.cuda.max_memory_reserved", return_value=0),
+            patch("rlvr.diagnostics.torch.cuda.device_memory_used", return_value=0),
         ):
             callback.on_pre_optimizer_step(args, state, None, model=model)
             optimizer.step()
@@ -612,7 +609,7 @@ class SingleStepSmokeTest(unittest.TestCase):
         args = SimpleNamespace(
             max_steps=1, num_generations=4, process_index=1, vllm_tensor_parallel_size=4
         )
-        with patch("train_rlvr.dist.all_reduce"):
+        with patch("rlvr.diagnostics.dist.all_reduce"):
             callback.on_train_end(args, trainer.state, None)
         self.assertEqual(events, ["sync", "rollout"])
         self.assertEqual(callback.verified_sync_steps, {1})
@@ -643,7 +640,7 @@ class SingleStepSmokeTest(unittest.TestCase):
         original_sync.side_effect = lambda: None
         generation.generate.reset_mock()
         with (
-            patch("train_rlvr.dist.all_reduce"),
+            patch("rlvr.diagnostics.dist.all_reduce"),
             self.assertRaisesRegex(RuntimeError, "stale/mismatched"),
         ):
             callback.on_train_end(args, trainer.state, None)
@@ -654,7 +651,7 @@ class SingleStepSmokeTest(unittest.TestCase):
         original_sync.side_effect = sync
         callback.sync_before[name] = down_proj_sample(parameter, 1, 4)
         with (
-            patch("train_rlvr.dist.all_reduce"),
+            patch("rlvr.diagnostics.dist.all_reduce"),
             self.assertRaisesRegex(RuntimeError, "no changed sample.*BF16 rounding"),
         ):
             callback.on_train_end(args, trainer.state, None)
@@ -673,7 +670,7 @@ class SingleStepSmokeTest(unittest.TestCase):
             0,
         )
         with (
-            patch("train_rlvr.dist.all_reduce"),
+            patch("rlvr.diagnostics.dist.all_reduce"),
             self.assertRaisesRegex(RuntimeError, "survives BF16 rounding"),
         ):
             callback.on_train_end(args, trainer.state, None)
@@ -686,7 +683,7 @@ class SingleStepSmokeTest(unittest.TestCase):
         loaded.data.copy_(parameter[:, :2])
         original_sync.side_effect = lambda: None
         with (
-            patch("train_rlvr.dist.all_reduce"),
+            patch("rlvr.diagnostics.dist.all_reduce"),
             self.assertRaisesRegex(RuntimeError, "stale/mismatched"),
         ):
             callback.on_train_end(args, trainer.state, None)
@@ -696,7 +693,7 @@ class SingleStepSmokeTest(unittest.TestCase):
         callback.sync_before[name].zero_()
         generation.generate.side_effect = lambda **kwargs: ([[1, 2]], [[]], [[]], None)
         with (
-            patch("train_rlvr.dist.all_reduce"),
+            patch("rlvr.diagnostics.dist.all_reduce"),
             self.assertRaisesRegex(RuntimeError, "no completion"),
         ):
             callback.on_train_end(args, trainer.state, None)

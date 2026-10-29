@@ -23,7 +23,7 @@ from prepare_rlvr_data import (
 )
 
 from benchmark_exclusions import NORMALIZATION, load_exclusions, question_hash
-from rlvr_rewards import math_reward, math_rewards, validate_reference_answers
+from rlvr.rewards import math_reward, math_rewards, validate_reference_answers
 
 
 def record(prompt="user: What is six times seven?", domain="math", answers=None):

@@ -1,3 +1,5 @@
+"""Strict final-answer extraction and binary mathematical-equivalence rewards."""
+
 import re
 import threading
 from functools import lru_cache

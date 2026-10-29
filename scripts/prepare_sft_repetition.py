@@ -28,15 +28,15 @@ from omegaconf import OmegaConf
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from train_sft import (
+from sft.checkpoints import guard_repetition_destination
+from sft.data import (
     RepetitionCollator,
     RepetitionDataset,
-    guard_repetition_destination,
-    make_tokenizer,
     repetition_plan,
     tokenize_sft_example,
     tokenized_digest,
 )
+from training_common import make_tokenizer
 
 
 def sha(data):
