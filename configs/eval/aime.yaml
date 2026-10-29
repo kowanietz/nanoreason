@@ -1,14 +1,9 @@
-olmes_project: /p/scratch/rcfd/kowanietz1/olmes
+# @package _global_
+
+defaults:
+  - /eval/base
+  - _self_
 
 tasks:
   "2024": aime:2024::olmo3:adapt
   "2025": aime:2025::olmo3:adapt
-model_type: vllm
-model_args:
-  trust_remote_code: false
-  dtype: bfloat16
-  tokenizer: /p/scratch/rcfd/kowanietz1/models/Olmo-3-7B-Think-SFT
-  max_length: 32768
-batch_size: auto
-gpus: 4
-num_workers: 1

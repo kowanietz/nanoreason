@@ -28,7 +28,7 @@ class TrainingOlmo3Model(Olmo3Model):
     __call__ = torch.nn.Module.__call__
 
 
-@hydra.main(version_base="1.3", config_path="../configs", config_name="rlvr-smoke")
+@hydra.main(version_base="1.3", config_path="../configs", config_name="rlvr/smoke")
 def main(config: DictConfig) -> None:
     started = time.monotonic()
     config = OmegaConf.to_container(config, resolve=True)

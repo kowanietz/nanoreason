@@ -484,10 +484,23 @@ def prepare(config, dry_run=False):
     return manifest
 
 
+def load_config(path: Path) -> dict:
+    """Compose repository presets from the root; preserve standalone custom configs."""
+    path = path.resolve()
+    config_root = ROOT / "configs"
+    if path.is_relative_to(config_root):
+        name = path.relative_to(config_root).with_suffix("").as_posix()
+    else:
+        config_root, name = path.parent, path.stem
+    with initialize_config_dir(version_base="1.3", config_dir=str(config_root)):
+        config = compose(config_name=name)
+    return OmegaConf.to_container(config, resolve=True)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "config", nargs="?", default=str(ROOT / "configs/sft-repetition-3k2.yaml")
+        "config", nargs="?", default=str(ROOT / "configs/sft/repetition-3k2.yaml")
     )
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
@@ -495,10 +508,7 @@ def main():
     os.environ["CUDA_VISIBLE_DEVICES"] = ""
     for variable in ("HF_HUB_OFFLINE", "TRANSFORMERS_OFFLINE", "HF_DATASETS_OFFLINE"):
         os.environ[variable] = "1"
-    config_path = Path(args.config).resolve()
-    with initialize_config_dir(version_base="1.3", config_dir=str(config_path.parent)):
-        config = compose(config_name=config_path.stem)
-    prepare(OmegaConf.to_container(config, resolve=True), args.dry_run)
+    prepare(load_config(Path(args.config)), args.dry_run)
 
 
 if __name__ == "__main__":

@@ -1,14 +1,8 @@
-defaults:
-  - _self_
-  - override hydra/job_logging: none
-  - override hydra/hydra_logging: none
+# @package _global_
 
-hydra:
-  run:
-    dir: .
-  output_subdir: null
-  job:
-    chdir: false
+defaults:
+  - /common
+  - _self_
 
 model:
   load_dtype: auto

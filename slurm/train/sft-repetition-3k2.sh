@@ -16,7 +16,7 @@ set -euo pipefail
 
 ROOT="/p/scratch/rcfd/kowanietz1"
 REPO="$ROOT/projects/reasoning-posttraining"
-CONFIG="sft-repetition-3k2"
+CONFIG="sft/repetition-3k2"
 
 MILESTONE="${1:-}"
 

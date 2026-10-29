@@ -34,7 +34,7 @@ from train_rlvr import TrainingOlmo3Model
 from training_common import make_tokenizer
 
 
-def smoke_config(name="rlvr-smoke"):
+def smoke_config(name="rlvr/smoke"):
     with initialize_config_dir(version_base="1.3", config_dir=str(ROOT / "configs")):
         return OmegaConf.to_container(compose(config_name=name), resolve=True)
 
@@ -411,7 +411,7 @@ class TokenizerAndRewardTest(unittest.TestCase):
 
 class SingleStepSmokeTest(unittest.TestCase):
     def test_16k_config_preserves_training_setup(self):
-        base, config = smoke_config(), smoke_config("rlvr-smoke-16k")
+        base, config = smoke_config(), smoke_config("rlvr/smoke-16k")
         validate_config(config)
         self.assertEqual(config["grpo"]["max_steps"], 1)
         self.assertEqual(config["grpo"]["max_completion_length"], 16384)
@@ -727,7 +727,7 @@ class SingleStepSmokeTest(unittest.TestCase):
                     "bash",
                     str(ROOT / "slurm/train/rlvr-smoke.sh"),
                     "1",
-                    "--config-name=rlvr-smoke-16k",
+                    "--config-name=rlvr/smoke-16k",
                     "runtime.validate_only=true",
                 ],
                 env=env,
@@ -752,7 +752,7 @@ class SingleStepSmokeTest(unittest.TestCase):
             self.assertIn("--nproc_per_node=4", argv)
             overrides = argv[argv.index(str(ROOT / "src/train_rlvr.py")) + 1 :]
             parsed = get_args_parser().parse_args(overrides)
-            self.assertEqual(parsed.config_name, "rlvr-smoke-16k")
+            self.assertEqual(parsed.config_name, "rlvr/smoke-16k")
             self.assertEqual(
                 parsed.overrides,
                 ["runtime.validate_only=true", "runtime.stop_after_step=1"],

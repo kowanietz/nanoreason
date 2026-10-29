@@ -32,10 +32,8 @@ def main():
     if args.config != "aime" and args.year is not None:
         parser.error("--year is only supported for AIME")
 
-    with initialize_config_dir(
-        version_base="1.3", config_dir=str(ROOT / "configs/eval")
-    ):
-        config = compose(config_name=args.config)
+    with initialize_config_dir(version_base="1.3", config_dir=str(ROOT / "configs")):
+        config = compose(config_name=f"eval/{args.config}")
 
     model_args = OmegaConf.to_container(config.model_args, resolve=True)
     model_args["tokenizer"] = args.tokenizer or model_args["tokenizer"]

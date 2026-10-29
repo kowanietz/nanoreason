@@ -33,7 +33,7 @@ from training_common import make_tokenizer
 def repetition_config():
     with initialize_config_dir(version_base="1.3", config_dir=str(ROOT / "configs")):
         return OmegaConf.to_container(
-            compose(config_name="sft-repetition-3k2"), resolve=True
+            compose(config_name="sft/repetition-3k2"), resolve=True
         )
 
 

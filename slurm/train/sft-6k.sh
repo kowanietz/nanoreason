@@ -16,7 +16,7 @@ set -euo pipefail
 
 ROOT="/p/scratch/rcfd/kowanietz1"
 REPO="$ROOT/projects/reasoning-posttraining"
-CONFIG="sft-6k"
+CONFIG="sft/packed-6k"
 
 module load uv
 cd "$REPO"

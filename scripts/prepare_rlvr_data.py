@@ -12,7 +12,8 @@ from pathlib import Path
 
 import pyarrow as pa
 import pyarrow.parquet as pq
-import yaml
+from hydra import compose, initialize_config_dir
+from omegaconf import OmegaConf
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
@@ -386,7 +387,10 @@ def main() -> None:
     args = parser.parse_args()
     from training_common import make_tokenizer
 
-    model = yaml.safe_load((ROOT / "configs/base.yaml").read_text())["model"]
+    with initialize_config_dir(version_base="1.3", config_dir=str(ROOT / "configs")):
+        model = OmegaConf.to_container(
+            compose(config_name="sft/base").model, resolve=True
+        )
     if args.tokenizer:
         model["tokenizer_name_or_path"] = str(args.tokenizer)
     if not Path(model["tokenizer_name_or_path"]).is_dir():

@@ -1,0 +1,13 @@
+# @package _global_
+
+defaults:
+  - _self_
+  - override /hydra/job_logging: none
+  - override /hydra/hydra_logging: none
+
+hydra:
+  run:
+    dir: .
+  output_subdir: null
+  job:
+    chdir: false
