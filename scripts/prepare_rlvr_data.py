@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import argparse
-import ast
 import hashlib
 import json
 import re
@@ -18,6 +17,14 @@ from omegaconf import OmegaConf
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from benchmark_exclusions import load_exclusions, normalized, question_hash
+from rlvr.checkpoints import fingerprint
+from rlvr.ifeval import (
+    IFValidationError,
+    verifier_info,
+)
+from rlvr.ifeval import (
+    constraint_spec as validated_spec,
+)
 from rlvr.rewards import validate_reference_answers
 
 COLUMNS = [
@@ -54,37 +61,13 @@ SCHEMA = pa.schema(
 )
 
 
-def fingerprint(path: Path) -> str:
-    with path.open("rb") as stream:
-        return hashlib.file_digest(stream, "sha256").hexdigest()
-
-
 def constraint_spec(ground_truth):
-    if len(ground_truth) != 1:
-        raise ValueError("invalid_if_constraints")
-    try:
-        value = ast.literal_eval(ground_truth[0])
-    except (ValueError, SyntaxError) as error:
-        raise ValueError("invalid_if_constraints") from error
-    if not isinstance(value, list) or len(value) != 1 or not isinstance(value[0], dict):
-        raise ValueError("invalid_if_constraints")
-    spec = value[0]
-    if set(spec) != {"instruction_id", "kwargs"}:
-        raise ValueError("invalid_if_constraints")
-    ids, arguments = spec["instruction_id"], spec["kwargs"]
-    if (
-        not isinstance(ids, list)
-        or not ids
-        or not isinstance(arguments, list)
-        or len(ids) != len(arguments)
-        or any(not isinstance(key, str) or not key for key in ids)
-        or any(arg is not None and not isinstance(arg, dict) for arg in arguments)
-    ):
-        raise ValueError("invalid_if_constraints")
-    try:
-        return json.dumps(spec, sort_keys=True, ensure_ascii=False, allow_nan=False)
-    except (TypeError, ValueError) as error:
-        raise ValueError("invalid_if_constraints") from error
+    return json.dumps(
+        validated_spec(ground_truth),
+        sort_keys=True,
+        ensure_ascii=False,
+        allow_nan=False,
+    )
 
 
 def prepare_record(row, source_file, source_row):
@@ -121,7 +104,7 @@ def prepare_record(row, source_file, source_row):
             raise ValueError("unsupported_math_reference") from error
     else:
         if row.get("constraint_type") != "multi" or not row.get("constraint"):
-            raise ValueError("invalid_if_constraints")
+            raise IFValidationError("invalid_if_constraints")
         spec = constraint_spec(answers)
     return {
         **{key: row.get(key) for key in COLUMNS[1:]},
@@ -133,15 +116,16 @@ def prepare_record(row, source_file, source_row):
         "source_row": source_row,
         "constraint_spec": spec,
         "reasoning_prefix": True,
-        "reward_enabled": domain == "math",
+        "reward_enabled": True,
     }
 
 
-def select_records(records, exclusions):
+def select_records(records, exclusions, quarantine_invalid_if_references=False):
     """Exclude benchmark overlap and all copies of conflicting duplicate prompts."""
     seen, conflicts = {}, set()
     input_counts, removed = Counter(), Counter()
     removal_examples = {}
+    validation_errors = []
     total = 0
     for row, source_file, source_row in records:
         total += 1
@@ -161,6 +145,19 @@ def select_records(records, exclusions):
         if reason is None:
             try:
                 record = prepare_record(row, source_file, source_row)
+            except IFValidationError as error:
+                if not quarantine_invalid_if_references:
+                    raise IFValidationError(
+                        f"{source_file}:{source_row}: {error}"
+                    ) from error
+                reason = "invalid_if_reference"
+                validation_errors.append(
+                    {
+                        "source_id": f"{source_file}:{source_row}",
+                        "error": str(error),
+                        "ground_truth": row["ground_truth"],
+                    }
+                )
             except ValueError as error:
                 reason = str(error)
         if reason is None:
@@ -191,6 +188,7 @@ def select_records(records, exclusions):
         "input_by_domain": dict(sorted(input_counts.items())),
         "removed": dict(sorted(removed.items())),
         "removal_examples": removal_examples,
+        "if_validation_errors": validation_errors,
         "retained_rows": len(selected),
         "retained_by_domain": dict(
             sorted(Counter(row["domain"] for row in selected).items())
@@ -260,6 +258,7 @@ def prepare(
     tokenizer,
     exclusions: Path,
     dry_run: bool = False,
+    quarantine_invalid_if_references: bool = False,
 ):
     """Build deterministic Parquet/manifest artifacts, or validate without writing."""
     if not dry_run and output_dir.exists() and any(output_dir.iterdir()):
@@ -270,7 +269,9 @@ def prepare(
     if not files:
         raise FileNotFoundError(f"No local Parquet shards in {source_dir / 'data'}")
     hashes, exclusion_info = load_exclusions(exclusions)
-    rows, statistics = select_records(read_records(files, source_dir), hashes)
+    rows, statistics = select_records(
+        read_records(files, source_dir), hashes, quarantine_invalid_if_references
+    )
     if not rows:
         raise ValueError("No eligible RLVR records remain")
     samples = check_rendering(rows, tokenizer)
@@ -298,7 +299,7 @@ def prepare(
         if (tokenizer_dir / name).is_file()
     ]
     manifest = {
-        "preprocessing_version": 3,
+        "preprocessing_version": 4,
         "source_directory": str(source_dir.resolve()),
         "source_files": [
             {
@@ -316,6 +317,7 @@ def prepare(
             "deduplication": "normalized prompt; first in sorted shard/row order; drop conflicting groups",
             "math_references": "require supported answer types; reject bare-symbol construction targets",
             "sampling": None,
+            "quarantine_invalid_if_references": quarantine_invalid_if_references,
         },
         "tokenizer": {
             "path": str(tokenizer_dir),
@@ -345,8 +347,19 @@ def prepare(
         },
         "rewards": {
             "math": "enabled",
-            "ifeval": "disabled: Open Instruct IFEvalG and its language/NLTK resources are not installed or verified",
+            "ifeval": "enabled",
         },
+        "if_verifier": verifier_info(),
+        "constraint_coverage": dict(
+            sorted(
+                Counter(
+                    key
+                    for row in rows
+                    if row["domain"] == "ifeval"
+                    for key in json.loads(row["constraint_spec"])["instruction_id"]
+                ).items()
+            )
+        ),
         "output": {
             "file": "examples.parquet",
             "rows": len(rows),
@@ -380,6 +393,11 @@ def main() -> None:
     )
     parser.add_argument("--tokenizer", type=Path)
     parser.add_argument(
+        "--quarantine-invalid-if-references",
+        action="store_true",
+        help="Explicitly quarantine invalid/random-default IF references; record every error and original reference in the manifest",
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Validate and fingerprint without writing artifacts",
@@ -401,6 +419,7 @@ def main() -> None:
         make_tokenizer(model),
         args.exclusions,
         args.dry_run,
+        args.quarantine_invalid_if_references,
     )
     print(json.dumps(manifest, sort_keys=True, indent=2, ensure_ascii=False))
     for domain, sample in samples.items():

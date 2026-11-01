@@ -7,6 +7,43 @@ from pathlib import Path
 import torch.distributed as dist
 
 
+def validate_checkpoint(path: Path, world: int) -> dict:
+    """Validate counters and referenced DCP shard extents without loading weights."""
+    import torch
+    from torch.distributed.checkpoint import FileSystemReader
+
+    required = [
+        "trainer_state.json",
+        "scheduler.pt",
+        "optimizer_0/.metadata",
+        "pytorch_model_fsdp_0/.metadata",
+        *[f"rng_state_{rank}.pth" for rank in range(world)],
+    ]
+    if (path / "checkpoint-is-incomplete.txt").exists() or any(
+        not (path / name).is_file() or not (path / name).stat().st_size
+        for name in required
+    ):
+        raise ValueError(f"Incomplete native FSDP checkpoint: {path}")
+    state = json.loads((path / "trainer_state.json").read_text())
+    step = state["global_step"]
+    scheduler = torch.load(path / "scheduler.pt", map_location="cpu", weights_only=True)
+    if step < 1 or path.name != f"checkpoint-{step}" or scheduler["last_epoch"] != step:
+        raise ValueError(f"Inconsistent checkpoint step counters: {path}")
+    for folder in ("pytorch_model_fsdp_0", "optimizer_0"):
+        directory = path / folder
+        metadata = FileSystemReader(directory).read_metadata()
+        if not metadata.storage_data:
+            raise ValueError(f"Empty DCP checkpoint: {directory}")
+        sizes = {}
+        for item in metadata.storage_data.values():
+            shard = directory / item.relative_path
+            if shard not in sizes:
+                sizes[shard] = shard.stat().st_size if shard.is_file() else -1
+            if sizes[shard] < item.offset + item.length:
+                raise ValueError(f"Missing or truncated DCP shard: {shard}")
+    return state
+
+
 def fingerprint(path: str | Path) -> str:
     with Path(path).open("rb") as stream:
         return hashlib.file_digest(stream, "sha256").hexdigest()
@@ -26,20 +63,12 @@ def resume_checkpoint(
     if checkpoint is None:
         return None
     path = Path(checkpoint)
-    required = [
-        "trainer_state.json",
-        "scheduler.pt",
-        "optimizer_0/.metadata",
-        "pytorch_model_fsdp_0/.metadata",
-        *[f"rng_state_{rank}.pth" for rank in range(world)],
-    ]
     if (
         path.resolve().parent != output.resolve()
         or path.resolve() != Path(latest or "").resolve()
-        or (path / "checkpoint-is-incomplete.txt").exists()
-        or any(not (path / name).is_file() for name in required)
     ):
         raise ValueError(f"Incomplete or non-latest native FSDP checkpoint: {path}")
+    validate_checkpoint(path, world)
     return str(path)
 
 

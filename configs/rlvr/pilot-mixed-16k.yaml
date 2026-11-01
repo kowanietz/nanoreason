@@ -1,0 +1,30 @@
+# @package _global_
+
+defaults:
+  - /rlvr/smoke
+  - _self_
+
+data:
+  directory: /p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/.cache/rlvr-prepared-v4
+  preprocessing_version: 4
+  domains: [math, ifeval]
+  selection: balanced
+  max_examples: 8
+  selection_seed: 73
+  source_id: null
+
+grpo:
+  output_dir: /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/rlvr/dr-grpo-pilot-mixed-16k
+  max_steps: 8
+  max_completion_length: 16384
+  vllm_max_model_length: 16896
+  vllm_importance_sampling_mode: token_truncate
+  vllm_importance_sampling_clip_max: 3.0
+  save_steps: 4
+
+runtime:
+  mode: train
+  weight_readback: false
+  resume_from_checkpoint: auto
+  stop_after_step: null
+  stop_after_minutes: 165

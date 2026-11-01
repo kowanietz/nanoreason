@@ -1,4 +1,4 @@
-"""Smoke-test evidence for learning, BF16 weight synchronization, and rollouts."""
+"""Training metrics and optional policy/vLLM checks."""
 
 import json
 import math
@@ -302,6 +302,108 @@ class SmokeDiagnostics(TrainerCallback):
             )
 
 
+class TrainingDiagnostics(SmokeDiagnostics):
+    """Normal training permits uniform groups and makes weight readback opt-in."""
+
+    def __init__(self, stop_after_step, weight_readback=False):
+        super().__init__(stop_after_step)
+        self.weight_readback = weight_readback
+
+    def on_train_begin(self, args, state, control, model=None, **kwargs):
+        if self.weight_readback:
+            # FSDP weights have already been restored when this callback runs.
+            self.snapshot_sync_weights(args, model)
+            generation = self.trainer.vllm_generation
+            original_sync = generation.sync_weights
+
+            def checked_sync():
+                original_sync()
+                if self.sync_before:
+                    self.verify_vllm_weights(args)
+                    self.verified_sync_steps.add(self.trainer.state.global_step)
+
+            generation.sync_weights = checked_sync
+
+    def snapshot_sync_weights(self, args, model):
+        self.sync_before = {}
+        for name, parameter in model.named_parameters():
+            if name.endswith("mlp.down_proj.weight"):
+                self.sync_before[name] = down_proj_sample(
+                    parameter,
+                    args.process_index % args.vllm_tensor_parallel_size,
+                    args.vllm_tensor_parallel_size,
+                )
+                if len(self.sync_before) == 2:
+                    break
+
+    def on_pre_optimizer_step(self, args, state, control, model=None, **kwargs):
+        if self.weight_readback:
+            self.snapshot_sync_weights(args, model)
+
+    def on_optimizer_step(self, args, state, control, model=None, **kwargs):
+        print(
+            json.dumps(
+                {
+                    "event": "optimizer_step",
+                    "rank": args.process_index,
+                    "step": state.global_step + 1,
+                    "vllm_synced_policy_step": self.trainer._last_loaded_step,
+                    "torch_peak_allocated_gib": torch.cuda.max_memory_allocated()
+                    / 2**30,
+                    "device_used_gib": torch.cuda.device_memory_used(args.device)
+                    / 2**30,
+                }
+            ),
+            flush=True,
+        )
+
+    def on_log(self, args, state, control, logs=None, **kwargs):
+        if logs and "frac_reward_zero_std" in logs:
+            self.mixed_rewards |= logs["frac_reward_zero_std"] < 1
+
+    def on_train_end(self, args, state, control, **kwargs):
+        return control
+
+
+def _saved_checkpoint_and_losses(trainer):
+    trainer.save_state()
+    dist.barrier()
+    output = Path(trainer.args.output_dir)
+    saved = resume_checkpoint(output, "auto", trainer.args.world_size)
+    if (
+        saved is None
+        or json.loads((Path(saved) / "trainer_state.json").read_text())["global_step"]
+        != trainer.state.global_step
+    ):
+        raise RuntimeError("Final native checkpoint was not saved at the stopping step")
+    return saved, [e["loss"] for e in trainer.state.log_history if "loss" in e]
+
+
+def finish_training(trainer, diagnostics, checkpoint, started):
+    saved, losses = _saved_checkpoint_and_losses(trainer)
+    output = Path(trainer.args.output_dir)
+    finite = bool(losses) and all(math.isfinite(loss) for loss in losses)
+    result = {
+        "global_step": trainer.state.global_step,
+        "resumed_from": checkpoint,
+        "checkpoint": saved,
+        "finite_logged_losses": finite,
+        "checks_passed": finite,
+        "weight_readback_enabled": diagnostics.weight_readback,
+        "verified_sync_steps": sorted(diagnostics.verified_sync_steps),
+        "mixed_reward_group_observed": diagnostics.mixed_rewards,
+        "trajectory_reproducibility": "not established; native resume regenerates rollouts and vLLM RNG",
+        "seconds": time.monotonic() - started,
+    }
+    if trainer.is_world_process_zero():
+        (output / f"training-result-{trainer.state.global_step}.json").write_text(
+            json.dumps(result, indent=2)
+        )
+    print(json.dumps(result), flush=True)
+    if not finite:
+        raise FloatingPointError("Missing or nonfinite training losses")
+
+
 def finish_smoke_test(
     trainer: GRPOTrainer,
     diagnostics: SmokeDiagnostics,
@@ -311,16 +413,7 @@ def finish_smoke_test(
     """Verify the saved checkpoint and persist the learning/synchronization evidence."""
     args = trainer.args
     output = Path(args.output_dir)
-    trainer.save_state()
-    dist.barrier()
-    saved = resume_checkpoint(output, "auto", args.world_size)
-    if (
-        saved is None
-        or json.loads((Path(saved) / "trainer_state.json").read_text())["global_step"]
-        != trainer.state.global_step
-    ):
-        raise RuntimeError("Final native checkpoint was not saved at the stopping step")
-    losses = [entry["loss"] for entry in trainer.state.log_history if "loss" in entry]
+    saved, losses = _saved_checkpoint_and_losses(trainer)
     finite_losses = bool(losses) and all(math.isfinite(loss) for loss in losses)
     result = {
         "global_step": trainer.state.global_step,

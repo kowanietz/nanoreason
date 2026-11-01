@@ -9,11 +9,20 @@ import unittest
 from collections import Counter, defaultdict
 from pathlib import Path
 from types import SimpleNamespace
-from unittest.mock import Mock, PropertyMock, patch
+from unittest.mock import Mock, PropertyMock, call, patch
 
 import pyarrow as pa
 import pyarrow.parquet as pq
 import torch
+from accelerate import Accelerator, FullyShardedDataParallelPlugin, skip_first_batches
+from accelerate.data_loader import BatchSamplerShard
+from accelerate.utils import (
+    load_fsdp_model,
+    load_fsdp_optimizer,
+    merge_fsdp_weights,
+    save_fsdp_model,
+    save_fsdp_optimizer,
+)
 from hydra import compose, initialize_config_dir
 from hydra._internal.utils import get_args_parser
 from omegaconf import OmegaConf
@@ -25,18 +34,112 @@ from trl.trainer.utils import add_fused_lm_head
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from benchmark_exclusions import load_exclusions
-from rlvr.checkpoints import resume_checkpoint
-from rlvr.data import load_smoke_data
-from rlvr.diagnostics import SmokeDiagnostics, down_proj_sample
+from rlvr.checkpoints import resume_checkpoint, validate_checkpoint
+from rlvr.data import domain_quotas, load_rlvr_data
+from rlvr.diagnostics import SmokeDiagnostics, TrainingDiagnostics, down_proj_sample
+from rlvr.dispatch import make_domain_rewards
+from rlvr.ifeval import verifier_info
 from rlvr.rewards import math_rewards
 from rlvr.validation import validate_config
-from train_rlvr import TrainingOlmo3Model
+from train_rlvr import CheckpointGRPOTrainer, TrainingOlmo3Model
 from training_common import make_tokenizer
 
 
 def smoke_config(name="rlvr/smoke"):
     with initialize_config_dir(version_base="1.3", config_dir=str(ROOT / "configs")):
         return OmegaConf.to_container(compose(config_name=name), resolve=True)
+
+
+def cpu_checkpoint(path, step=4):
+    """Exercise the same Accelerate DCP APIs with a tiny unsharded CPU model."""
+    path.mkdir(exist_ok=True)
+    accelerator = Accelerator(cpu=True)
+    plugin = FullyShardedDataParallelPlugin(
+        fsdp_version=2,
+        state_dict_type="SHARDED_STATE_DICT",
+        cpu_offload=False,
+    )
+    model = torch.nn.Linear(3, 2)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-6)
+    scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lambda _: 1.0)
+    for _ in range(step):
+        optimizer.zero_grad()
+        model(torch.ones(1, 3)).square().mean().backward()
+        optimizer.step()
+        scheduler.step()
+    save_fsdp_model(plugin, accelerator, model, path)
+    save_fsdp_optimizer(plugin, accelerator, optimizer, model, path)
+    torch.save(scheduler.state_dict(), path / "scheduler.pt")
+    TrainerState(global_step=step, max_steps=32).save_to_json(
+        path / "trainer_state.json"
+    )
+    for rank in range(4):
+        torch.save({"cpu": torch.get_rng_state()}, path / f"rng_state_{rank}.pth")
+    return model, optimizer, scheduler, plugin, accelerator
+
+
+class CheckpointSaveTest(unittest.TestCase):
+    def trainer(self, device="cuda:2", fsdp=True):
+        trainer = object.__new__(CheckpointGRPOTrainer)
+        trainer.args = SimpleNamespace(device=torch.device(device), process_index=2)
+        trainer.state = TrainerState(global_step=8)
+        trainer.is_fsdp_enabled = fsdp
+        return trainer
+
+    def test_cuda_cleanup_precedes_unmodified_native_checkpoint_save(self):
+        trainer = self.trainer()
+        device = trainer.args.device
+        calls = Mock()
+        with (
+            patch("train_rlvr.torch.cuda") as cuda,
+            patch.object(GRPOTrainer, "_save_checkpoint") as native_save,
+            patch("builtins.print") as output,
+        ):
+            calls.attach_mock(cuda, "cuda")
+            calls.attach_mock(native_save, "native_save")
+            cuda.mem_get_info.side_effect = [
+                (2**30, 40 * 2**30),
+                (8 * 2**30, 40 * 2**30),
+            ]
+            model, trial = object(), object()
+            trainer._save_checkpoint(model, trial)
+            event = json.loads(output.call_args.args[0])
+            self.assertEqual(event["free_before_gib"], 1)
+            self.assertEqual(event["free_after_gib"], 8)
+            self.assertEqual(
+                calls.mock_calls,
+                [
+                    call.cuda.set_device(device),
+                    call.cuda.synchronize(device),
+                    call.cuda.mem_get_info(device),
+                    call.cuda.empty_cache(),
+                    call.cuda.mem_get_info(device),
+                    call.native_save(model, trial),
+                ],
+            )
+
+    def test_pending_cuda_error_aborts_before_native_save(self):
+        with (
+            patch("train_rlvr.torch.cuda") as cuda,
+            patch.object(GRPOTrainer, "_save_checkpoint") as native_save,
+            patch("builtins.print"),
+        ):
+            cuda.synchronize.side_effect = RuntimeError("pending CUDA failure")
+            with self.assertRaisesRegex(RuntimeError, "pending CUDA failure"):
+                self.trainer()._save_checkpoint(None, None)
+            native_save.assert_not_called()
+            cuda.empty_cache.assert_not_called()
+
+    def test_cpu_and_non_fsdp_saves_delegate_without_cuda_calls(self):
+        for device, fsdp in (("cpu", True), ("cuda:2", False)):
+            with (
+                self.subTest(device=device, fsdp=fsdp),
+                patch("train_rlvr.torch.cuda") as cuda,
+                patch.object(GRPOTrainer, "_save_checkpoint") as native_save,
+            ):
+                self.trainer(device, fsdp)._save_checkpoint(None, None)
+                self.assertEqual(cuda.mock_calls, [])
+                native_save.assert_called_once_with(None, None)
 
 
 class TrainingDecoderTest(unittest.TestCase):
@@ -124,23 +227,117 @@ class SmokeConfigTest(unittest.TestCase):
             checkpoint.mkdir()
             with self.assertRaisesRegex(ValueError, "Incomplete"):
                 resume_checkpoint(output, "auto", 4)
-            files = [
-                "trainer_state.json",
-                "scheduler.pt",
-                "optimizer_0/.metadata",
-                "pytorch_model_fsdp_0/.metadata",
-                *[f"rng_state_{rank}.pth" for rank in range(4)],
-            ]
-            for name in files:
-                path = checkpoint / name
-                path.parent.mkdir(exist_ok=True)
-                path.touch()
+            cpu_checkpoint(checkpoint)
             self.assertEqual(resume_checkpoint(output, "auto", 4), str(checkpoint))
+            shard = next((checkpoint / "pytorch_model_fsdp_0").glob("*.distcp"))
+            contents = shard.read_bytes()
+            shard.write_bytes(contents[:-32])
+            with self.assertRaisesRegex(ValueError, "truncated DCP"):
+                resume_checkpoint(output, "auto", 4)
+            shard.write_bytes(contents)
+            state_path = checkpoint / "trainer_state.json"
+            state = state_path.read_text()
+            state_path.write_text(json.dumps({"global_step": 3}))
+            with self.assertRaisesRegex(ValueError, "step counters"):
+                resume_checkpoint(output, "auto", 4)
+            state_path.write_text(state)
             with self.assertRaisesRegex(ValueError, "require resumption"):
                 resume_checkpoint(output, False, 4)
-            (output / "checkpoint-8").mkdir()
+            (output / "checkpoint-8/pytorch_model_fsdp_0").mkdir(parents=True)
             with self.assertRaises(ValueError):
                 resume_checkpoint(output, str(checkpoint), 4)
+            with self.assertRaisesRegex(ValueError, "Incomplete"):
+                resume_checkpoint(output, "auto", 4)
+
+    def test_cpu_native_restore_optimizer_scheduler_and_export(self):
+        from safetensors.torch import load_file
+
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            path = Path(directory) / "checkpoint-4"
+            model, optimizer, scheduler, plugin, accelerator = cpu_checkpoint(path)
+            expected = {k: v.clone() for k, v in model.state_dict().items()}
+            restored = torch.nn.Linear(3, 2)
+            opt = torch.optim.AdamW(restored.parameters(), lr=1e-6)
+            sched = torch.optim.lr_scheduler.LambdaLR(opt, lambda _: 1.0)
+            load_fsdp_model(plugin, accelerator, restored, path)
+            load_fsdp_optimizer(plugin, accelerator, opt, restored, path)
+            sched.load_state_dict(torch.load(path / "scheduler.pt", weights_only=True))
+            self.assertEqual(validate_checkpoint(path, 4)["global_step"], 4)
+            self.assertEqual(sched.state_dict(), scheduler.state_dict())
+            for left, right in zip(
+                optimizer.state.values(), opt.state.values(), strict=True
+            ):
+                for key in ("step", "exp_avg", "exp_avg_sq"):
+                    torch.testing.assert_close(left[key], right[key], rtol=0, atol=0)
+            merge_fsdp_weights(
+                path / "pytorch_model_fsdp_0", Path(directory) / "export"
+            )
+            for key, value in load_file(
+                Path(directory) / "export/model.safetensors"
+            ).items():
+                torch.testing.assert_close(value, expected[key], rtol=0, atol=0)
+                torch.testing.assert_close(
+                    restored.state_dict()[key], expected[key], rtol=0, atol=0
+                )
+            for policy, opt_ in ((model, optimizer), (restored, opt)):
+                opt_.zero_grad()
+                policy(torch.ones(1, 3)).square().mean().backward()
+                opt_.step()
+            for left, right in zip(
+                model.parameters(), restored.parameters(), strict=True
+            ):
+                torch.testing.assert_close(left, right, rtol=0, atol=0)
+
+    def test_fixed_mixture_rounding_and_validation(self):
+        data = {
+            "domains": ["math", "ifeval"],
+            "selection": "balanced",
+            "max_examples": 32,
+        }
+        self.assertEqual(domain_quotas(data), {"math": 16, "ifeval": 16})
+        data["domain_weights"] = {"math": 3, "ifeval": 1}
+        self.assertEqual(domain_quotas(data), {"math": 24, "ifeval": 8})
+        data["max_examples"] = 7
+        self.assertEqual(domain_quotas(data), {"math": 5, "ifeval": 2})
+        for weights in (
+            {},
+            {"math": 1},
+            {"math": 0, "ifeval": 0},
+            {"math": -1, "ifeval": 1},
+            {"math": float("nan"), "ifeval": 1},
+        ):
+            with self.subTest(weights=weights), self.assertRaises(ValueError):
+                domain_quotas({**data, "domain_weights": weights})
+
+    def test_resumed_sampler_continues_without_duplicate_or_skipped_prompts(self):
+        from torch.utils.data import BatchSampler, DataLoader
+
+        def loader(rank):
+            trainer = object.__new__(GRPOTrainer)
+            trainer.train_dataset = list(range(32))
+            trainer.num_generations, trainer.num_iterations = 4, 1
+            trainer.shuffle_dataset = True
+            trainer.args = SimpleNamespace(
+                generation_batch_size=4, steps_per_generation=1, seed=73
+            )
+            sampler = trainer._get_train_sampler()
+            batches = BatchSamplerShard(
+                BatchSampler(sampler, batch_size=1, drop_last=True),
+                num_processes=4,
+                process_index=rank,
+                split_batches=False,
+            )
+            return DataLoader(trainer.train_dataset, batch_sampler=batches)
+
+        full = [[batch.item() for batch in loader(rank)] for rank in range(4)]
+        self.assertTrue(all(sequence == full[0] for sequence in full))
+        self.assertEqual(set(full[0]), set(range(32)))
+        for rank in range(4):
+            for step in (8, 10, 16, 24):
+                resumed = [
+                    batch.item() for batch in skip_first_batches(loader(rank), step)
+                ]
+                self.assertEqual(resumed, full[rank][step:])
 
 
 class TokenizerAndRewardTest(unittest.TestCase):
@@ -194,6 +391,52 @@ class TokenizerAndRewardTest(unittest.TestCase):
         self.assertIsNone(images)
         self.assertEqual(fields, {})
 
+    def test_first_resumed_rollout_syncs_and_runs_optional_readback_before_generation(
+        self,
+    ):
+        trainer = self.bare_trainer()
+        trainer.use_vllm, trainer._last_loaded_step = True, -1
+        trainer.state.global_step = 8
+        events = []
+
+        def generate(**kwargs):
+            events.append("generate")
+            return None, [[1, 2]], [[[0.0], [0.0]]], None
+
+        trainer.vllm_generation = SimpleNamespace(
+            sync_weights=lambda: events.append("sync"),
+            generate=generate,
+        )
+        model = SimpleNamespace(
+            named_parameters=lambda: [
+                ("model.layers.0.mlp.down_proj.weight", torch.ones(4, 8))
+            ]
+        )
+        callback = TrainingDiagnostics(None, weight_readback=True)
+        callback.trainer = trainer
+        callback.verify_vllm_weights = lambda _: events.append("readback")
+        args = SimpleNamespace(process_index=0, vllm_tensor_parallel_size=4)
+        callback.on_train_begin(args, trainer.state, TrainerControl(), model=model)
+        self.assertTrue(callback.sync_before)
+        callback.on_pre_optimizer_step(
+            args, trainer.state, TrainerControl(), model=model
+        )
+        callback.on_log(
+            args, trainer.state, TrainerControl(), logs={"frac_reward_zero_std": 0.5}
+        )
+        self.assertTrue(callback.mixed_rewards)
+        trainer._generate_single_turn([[1]], None, {}, 4)
+        self.assertEqual(events, ["sync", "readback", "generate"])
+        self.assertEqual(trainer._last_loaded_step, 8)
+        self.assertEqual(callback.verified_sync_steps, {8})
+        events.clear()
+        trainer._generate_single_turn([[1]], None, {}, 4)
+        self.assertEqual(events, ["generate"])
+        trainer.state.global_step = 9
+        events.clear()
+        trainer._generate_single_turn([[1]], None, {}, 4)
+        self.assertEqual(events, ["sync", "readback", "generate"])
+
     def test_actual_trl_reward_dispatch_and_metadata_alignment(self):
         trainer = self.bare_trainer()
         prompt = [{"role": "user", "content": "What is six times seven?"}]
@@ -236,6 +479,60 @@ class TokenizerAndRewardTest(unittest.TestCase):
                 completions,
                 [[1]] * 4,
             )
+
+    def test_actual_trl_mixed_reward_dispatch(self):
+        trainer = self.bare_trainer()
+        trainer.reward_funcs = [make_domain_rewards(self.tokenizer, 4)]
+        trainer.reward_func_names = ["domain_rewards"]
+        trainer._pending_extra_logs = defaultdict(list)
+        prompt = [{"role": "user", "content": "Respond."}]
+        gold = [
+            repr(
+                [
+                    {
+                        "instruction_id": [
+                            "punctuation:no_comma",
+                            "detectable_format:json_format",
+                        ],
+                        "kwargs": [None, None],
+                    }
+                ]
+            )
+        ]
+        inputs = [
+            {
+                "prompt": prompt,
+                "ground_truth": ["42"] if i < 4 else gold,
+                "domain": "math" if i < 4 else "ifeval",
+                "reasoning_prefix": True,
+                "source_id": "math" if i < 4 else "if",
+            }
+            for i in range(8)
+        ]
+        texts = [
+            "work</think>42",
+            "work</think>43",
+            "unfinished",
+            "work</think>42",
+            'work</think>{"answer": 42}',
+            "work</think>hello world",
+            "unfinished",
+            "work</think>hello, world",
+        ]
+        completions = [[{"role": "assistant", "content": text}] for text in texts]
+        rewards = GRPOTrainer._calculate_rewards(
+            trainer,
+            inputs,
+            [prompt] * 8,
+            completions,
+            [[1, self.tokenizer.eos_token_id]] * 8,
+        )
+        self.assertEqual(rewards[:, 0].tolist(), [1, 0, 0, 1, 1, 0.5, 0, 0])
+        self.assertEqual(trainer._pending_metrics["domain/ifeval/strict_rate"], [0.25])
+        self.assertEqual(trainer._pending_metrics["group/all/mixed_reward_rate"], [1])
+        self.assertEqual(
+            trainer._pending_extra_logs["domain"], ["math"] * 4 + ["ifeval"] * 4
+        )
 
     def test_production_importance_sampling_modes_at_16k(self):
         length = 16384
@@ -333,6 +630,75 @@ class TokenizerAndRewardTest(unittest.TestCase):
                         ratios, torch.full_like(ratios, expected)
                     )
 
+    def test_if_manifest_checks_verifier_inputs_not_descriptive_metadata(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            config = copy.deepcopy(self.config)
+            config["data"].update(
+                directory=directory,
+                max_examples=1,
+                domains=["ifeval"],
+                preprocessing_version=4,
+            )
+            row = {
+                "prompt": [{"role": "user", "content": "Write without commas."}],
+                "source_prompt": "user: Write without commas.",
+                "ground_truth": [
+                    repr(
+                        [
+                            {
+                                "instruction_id": ["punctuation:no_comma"],
+                                "kwargs": [None],
+                            }
+                        ]
+                    )
+                ],
+                "domain": "ifeval",
+                "reward_enabled": True,
+                "reasoning_prefix": True,
+                "source_id": "fixture",
+            }
+            parquet = Path(directory) / "examples.parquet"
+            pq.write_table(pa.Table.from_pylist([row]), parquet)
+            _, exclusions = load_exclusions(Path(config["data"]["exclusions"]))
+            recorded = copy.deepcopy(verifier_info())
+            recorded["upstream"]["comparison_registry"] = {"documentation": "legacy v4"}
+            manifest = {
+                "preprocessing_version": 4,
+                "rewards": {"ifeval": "enabled"},
+                "if_verifier": recorded,
+                "exclusions": exclusions,
+                "output": {
+                    "file": parquet.name,
+                    "rows": 1,
+                    "sha256": hashlib.sha256(parquet.read_bytes()).hexdigest(),
+                },
+                "statistics": {"retained_by_domain": {"ifeval": 1}},
+                "tokenizer": {
+                    "chat_template_sha256": hashlib.sha256(
+                        self.tokenizer.chat_template.encode()
+                    ).hexdigest()
+                },
+            }
+            path = Path(directory) / "manifest.json"
+            path.write_text(json.dumps(manifest))
+            self.assertEqual(load_rlvr_data(config, self.tokenizer)[0].to_list(), [row])
+            for key in ("dependencies", "resources", "registry_ids"):
+                invalid = copy.deepcopy(manifest)
+                invalid["if_verifier"][key] = None
+                path.write_text(json.dumps(invalid))
+                with (
+                    self.subTest(key=key),
+                    self.assertRaisesRegex(ValueError, "provenance"),
+                ):
+                    load_rlvr_data(config, self.tokenizer)
+            invalid = copy.deepcopy(manifest)
+            invalid["if_verifier"]["upstream"]["vendored_sha256"]["instructions.py"] = (
+                "0" * 64
+            )
+            path.write_text(json.dumps(invalid))
+            with self.assertRaisesRegex(ValueError, "provenance"):
+                load_rlvr_data(config, self.tokenizer)
+
     def test_dataset_checksum_filtering_lengths_and_reproducibility(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             config = copy.deepcopy(self.config)
@@ -382,20 +748,20 @@ class TokenizerAndRewardTest(unittest.TestCase):
             }
             path = Path(directory) / "manifest.json"
             path.write_text(json.dumps(manifest))
-            first, info = load_smoke_data(config, self.tokenizer)
-            second, repeated_info = load_smoke_data(config, self.tokenizer)
+            first, info = load_rlvr_data(config, self.tokenizer)
+            second, repeated_info = load_rlvr_data(config, self.tokenizer)
             self.assertEqual(first.to_list(), second.to_list())
             self.assertEqual(info, repeated_info)
             self.assertNotIn("outputs", first.column_names)
             config["data"].update(max_examples=1, source_id=first[1]["source_id"])
-            targeted, targeted_info = load_smoke_data(config, self.tokenizer)
+            targeted, targeted_info = load_rlvr_data(config, self.tokenizer)
             self.assertEqual(targeted.to_list(), [first[1]])
             self.assertEqual(
                 targeted_info["selected_source_ids"], [first[1]["source_id"]]
             )
             config["data"]["source_id"] = "missing"
             with self.assertRaisesRegex(ValueError, "Insufficient"):
-                load_smoke_data(config, self.tokenizer)
+                load_rlvr_data(config, self.tokenizer)
             self.assertEqual(info["excluded"]["prompt_over_budget"], 1)
             self.assertEqual(info["excluded"]["not_enabled_math"], 1)
             for section, key in (("output", "sha256"), ("exclusions", "sha256")):
@@ -406,7 +772,7 @@ class TokenizerAndRewardTest(unittest.TestCase):
                     self.subTest(section=section),
                     self.assertRaisesRegex(ValueError, "provenance"),
                 ):
-                    load_smoke_data(config, self.tokenizer)
+                    load_rlvr_data(config, self.tokenizer)
 
 
 class SingleStepSmokeTest(unittest.TestCase):

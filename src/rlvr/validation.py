@@ -10,10 +10,37 @@ from transformers import AutoConfig
 from training_common import make_tokenizer
 
 from .checkpoints import fingerprint
+from .data import domain_quotas
 
 
 def validate_config(config: dict) -> dict:
     args, runtime = config["grpo"], config["runtime"]
+    mode = runtime.get("mode", "smoke")
+    if mode not in {"smoke", "train"}:
+        raise ValueError("runtime.mode must be smoke or train")
+    domains = config["data"].get("domains", ["math"])
+    if (
+        not isinstance(domains, list)
+        or not domains
+        or len(set(domains)) != len(domains)
+        or set(domains) - {"math", "ifeval"}
+        or config["data"].get("selection", "shuffle") not in {"shuffle", "balanced"}
+        or config["data"]["max_examples"] < len(domains)
+        or (mode == "smoke" and domains != ["math"])
+    ):
+        raise ValueError("Invalid domain selection")
+    domain_quotas(config["data"])
+    if mode == "train" and (
+        not args["vllm_importance_sampling_correction"]
+        or args.get("vllm_importance_sampling_mode") != "token_truncate"
+        or args.get("vllm_importance_sampling_clip_max") != 3.0
+        or config["data"].get("preprocessing_version") != 4
+        or args["save_strategy"] != "steps"
+        or args["max_steps"] % args["save_steps"]
+    ):
+        raise ValueError(
+            "Training requires v4 data, token_truncate IS, and a final checkpoint"
+        )
     world = runtime["expected_world_size"]
     batch = args["per_device_train_batch_size"] * world
     generation = args["generation_batch_size"]
@@ -33,9 +60,7 @@ def validate_config(config: dict) -> dict:
         generation // batch != args["gradient_accumulation_steps"]
         or args["num_iterations"] != 1
     ):
-        raise ValueError(
-            "Smoke checkpoints require one fresh generation batch per optimizer step"
-        )
+        raise ValueError("Expected one fresh generation batch per optimizer step")
     if (
         args["vllm_max_model_length"]
         < config["data"]["max_prompt_tokens"] + args["max_completion_length"]
@@ -62,14 +87,14 @@ def validate_config(config: dict) -> dict:
         or args["use_liger_kernel"]
         or args["torch_compile"]
     ):
-        raise ValueError("Unsupported Phase 3A training settings")
+        raise ValueError("Unsupported RLVR training settings")
     stop = runtime["stop_after_step"]
-    if not 1 <= args["max_steps"] <= 10 or (
-        stop is not None and not 1 <= stop <= args["max_steps"]
+    if (
+        not 1 <= args["max_steps"]
+        or (mode == "smoke" and args["max_steps"] > 10)
+        or (stop is not None and not 1 <= stop <= args["max_steps"])
     ):
-        raise ValueError(
-            "Smoke test and intermediate stop must be within 1–10 optimizer steps"
-        )
+        raise ValueError("Invalid max_steps or stop_after_step")
     source, destination = (
         Path(config["model"]["name_or_path"]).resolve(),
         Path(args["output_dir"]).resolve(),
@@ -84,12 +109,12 @@ def validate_config(config: dict) -> dict:
         config["data"]["max_examples"] < args["max_steps"]
         or config["data"]["max_prompt_tokens"] < 1
     ):
-        raise ValueError("Invalid deterministic smoke subset or prompt budget")
+        raise ValueError("Invalid training subset or prompt budget")
     source_id = config["data"].get("source_id")
     if source_id is not None and (
         not isinstance(source_id, str) or not source_id.strip()
     ):
-        raise ValueError("Smoke source_id must be a nonempty string")
+        raise ValueError("source_id must be a nonempty string")
     return {
         "world_size": world,
         "generation_batch_size": generation,

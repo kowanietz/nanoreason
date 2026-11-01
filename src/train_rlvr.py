@@ -14,8 +14,14 @@ from transformers.models.olmo3.modeling_olmo3 import Olmo3Model
 from trl import GRPOConfig, GRPOTrainer
 
 from rlvr.checkpoints import fingerprint, resume_checkpoint, write_run_manifest
-from rlvr.data import load_smoke_data
-from rlvr.diagnostics import SmokeDiagnostics, finish_smoke_test
+from rlvr.data import load_rlvr_data
+from rlvr.diagnostics import (
+    SmokeDiagnostics,
+    TrainingDiagnostics,
+    finish_smoke_test,
+    finish_training,
+)
+from rlvr.dispatch import make_domain_rewards
 from rlvr.rewards import math_rewards
 from rlvr.validation import validate_config, validate_model
 from training_common import StopAtDeadline, make_tokenizer
@@ -28,6 +34,32 @@ class TrainingOlmo3Model(Olmo3Model):
     __call__ = torch.nn.Module.__call__
 
 
+class CheckpointGRPOTrainer(GRPOTrainer):
+    def _save_checkpoint(self, model, trial):
+        if self.is_fsdp_enabled and self.args.device.type == "cuda":
+            device = self.args.device
+            # NCCL needs the rank's device and room outside PyTorch's cache.
+            torch.cuda.set_device(device)
+            torch.cuda.synchronize(device)
+            free_before, _ = torch.cuda.mem_get_info(device)
+            torch.cuda.empty_cache()
+            free_after, _ = torch.cuda.mem_get_info(device)
+            print(
+                json.dumps(
+                    {
+                        "event": "checkpoint_memory",
+                        "rank": self.args.process_index,
+                        "step": self.state.global_step,
+                        "device": str(device),
+                        "free_before_gib": free_before / 2**30,
+                        "free_after_gib": free_after / 2**30,
+                    }
+                ),
+                flush=True,
+            )
+        return super()._save_checkpoint(model, trial)
+
+
 @hydra.main(version_base="1.3", config_path="../configs", config_name="rlvr/smoke")
 def main(config: DictConfig) -> None:
     started = time.monotonic()
@@ -36,14 +68,15 @@ def main(config: DictConfig) -> None:
     tokenizer = make_tokenizer(config["model"])
     tokenizer.padding_side = "left"
     model_info = validate_model(config, tokenizer)
-    dataset, data_info = load_smoke_data(config, tokenizer)
+    dataset, data_info = load_rlvr_data(config, tokenizer)
+    smoke = config["runtime"].get("mode", "smoke") == "smoke"
     versions = {
         name: version(name)
         for name in ("trl", "vllm", "torch", "transformers", "accelerate", "datasets")
     }
     if not versions["trl"].startswith("1.16.") or versions["vllm"] != "0.30.0":
         raise ValueError(
-            "Phase 3A requires the locked TRL 1.16.x / vLLM 0.30.0 environment"
+            "RLVR requires the locked TRL 1.16.x / vLLM 0.30.0 environment"
         )
     print(
         json.dumps(
@@ -93,22 +126,24 @@ def main(config: DictConfig) -> None:
         "uv_lock_sha256": fingerprint(ROOT / "uv.lock"),
         "world_size": args.world_size,
     }
+    if not smoke:
+        settings["runtime_mode"] = "train"
     write_run_manifest(output, checkpoint, settings, config, args.process_index)
     if checkpoint:
         step = json.loads((Path(checkpoint) / "trainer_state.json").read_text())[
             "global_step"
         ]
         if step >= (config["runtime"]["stop_after_step"] or args.max_steps):
-            result_path = output / f"smoke-result-{step}.json"
+            result_path = (
+                output / f"{'smoke' if smoke else 'training'}-result-{step}.json"
+            )
             if not result_path.is_file() or not json.loads(result_path.read_text()).get(
                 "checks_passed"
             ):
                 raise RuntimeError(
-                    "Checkpoint reached this milestone without verified smoke diagnostics; inspect its logs"
+                    "Checkpoint reached this milestone without a verified result; inspect its logs"
                 )
-            print(
-                f"Requested smoke milestone already reached at step {step}", flush=True
-            )
+            print(f"Requested milestone already reached at step {step}", flush=True)
             return
     model = AutoModelForCausalLM.from_pretrained(
         config["model"]["name_or_path"],
@@ -121,11 +156,20 @@ def main(config: DictConfig) -> None:
     model.model.__class__ = TrainingOlmo3Model
     if model.dtype != torch.bfloat16:
         raise ValueError("Policy was not initialized in BF16")
-    diagnostics = SmokeDiagnostics(config["runtime"]["stop_after_step"])
-    trainer = GRPOTrainer(
+    diagnostics = (
+        SmokeDiagnostics(config["runtime"]["stop_after_step"])
+        if smoke
+        else TrainingDiagnostics(
+            config["runtime"]["stop_after_step"],
+            weight_readback=config["runtime"].get("weight_readback", False),
+        )
+    )
+    trainer = CheckpointGRPOTrainer(
         model=model,
         args=args,
-        reward_funcs=math_rewards,
+        reward_funcs=math_rewards
+        if smoke
+        else make_domain_rewards(tokenizer, args.num_generations),
         train_dataset=dataset,
         processing_class=tokenizer,
         callbacks=[
@@ -159,7 +203,10 @@ def main(config: DictConfig) -> None:
     )
     torch.cuda.reset_peak_memory_stats()
     trainer.train(resume_from_checkpoint=checkpoint)
-    finish_smoke_test(trainer, diagnostics, checkpoint, started)
+    if smoke:
+        finish_smoke_test(trainer, diagnostics, checkpoint, started)
+    else:
+        finish_training(trainer, diagnostics, checkpoint, started)
 
 
 if __name__ == "__main__":

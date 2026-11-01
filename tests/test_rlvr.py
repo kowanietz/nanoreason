@@ -23,6 +23,7 @@ from prepare_rlvr_data import (
 )
 
 from benchmark_exclusions import NORMALIZATION, load_exclusions, question_hash
+from rlvr.ifeval import IFValidationError
 from rlvr.rewards import math_reward, math_rewards, validate_reference_answers
 
 
@@ -408,7 +409,7 @@ class PreparationTest(unittest.TestCase):
         self.assertEqual(stats["removed"], {"domain_not_selected": 1})
         self.assertEqual(rows[0]["ground_truth"], ["42"])
         self.assertEqual(rows[0]["dataset"], ["math"])
-        self.assertFalse(rows[1]["reward_enabled"])
+        self.assertTrue(rows[1]["reward_enabled"])
         self.assertEqual(json.loads(rows[1]["constraint_spec"])["kwargs"], [None, None])
 
     def test_deterministic_deduplication(self):
@@ -459,9 +460,18 @@ class PreparationTest(unittest.TestCase):
             row = record(domain="ifeval")
             row["ground_truth"] = [value]
             with self.subTest(value=value):
-                selected, stats = select([row])
+                with self.assertRaises(IFValidationError):
+                    select([row])
+                selected, stats = select_records(
+                    [(row, "data/a.parquet", 0)],
+                    set(),
+                    quarantine_invalid_if_references=True,
+                )
                 self.assertEqual(selected, [])
-                self.assertEqual(stats["removed"], {"invalid_if_constraints": 1})
+                self.assertEqual(stats["removed"], {"invalid_if_reference": 1})
+                self.assertEqual(
+                    stats["if_validation_errors"][0]["ground_truth"], [value]
+                )
 
     def test_exact_benchmark_overlap(self):
         rows, stats = select(

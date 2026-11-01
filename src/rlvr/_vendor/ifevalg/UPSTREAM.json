@@ -1,0 +1,35 @@
+{
+  "repository": "https://github.com/allenai/open-instruct",
+  "revision": "5db7f11bf7f34596ba9af4cfe5ade1e2dbff8cce",
+  "scoring_source": "open_instruct/ground_truth_utils.py:IFEvalVerifier.__call__",
+  "modifications": [
+    "Only the two absolute intra-package imports were relocated to relative imports.",
+    "The small scoring loop is integrated in rlvr/ifeval.py with strict reference validation and existing final_response extraction."
+  ],
+  "license": "Apache-2.0; original copyright headers retained; upstream LICENSE included",
+  "vendored_sha256": {
+    "instructions.py": "93fe2c895e389c2939f589c63ce8b86f101a2954e8cea094aa995ff567bb0238",
+    "instructions_registry.py": "597ddb62f4df750465a4603d51b8b86d765ebb3aa7eb7845e3ffaa834da41d9a",
+    "instructions_util.py": "b0b21dd189474071c027cc377e7132dcbf7a6c921def4440b3d1df8eccffdcd9"
+  },
+  "resources": [
+    {
+      "url": "https://raw.githubusercontent.com/nltk/nltk_data/550b6625bcef1f2abff2ff770a5a0d272c9c6b2a/packages/tokenizers/punkt_tab.zip",
+      "sha256": "e57f64187974277726a3417ca6f181ec5403676c717672eef6a748a7b20e0106",
+      "files": {
+        "tokenizers/punkt_tab/english/collocations.tab": "8e2da1225e4dd2cc9dba261ee231ccb134859e21b46006e7f472c5ee269af0cf",
+        "tokenizers/punkt_tab/english/sent_starters.txt": "f3f8535483e1dba487241b764945168123bca3209a9645e59acd1225dc76edac",
+        "tokenizers/punkt_tab/english/abbrev_types.txt": "92a3e070f43d9b4c5534758ca40ad7343b04e7e29bfe0c2eb658a39445a4f779",
+        "tokenizers/punkt_tab/english/ortho_context.tab": "4bbcca25ed3d3f06c02402abf8419b9f033b8adc06e7b482eca4e45f81a5dc4c"
+      }
+    },
+    {
+      "url": "https://raw.githubusercontent.com/nltk/nltk_data/550b6625bcef1f2abff2ff770a5a0d272c9c6b2a/packages/tokenizers/punkt.zip",
+      "sha256": "51c3078994aeaf650bfc8e028be4fb42b4a0d177d41c012b6a983979653660ec",
+      "files": {
+        "tokenizers/punkt/PY3/english.pickle": "5cad3758596392364e3be9803dbd7ebeda384b68937b488a01365f5551bb942c",
+        "tokenizers/punkt/english.pickle": "dda37972ae88998a6fd3e3ec002697a6bd362b32d050fda7d7ca5276873092aa"
+      }
+    }
+  ]
+}

@@ -23,6 +23,8 @@ class ConfigCompositionTest(unittest.TestCase):
             "sft/repetition-3k2",
             "rlvr/smoke",
             "rlvr/smoke-16k",
+            "rlvr/pilot-mixed-16k",
+            "rlvr/mixed-32-16k",
         ):
             with (
                 self.subTest(name=name),
@@ -42,6 +44,9 @@ class ConfigCompositionTest(unittest.TestCase):
                 self.assertEqual(
                     config.hydra.runtime.choices["hydra/hydra_logging"], "none"
                 )
+                if name == "rlvr/mixed-32-16k":
+                    self.assertTrue(config.grpo.log_completions)
+                    self.assertEqual(config.grpo.num_completions_to_print, 0)
 
     def test_leaf_and_cli_overrides_take_precedence(self):
         with initialize_config_dir(version_base="1.3", config_dir=str(CONFIGS)):
@@ -69,6 +74,8 @@ class ConfigCompositionTest(unittest.TestCase):
             },
             "gpqa": ["gpqa::olmo3:adapt"],
             "math500": ["minerva_math_500::hamish_zs_reasoning"],
+            "ifeval": ["ifeval::olmo3:adapt"],
+            "bbh": ["bbh:cot::olmo3:adapt"],
         }
         for name, tasks in expected.items():
             with (
