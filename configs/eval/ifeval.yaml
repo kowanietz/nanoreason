@@ -1,0 +1,14 @@
+# @package _global_
+
+defaults:
+  - /eval/base
+  - _self_
+
+model_args:
+  process_output: r1_style
+tasks:
+  - ifeval::olmo3:adapt
+task_args:
+  generation_kwargs:
+    max_gen_toks: 32768
+    truncate_context: false
