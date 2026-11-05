@@ -1,0 +1,705 @@
+Job ID: 15779275
+warning: `VIRTUAL_ENV=.venv-eval` does not match the project environment path `/p/scratch/rcfd/kowanietz1/olmes/.venv` and will be ignored; use `--active` to target the active environment instead
+2026-11-04 21:47:22,382 [WARNING] No config found for model:/p/scratch/rcfd/kowanietz1/models/Olmo-3-7B, using raw model
+2026-11-04 21:47:22,382 [INFO] Running eval locally on 1 tasks!
+2026-11-04 21:47:22,382 [INFO] Command: python -m oe_eval.run_eval --task '{"task_name": "aime", "split": "test", "primary_metric": "pass_at_1", "use_chat_format": true, "num_shots": 0, "generation_kwargs": {"max_gen_toks": 16384, "temperature": 0.6, "top_p": 0.95, "do_sample": true, "stop_sequences": [], "repeats": 32}, "metric_kwargs": {"pass_at_ks": [1, 4, 8, 16, 32]}, "metadata": {"years": [2025], "alias": "aime:2025::olmo3:adapt"}}' --batch-size auto --output-dir /p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/results/Olmo-3-7B/aime-2025 --save-raw-requests true --num-workers 1 --gpus 4 --model /p/scratch/rcfd/kowanietz1/models/Olmo-3-7B --model-args '{"trust_remote_code": false, "dtype": "bfloat16", "tokenizer": "/p/scratch/rcfd/kowanietz1/models/Olmo-3-7B-Think-SFT", "max_length": 32768, "model_type": "vllm"}'
+Skipping import of cpp extensions due to incompatible torch version 2.8.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+INFO 11-04 21:49:11 [__init__.py:216] Automatically detected platform cuda.
+21:49:33 - LiteLLM:WARNING: get_model_cost_map.py:264 - LiteLLM: model cost map fetch attempt 1/3 failed (ConnectError fetching https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: [Errno 97] Address family not supported by protocol); retrying in 3.0s
+2026-11-04:21:49:33,594 WARNING  [get_model_cost_map.py:264] LiteLLM: model cost map fetch attempt 1/3 failed (ConnectError fetching https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: [Errno 97] Address family not supported by protocol); retrying in 3.0s
+21:49:36 - LiteLLM:WARNING: get_model_cost_map.py:264 - LiteLLM: model cost map fetch attempt 2/3 failed (ConnectError fetching https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: [Errno 97] Address family not supported by protocol); retrying in 4.9s
+2026-11-04:21:49:36,624 WARNING  [get_model_cost_map.py:264] LiteLLM: model cost map fetch attempt 2/3 failed (ConnectError fetching https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: [Errno 97] Address family not supported by protocol); retrying in 4.9s
+21:49:41 - LiteLLM:WARNING: get_model_cost_map.py:509 - LiteLLM: Failed to fetch remote model cost map from https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: ConnectError fetching https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: [Errno 97] Address family not supported by protocol (after 3 attempts). Falling back to local backup.
+2026-11-04:21:49:41,518 WARNING  [get_model_cost_map.py:509] LiteLLM: Failed to fetch remote model cost map from https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: ConnectError fetching https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: [Errno 97] Address family not supported by protocol (after 3 attempts). Falling back to local backup.
+2026-11-04:21:49:58,152 INFO     [rouge_scorer.py:83] Using default tokenizer.
+INFO 11-04 21:50:04 [arg_utils.py:504] HF_HUB_OFFLINE is True, replace model_id [/p/scratch/rcfd/kowanietz1/models/Olmo-3-7B] to model_path [/p/scratch/rcfd/kowanietz1/models/Olmo-3-7B]
+INFO 11-04 21:50:04 [arg_utils.py:504] HF_HUB_OFFLINE is True, replace model_id [/p/scratch/rcfd/kowanietz1/models/Olmo-3-7B] to model_path [/p/scratch/rcfd/kowanietz1/models/Olmo-3-7B]
+INFO 11-04 21:50:04 [utils.py:233] non-default args: {'tokenizer': '/p/scratch/rcfd/kowanietz1/models/Olmo-3-7B-Think-SFT', 'dtype': 'bfloat16', 'seed': 1234, 'max_model_len': 32768, 'tensor_parallel_size': 4, 'disable_log_stats': True, 'model': '/p/scratch/rcfd/kowanietz1/models/Olmo-3-7B'}
+INFO 11-04 21:50:04 [model.py:547] Resolved architecture: Olmo2ForCausalLM
+`torch_dtype` is deprecated! Use `dtype` instead!
+INFO 11-04 21:50:04 [model.py:1510] Using max model len 32768
+INFO 11-04 21:50:04 [scheduler.py:205] Chunked prefill is enabled with max_num_batched_tokens=8192.
+WARNING 11-04 21:50:05 [__init__.py:3036] We must use the `spawn` multiprocessing start method. Overriding VLLM_WORKER_MULTIPROC_METHOD to 'spawn'. See https://docs.vllm.ai/en/latest/usage/troubleshooting.html#python-multiprocessing for more information. Reasons: CUDA is initialized
+Skipping import of cpp extensions due to incompatible torch version 2.8.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+INFO 11-04 21:50:18 [__init__.py:216] Automatically detected platform cuda.
+2026-11-04:21:50:23,327 INFO     [rouge_scorer.py:83] Using default tokenizer.
+[1;36m(EngineCore_DP0 pid=228997)[0;0m INFO 11-04 21:50:25 [core.py:644] Waiting for init message from front-end.
+[1;36m(EngineCore_DP0 pid=228997)[0;0m INFO 11-04 21:50:25 [core.py:77] Initializing a V1 LLM engine (v0.11.0) with config: model='/p/scratch/rcfd/kowanietz1/models/Olmo-3-7B', speculative_config=None, tokenizer='/p/scratch/rcfd/kowanietz1/models/Olmo-3-7B-Think-SFT', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=32768, download_dir=None, load_format=auto, tensor_parallel_size=4, pipeline_parallel_size=1, data_parallel_size=1, disable_custom_all_reduce=False, quantization=None, enforce_eager=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_fallback=False, disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser=''), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None), seed=1234, served_model_name=/p/scratch/rcfd/kowanietz1/models/Olmo-3-7B, enable_prefix_caching=True, chunked_prefill_enabled=True, pooler_config=None, compilation_config={"level":3,"debug_dump_path":"","cache_dir":"","backend":"","custom_ops":[],"splitting_ops":["vllm.unified_attention","vllm.unified_attention_with_output","vllm.mamba_mixer2","vllm.mamba_mixer","vllm.short_conv","vllm.linear_attention","vllm.plamo2_mamba_mixer","vllm.gdn_attention","vllm.sparse_attn_indexer"],"use_inductor":true,"compile_sizes":[],"inductor_compile_config":{"enable_auto_functionalized_v2":false},"inductor_passes":{},"cudagraph_mode":[2,1],"use_cudagraph":true,"cudagraph_num_of_warmups":1,"cudagraph_capture_sizes":[512,504,496,488,480,472,464,456,448,440,432,424,416,408,400,392,384,376,368,360,352,344,336,328,320,312,304,296,288,280,272,264,256,248,240,232,224,216,208,200,192,184,176,168,160,152,144,136,128,120,112,104,96,88,80,72,64,56,48,40,32,24,16,8,4,2,1],"cudagraph_copy_inputs":false,"full_cuda_graph":false,"use_inductor_graph_partition":false,"pass_config":{},"max_capture_size":512,"local_cache_dir":null}
+[1;36m(EngineCore_DP0 pid=228997)[0;0m WARNING 11-04 21:50:25 [multiproc_executor.py:720] Reducing Torch parallelism from 16 threads to 1 to avoid unnecessary CPU contention. Set OMP_NUM_THREADS in the external environment to tune this value as needed.
+[1;36m(EngineCore_DP0 pid=228997)[0;0m INFO 11-04 21:50:25 [shm_broadcast.py:289] vLLM message queue communication handle: Handle(local_reader_ranks=[0, 1, 2, 3], buffer_handle=(4, 16777216, 10, 'psm_d72cf84f'), local_subscribe_addr='ipc:///tmp/ec233d46-5343-4d50-89b7-8fd5b5715172', remote_subscribe_addr=None, remote_addr_ipv6=False)
+Skipping import of cpp extensions due to incompatible torch version 2.8.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+Skipping import of cpp extensions due to incompatible torch version 2.8.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+Skipping import of cpp extensions due to incompatible torch version 2.8.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+Skipping import of cpp extensions due to incompatible torch version 2.8.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+INFO 11-04 21:50:34 [__init__.py:216] Automatically detected platform cuda.
+INFO 11-04 21:50:34 [__init__.py:216] Automatically detected platform cuda.
+INFO 11-04 21:50:34 [__init__.py:216] Automatically detected platform cuda.
+INFO 11-04 21:50:34 [__init__.py:216] Automatically detected platform cuda.
+2026-11-04:21:50:40,203 INFO     [rouge_scorer.py:83] Using default tokenizer.
+2026-11-04:21:50:40,205 INFO     [rouge_scorer.py:83] Using default tokenizer.
+2026-11-04:21:50:40,209 INFO     [rouge_scorer.py:83] Using default tokenizer.
+2026-11-04:21:50:40,216 INFO     [rouge_scorer.py:83] Using default tokenizer.
+INFO 11-04 21:50:49 [shm_broadcast.py:289] vLLM message queue communication handle: Handle(local_reader_ranks=[0], buffer_handle=(1, 10485760, 10, 'psm_928ee18c'), local_subscribe_addr='ipc:///tmp/efa0de58-cffa-4c41-9ff1-b1b9c9524dcd', remote_subscribe_addr=None, remote_addr_ipv6=False)
+INFO 11-04 21:50:49 [shm_broadcast.py:289] vLLM message queue communication handle: Handle(local_reader_ranks=[0], buffer_handle=(1, 10485760, 10, 'psm_e62fbb54'), local_subscribe_addr='ipc:///tmp/8d912bf4-8b55-4d11-b316-ed07c16ca7af', remote_subscribe_addr=None, remote_addr_ipv6=False)
+INFO 11-04 21:50:49 [shm_broadcast.py:289] vLLM message queue communication handle: Handle(local_reader_ranks=[0], buffer_handle=(1, 10485760, 10, 'psm_c06c496d'), local_subscribe_addr='ipc:///tmp/9da0f0c6-ae06-4cf1-89cf-fcb62613333c', remote_subscribe_addr=None, remote_addr_ipv6=False)
+INFO 11-04 21:50:49 [shm_broadcast.py:289] vLLM message queue communication handle: Handle(local_reader_ranks=[0], buffer_handle=(1, 10485760, 10, 'psm_d32b1c5e'), local_subscribe_addr='ipc:///tmp/d26b3246-057e-46a6-832a-2cd68a43d90b', remote_subscribe_addr=None, remote_addr_ipv6=False)
+[W1104 21:50:49.902858691 socket.cpp:755] [c10d] The client socket cannot be initialized to connect to [localhost.localdomain]:39171 (errno: 97 - Address family not supported by protocol).
+[W1104 21:50:49.902895862 socket.cpp:755] [c10d] The client socket cannot be initialized to connect to [localhost.localdomain]:39171 (errno: 97 - Address family not supported by protocol).
+[W1104 21:50:49.903223224 socket.cpp:755] [c10d] The client socket cannot be initialized to connect to [localhost.localdomain]:39171 (errno: 97 - Address family not supported by protocol).
+[W1104 21:50:49.964156622 socket.cpp:755] [c10d] The client socket cannot be initialized to connect to [localhost.localdomain]:39171 (errno: 97 - Address family not supported by protocol).
+[Gloo] Rank 1 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 0 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 3 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 2 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 0 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 3 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 2 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 1 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+INFO 11-04 21:50:50 [__init__.py:1384] Found nccl from library libnccl.so.2
+INFO 11-04 21:50:50 [__init__.py:1384] Found nccl from library libnccl.so.2
+INFO 11-04 21:50:50 [__init__.py:1384] Found nccl from library libnccl.so.2
+INFO 11-04 21:50:50 [__init__.py:1384] Found nccl from library libnccl.so.2
+INFO 11-04 21:50:50 [pynccl.py:103] vLLM is using nccl==2.27.3
+INFO 11-04 21:50:50 [pynccl.py:103] vLLM is using nccl==2.27.3
+INFO 11-04 21:50:50 [pynccl.py:103] vLLM is using nccl==2.27.3
+INFO 11-04 21:50:50 [pynccl.py:103] vLLM is using nccl==2.27.3
+WARNING 11-04 21:50:51 [symm_mem.py:58] SymmMemCommunicator: Device capability 8.0 not supported, communicator is not available.
+WARNING 11-04 21:50:51 [symm_mem.py:58] SymmMemCommunicator: Device capability 8.0 not supported, communicator is not available.
+WARNING 11-04 21:50:51 [symm_mem.py:58] SymmMemCommunicator: Device capability 8.0 not supported, communicator is not available.
+WARNING 11-04 21:50:51 [symm_mem.py:58] SymmMemCommunicator: Device capability 8.0 not supported, communicator is not available.
+INFO 11-04 21:50:51 [custom_all_reduce.py:35] Skipping P2P check and trusting the driver's P2P report.
+INFO 11-04 21:50:51 [custom_all_reduce.py:35] Skipping P2P check and trusting the driver's P2P report.
+INFO 11-04 21:50:51 [custom_all_reduce.py:35] Skipping P2P check and trusting the driver's P2P report.
+INFO 11-04 21:50:51 [custom_all_reduce.py:35] Skipping P2P check and trusting the driver's P2P report.
+INFO 11-04 21:50:51 [shm_broadcast.py:289] vLLM message queue communication handle: Handle(local_reader_ranks=[1, 2, 3], buffer_handle=(3, 4194304, 6, 'psm_a505146a'), local_subscribe_addr='ipc:///tmp/ec6effd7-dd82-4f30-ac1c-ce95d19c61b9', remote_subscribe_addr=None, remote_addr_ipv6=False)
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 1 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 3 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+INFO 11-04 21:50:51 [__init__.py:1384] Found nccl from library libnccl.so.2
+INFO 11-04 21:50:51 [pynccl.py:103] vLLM is using nccl==2.27.3
+INFO 11-04 21:50:51 [__init__.py:1384] Found nccl from library libnccl.so.2
+INFO 11-04 21:50:51 [__init__.py:1384] Found nccl from library libnccl.so.2
+INFO 11-04 21:50:51 [pynccl.py:103] vLLM is using nccl==2.27.3
+INFO 11-04 21:50:51 [pynccl.py:103] vLLM is using nccl==2.27.3
+[Gloo] Rank 2 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+INFO 11-04 21:50:51 [__init__.py:1384] Found nccl from library libnccl.so.2
+INFO 11-04 21:50:51 [pynccl.py:103] vLLM is using nccl==2.27.3
+INFO 11-04 21:50:52 [parallel_state.py:1208] rank 0 in world size 4 is assigned as DP rank 0, PP rank 0, TP rank 0, EP rank 0
+INFO 11-04 21:50:52 [parallel_state.py:1208] rank 3 in world size 4 is assigned as DP rank 0, PP rank 0, TP rank 3, EP rank 3
+INFO 11-04 21:50:52 [parallel_state.py:1208] rank 2 in world size 4 is assigned as DP rank 0, PP rank 0, TP rank 2, EP rank 2
+INFO 11-04 21:50:52 [parallel_state.py:1208] rank 1 in world size 4 is assigned as DP rank 0, PP rank 0, TP rank 1, EP rank 1
+WARNING 11-04 21:50:52 [topk_topp_sampler.py:66] FlashInfer is not available. Falling back to the PyTorch-native implementation of top-p & top-k sampling. For the best performance, please install FlashInfer.
+WARNING 11-04 21:50:52 [topk_topp_sampler.py:66] FlashInfer is not available. Falling back to the PyTorch-native implementation of top-p & top-k sampling. For the best performance, please install FlashInfer.
+WARNING 11-04 21:50:52 [topk_topp_sampler.py:66] FlashInfer is not available. Falling back to the PyTorch-native implementation of top-p & top-k sampling. For the best performance, please install FlashInfer.
+WARNING 11-04 21:50:52 [topk_topp_sampler.py:66] FlashInfer is not available. Falling back to the PyTorch-native implementation of top-p & top-k sampling. For the best performance, please install FlashInfer.
+[1;36m(Worker_TP2 pid=229103)[0;0m INFO 11-04 21:50:52 [gpu_model_runner.py:2602] Starting to load model /p/scratch/rcfd/kowanietz1/models/Olmo-3-7B...
+[1;36m(Worker_TP1 pid=229102)[0;0m INFO 11-04 21:50:52 [gpu_model_runner.py:2602] Starting to load model /p/scratch/rcfd/kowanietz1/models/Olmo-3-7B...
+[1;36m(Worker_TP3 pid=229104)[0;0m INFO 11-04 21:50:52 [gpu_model_runner.py:2602] Starting to load model /p/scratch/rcfd/kowanietz1/models/Olmo-3-7B...
+[1;36m(Worker_TP0 pid=229101)[0;0m INFO 11-04 21:50:52 [gpu_model_runner.py:2602] Starting to load model /p/scratch/rcfd/kowanietz1/models/Olmo-3-7B...
+[1;36m(Worker_TP2 pid=229103)[0;0m INFO 11-04 21:50:53 [gpu_model_runner.py:2634] Loading model from scratch...
+[1;36m(Worker_TP1 pid=229102)[0;0m INFO 11-04 21:50:53 [gpu_model_runner.py:2634] Loading model from scratch...
+[1;36m(Worker_TP2 pid=229103)[0;0m INFO 11-04 21:50:53 [cuda.py:366] Using Flash Attention backend on V1 engine.
+[1;36m(Worker_TP3 pid=229104)[0;0m INFO 11-04 21:50:53 [gpu_model_runner.py:2634] Loading model from scratch...
+[1;36m(Worker_TP1 pid=229102)[0;0m INFO 11-04 21:50:53 [cuda.py:366] Using Flash Attention backend on V1 engine.
+[1;36m(Worker_TP3 pid=229104)[0;0m INFO 11-04 21:50:53 [cuda.py:366] Using Flash Attention backend on V1 engine.
+[1;36m(Worker_TP0 pid=229101)[0;0m INFO 11-04 21:50:53 [gpu_model_runner.py:2634] Loading model from scratch...
+[1;36m(Worker_TP0 pid=229101)[0;0m INFO 11-04 21:50:53 [cuda.py:366] Using Flash Attention backend on V1 engine.
+[1;36m(Worker_TP0 pid=229101)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/3 [00:00<?, ?it/s]
+[1;36m(Worker_TP0 pid=229101)[0;0m Loading safetensors checkpoint shards:  33% Completed | 1/3 [00:16<00:33, 16.58s/it]
+[1;36m(Worker_TP0 pid=229101)[0;0m Loading safetensors checkpoint shards:  67% Completed | 2/3 [00:32<00:16, 16.30s/it]
+[1;36m(Worker_TP3 pid=229104)[0;0m INFO 11-04 21:51:45 [default_loader.py:267] Loading weights took 51.47 seconds
+[1;36m(Worker_TP0 pid=229101)[0;0m Loading safetensors checkpoint shards: 100% Completed | 3/3 [00:51<00:00, 17.43s/it]
+[1;36m(Worker_TP0 pid=229101)[0;0m Loading safetensors checkpoint shards: 100% Completed | 3/3 [00:51<00:00, 17.16s/it]
+[1;36m(Worker_TP0 pid=229101)[0;0m 
+[1;36m(Worker_TP0 pid=229101)[0;0m INFO 11-04 21:51:45 [default_loader.py:267] Loading weights took 51.53 seconds
+[1;36m(Worker_TP1 pid=229102)[0;0m INFO 11-04 21:51:45 [default_loader.py:267] Loading weights took 51.61 seconds
+[1;36m(Worker_TP2 pid=229103)[0;0m INFO 11-04 21:51:45 [default_loader.py:267] Loading weights took 51.63 seconds
+[1;36m(Worker_TP3 pid=229104)[0;0m INFO 11-04 21:51:46 [gpu_model_runner.py:2653] Model loading took 3.4767 GiB and 52.673649 seconds
+[1;36m(Worker_TP0 pid=229101)[0;0m INFO 11-04 21:51:46 [gpu_model_runner.py:2653] Model loading took 3.4767 GiB and 52.727853 seconds
+[1;36m(Worker_TP1 pid=229102)[0;0m INFO 11-04 21:51:46 [gpu_model_runner.py:2653] Model loading took 3.4767 GiB and 52.814154 seconds
+[1;36m(Worker_TP2 pid=229103)[0;0m INFO 11-04 21:51:46 [gpu_model_runner.py:2653] Model loading took 3.4767 GiB and 52.836274 seconds
+[1;36m(Worker_TP2 pid=229103)[0;0m INFO 11-04 21:51:57 [backends.py:548] Using cache directory: /p/scratch/rcfd/kowanietz1/.cache/vllm/torch_compile_cache/e340987fd5/rank_2_0/backbone for vLLM's torch.compile
+[1;36m(Worker_TP1 pid=229102)[0;0m INFO 11-04 21:51:57 [backends.py:548] Using cache directory: /p/scratch/rcfd/kowanietz1/.cache/vllm/torch_compile_cache/e340987fd5/rank_1_0/backbone for vLLM's torch.compile
+[1;36m(Worker_TP0 pid=229101)[0;0m INFO 11-04 21:51:57 [backends.py:548] Using cache directory: /p/scratch/rcfd/kowanietz1/.cache/vllm/torch_compile_cache/e340987fd5/rank_0_0/backbone for vLLM's torch.compile
+[1;36m(Worker_TP3 pid=229104)[0;0m INFO 11-04 21:51:57 [backends.py:548] Using cache directory: /p/scratch/rcfd/kowanietz1/.cache/vllm/torch_compile_cache/e340987fd5/rank_3_0/backbone for vLLM's torch.compile
+[1;36m(Worker_TP1 pid=229102)[0;0m INFO 11-04 21:51:57 [backends.py:559] Dynamo bytecode transform time: 10.57 s
+[1;36m(Worker_TP3 pid=229104)[0;0m INFO 11-04 21:51:57 [backends.py:559] Dynamo bytecode transform time: 10.57 s
+[1;36m(Worker_TP0 pid=229101)[0;0m INFO 11-04 21:51:57 [backends.py:559] Dynamo bytecode transform time: 10.57 s
+[1;36m(Worker_TP2 pid=229103)[0;0m INFO 11-04 21:51:57 [backends.py:559] Dynamo bytecode transform time: 10.57 s
+[1;36m(Worker_TP3 pid=229104)[0;0m INFO 11-04 21:52:00 [backends.py:164] Directly load the compiled graph(s) for dynamic shape from the cache, took 2.564 s
+[1;36m(Worker_TP0 pid=229101)[0;0m INFO 11-04 21:52:00 [backends.py:164] Directly load the compiled graph(s) for dynamic shape from the cache, took 2.560 s
+[1;36m(Worker_TP2 pid=229103)[0;0m INFO 11-04 21:52:00 [backends.py:164] Directly load the compiled graph(s) for dynamic shape from the cache, took 2.559 s
+[1;36m(Worker_TP1 pid=229102)[0;0m INFO 11-04 21:52:00 [backends.py:164] Directly load the compiled graph(s) for dynamic shape from the cache, took 2.617 s
+[1;36m(Worker_TP0 pid=229101)[0;0m INFO 11-04 21:52:04 [monitor.py:34] torch.compile takes 10.57 s in total
+[1;36m(Worker_TP1 pid=229102)[0;0m INFO 11-04 21:52:04 [monitor.py:34] torch.compile takes 10.57 s in total
+[1;36m(Worker_TP3 pid=229104)[0;0m INFO 11-04 21:52:04 [monitor.py:34] torch.compile takes 10.57 s in total
+[1;36m(Worker_TP2 pid=229103)[0;0m INFO 11-04 21:52:04 [monitor.py:34] torch.compile takes 10.57 s in total
+[1;36m(Worker_TP1 pid=229102)[0;0m INFO 11-04 21:52:06 [gpu_worker.py:298] Available KV cache memory: 30.59 GiB
+[1;36m(Worker_TP2 pid=229103)[0;0m INFO 11-04 21:52:06 [gpu_worker.py:298] Available KV cache memory: 30.59 GiB
+[1;36m(Worker_TP3 pid=229104)[0;0m INFO 11-04 21:52:06 [gpu_worker.py:298] Available KV cache memory: 30.59 GiB
+[1;36m(Worker_TP0 pid=229101)[0;0m INFO 11-04 21:52:06 [gpu_worker.py:298] Available KV cache memory: 30.59 GiB
+[1;36m(EngineCore_DP0 pid=228997)[0;0m INFO 11-04 21:52:06 [kv_cache_utils.py:1087] GPU KV cache size: 250,576 tokens
+[1;36m(EngineCore_DP0 pid=228997)[0;0m INFO 11-04 21:52:06 [kv_cache_utils.py:1091] Maximum concurrency for 32,768 tokens per request: 14.39x
+[1;36m(EngineCore_DP0 pid=228997)[0;0m INFO 11-04 21:52:06 [kv_cache_utils.py:1087] GPU KV cache size: 250,576 tokens
+[1;36m(EngineCore_DP0 pid=228997)[0;0m INFO 11-04 21:52:06 [kv_cache_utils.py:1091] Maximum concurrency for 32,768 tokens per request: 14.39x
+[1;36m(EngineCore_DP0 pid=228997)[0;0m INFO 11-04 21:52:06 [kv_cache_utils.py:1087] GPU KV cache size: 250,576 tokens
+[1;36m(EngineCore_DP0 pid=228997)[0;0m INFO 11-04 21:52:06 [kv_cache_utils.py:1091] Maximum concurrency for 32,768 tokens per request: 14.39x
+[1;36m(EngineCore_DP0 pid=228997)[0;0m INFO 11-04 21:52:06 [kv_cache_utils.py:1087] GPU KV cache size: 250,576 tokens
+[1;36m(EngineCore_DP0 pid=228997)[0;0m INFO 11-04 21:52:06 [kv_cache_utils.py:1091] Maximum concurrency for 32,768 tokens per request: 14.39x
+[1;36m(Worker_TP0 pid=229101)[0;0m Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   0%|          | 0/67 [00:00<?, ?it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   1%|▏         | 1/67 [00:00<00:30,  2.14it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   4%|▍         | 3/67 [00:00<00:11,  5.69it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   7%|▋         | 5/67 [00:00<00:07,  8.11it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  10%|█         | 7/67 [00:00<00:06,  9.74it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  13%|█▎        | 9/67 [00:01<00:05, 10.83it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  16%|█▋        | 11/67 [00:01<00:04, 11.59it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  19%|█▉        | 13/67 [00:01<00:04, 12.10it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  22%|██▏       | 15/67 [00:01<00:04, 12.37it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  25%|██▌       | 17/67 [00:01<00:03, 12.56it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  28%|██▊       | 19/67 [00:01<00:03, 12.67it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  31%|███▏      | 21/67 [00:01<00:03, 12.75it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  34%|███▍      | 23/67 [00:02<00:03, 12.78it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  37%|███▋      | 25/67 [00:02<00:03, 12.78it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  40%|████      | 27/67 [00:02<00:03, 12.73it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  43%|████▎     | 29/67 [00:02<00:02, 12.70it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  46%|████▋     | 31/67 [00:02<00:02, 12.66it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  49%|████▉     | 33/67 [00:02<00:02, 12.67it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  52%|█████▏    | 35/67 [00:03<00:02, 12.68it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  55%|█████▌    | 37/67 [00:03<00:02, 12.71it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  58%|█████▊    | 39/67 [00:03<00:02, 12.69it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  61%|██████    | 41/67 [00:03<00:02, 12.68it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  64%|██████▍   | 43/67 [00:03<00:01, 12.64it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  67%|██████▋   | 45/67 [00:03<00:01, 12.62it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  70%|███████   | 47/67 [00:04<00:01, 12.49it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  73%|███████▎  | 49/67 [00:04<00:01, 12.23it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  76%|███████▌  | 51/67 [00:04<00:01, 12.22it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  79%|███████▉  | 53/67 [00:04<00:01, 12.05it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  82%|████████▏ | 55/67 [00:04<00:01, 11.96it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  85%|████████▌ | 57/67 [00:04<00:00, 11.94it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  88%|████████▊ | 59/67 [00:05<00:00, 11.99it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  91%|█████████ | 61/67 [00:05<00:00, 12.02it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  94%|█████████▍| 63/67 [00:05<00:00, 12.06it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  97%|█████████▋| 65/67 [00:05<00:00, 11.42it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 67/67 [00:05<00:00, 10.67it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 67/67 [00:05<00:00, 11.57it/s]
+[1;36m(Worker_TP0 pid=229101)[0;0m Capturing CUDA graphs (decode, FULL):   0%|          | 0/35 [00:00<?, ?it/s]Capturing CUDA graphs (decode, FULL):   3%|▎         | 1/35 [00:00<00:06,  5.40it/s]Capturing CUDA graphs (decode, FULL):   9%|▊         | 3/35 [00:00<00:03,  9.48it/s]Capturing CUDA graphs (decode, FULL):  14%|█▍        | 5/35 [00:00<00:02, 11.05it/s]Capturing CUDA graphs (decode, FULL):  20%|██        | 7/35 [00:00<00:02, 11.80it/s]Capturing CUDA graphs (decode, FULL):  26%|██▌       | 9/35 [00:00<00:02, 12.30it/s]Capturing CUDA graphs (decode, FULL):  31%|███▏      | 11/35 [00:00<00:01, 12.51it/s]Capturing CUDA graphs (decode, FULL):  37%|███▋      | 13/35 [00:01<00:01, 12.72it/s]Capturing CUDA graphs (decode, FULL):  43%|████▎     | 15/35 [00:01<00:01, 12.84it/s]Capturing CUDA graphs (decode, FULL):  49%|████▊     | 17/35 [00:01<00:01, 12.86it/s]Capturing CUDA graphs (decode, FULL):  54%|█████▍    | 19/35 [00:01<00:01, 12.80it/s]Capturing CUDA graphs (decode, FULL):  60%|██████    | 21/35 [00:01<00:01, 12.82it/s]Capturing CUDA graphs (decode, FULL):  66%|██████▌   | 23/35 [00:01<00:00, 12.79it/s]Capturing CUDA graphs (decode, FULL):  71%|███████▏  | 25/35 [00:02<00:00, 12.87it/s]Capturing CUDA graphs (decode, FULL):  77%|███████▋  | 27/35 [00:02<00:00, 12.97it/s]Capturing CUDA graphs (decode, FULL):  83%|████████▎ | 29/35 [00:02<00:00, 13.05it/s]Capturing CUDA graphs (decode, FULL):  89%|████████▊ | 31/35 [00:02<00:00, 13.09it/s]Capturing CUDA graphs (decode, FULL):  94%|█████████▍| 33/35 [00:02<00:00, 13.12it/s]Capturing CUDA graphs (decode, FULL): 100%|██████████| 35/35 [00:02<00:00, 13.13it/s]Capturing CUDA graphs (decode, FULL): 100%|██████████| 35/35 [00:02<00:00, 12.53it/s]
+[1;36m(Worker_TP1 pid=229102)[0;0m INFO 11-04 21:52:15 [custom_all_reduce.py:203] Registering 6630 cuda graph addresses
+[1;36m(Worker_TP0 pid=229101)[0;0m INFO 11-04 21:52:15 [custom_all_reduce.py:203] Registering 6630 cuda graph addresses
+[1;36m(Worker_TP3 pid=229104)[0;0m INFO 11-04 21:52:15 [custom_all_reduce.py:203] Registering 6630 cuda graph addresses
+[1;36m(Worker_TP2 pid=229103)[0;0m INFO 11-04 21:52:15 [custom_all_reduce.py:203] Registering 6630 cuda graph addresses
+[1;36m(Worker_TP1 pid=229102)[0;0m INFO 11-04 21:52:16 [gpu_model_runner.py:3480] Graph capturing finished in 10 secs, took 0.97 GiB
+[1;36m(Worker_TP3 pid=229104)[0;0m INFO 11-04 21:52:16 [gpu_model_runner.py:3480] Graph capturing finished in 10 secs, took 0.97 GiB
+[1;36m(Worker_TP0 pid=229101)[0;0m INFO 11-04 21:52:16 [gpu_model_runner.py:3480] Graph capturing finished in 10 secs, took 0.97 GiB
+[1;36m(Worker_TP2 pid=229103)[0;0m INFO 11-04 21:52:16 [gpu_model_runner.py:3480] Graph capturing finished in 10 secs, took 0.97 GiB
+[1;36m(EngineCore_DP0 pid=228997)[0;0m INFO 11-04 21:52:16 [core.py:210] init engine (profile, create kv cache, warmup model) took 29.80 seconds
+INFO 11-04 21:52:17 [llm.py:306] Supported_tasks: ['generate']
+2026-11-04:21:52:17,568 INFO     [run_eval.py:689] Model loaded. Model hash: 886f933f82369712750c9a417b77545e
+2026-11-04:21:52:18,568 INFO     [run_eval.py:692] GPU memory:
+GPU-0: 0.90 GB free of 39.52 GB
+GPU-1: 0.90 GB free of 39.52 GB
+GPU-2: 0.90 GB free of 39.52 GB
+GPU-3: 0.90 GB free of 39.52 GB
+2026-11-04:21:52:18,570 INFO     [run_eval.py:751] **** Processing task: aime ({'task_name': 'aime', 'task_core': 'aime', 'split': 'test', 'primary_metric': 'pass_at_1', 'generation_kwargs': {'max_gen_toks': 16384, 'temperature': 0.6, 'truncate_context': False, 'do_sample': True, 'stop_sequences': [], 'top_p': 0.95, 'repeats': 32}, 'metric_kwargs': {'maj_at_ks': [], 'pass_at_ks': [1, 4, 8, 16, 32]}, 'native_id_field': 'index', 'dataset_path': 'allenai/aime-2021-2025', 'use_chat_format': True, 'version': 0, 'metadata': {'years': [2025], 'alias': 'aime:2025::olmo3:adapt'}}) ****
+2026-11-04:21:52:18,570 INFO     [run_eval.py:752]   Task hash: 0f676f43deb7cc372160a219a7e2061d, starting download...
+Using the latest cached version of the dataset since allenai/aime-2021-2025 couldn't be found on the Hugging Face Hub (offline mode is enabled).
+2026-11-04:21:52:18,583 WARNING  [load.py:1377] Using the latest cached version of the dataset since allenai/aime-2021-2025 couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /p/scratch/rcfd/kowanietz1/.cache/huggingface/datasets/allenai___aime-2021-2025/default/0.0.0/73e1eba765ad5847cdb5d1e2e7aaf7b22b585798 (last modified on Wed Oct  7 16:47:23 2026).
+2026-11-04:21:52:18,585 WARNING  [cache.py:94] Found the latest cached dataset configuration 'default' at /p/scratch/rcfd/kowanietz1/.cache/huggingface/datasets/allenai___aime-2021-2025/default/0.0.0/73e1eba765ad5847cdb5d1e2e7aaf7b22b585798 (last modified on Wed Oct  7 16:47:23 2026).
+2026-11-04:21:52:18,884 INFO     [datasets_wrapper.py:500] Non-HF cache (for datasets) case: NonHfCacheCase.NOT_USED_BC_CACHE_UNAVAILABLE
+2026-11-04:21:52:18,884 INFO     [run_eval.py:755]   Task finished downloading!
+2026-11-04:21:52:18,892 INFO     [run_eval.py:783] Number of requests: 960
+2026-11-04:21:52:18,892 INFO     [run_eval.py:791] First request: {'request_type': 'generate_until', 'doc': {'index': 90, 'problem': 'Find the sum of all integer bases $b>9$ for which $17_b$ is a divisor of $97_b.$', 'query': 'Find the sum of all integer bases $b>9$ for which $17_b$ is a divisor of $97_b.$\n\nPresent the answer in LaTex format: \\boxed{Your answer}', 'year': '2025', 'aime_number': 'AIME_I', 'solution': 'We are tasked with finding the number of integer bases $b>9$ such that $\\cfrac{9b+7}{b+7}\\in\textbf{Z}$. Notice that\\[\\cfrac{9b+7}{b+7}=\\cfrac{9b+63-56}{b+7}=\\cfrac{9(b+7)-56}{b+7}=9-\\cfrac{56}{b+7}\\]so we need only $\\cfrac{56}{b+7}\\in\textbf{Z}$. Then $b+7$ is a factor of $56$.\nThe factors of $56$ are $1,2,4,7,8,14,28,56$. Of these, only $8,14,28,56$ produce a positive $b$, namely $b=1,7,21,49$ respectively. However, we are given that $b>9$, so only $b=21,49$ are solutions. Thus the answer is $21+49=\\boxed{070}$.', 'answer': '70', 'choices': ['We are tasked with finding the number of integer bases $b>9$ such that $\\cfrac{9b+7}{b+7}\\in\textbf{Z}$. Notice that\\[\\cfrac{9b+7}{b+7}=\\cfrac{9b+63-56}{b+7}=\\cfrac{9(b+7)-56}{b+7}=9-\\cfrac{56}{b+7}\\]so we need only $\\cfrac{56}{b+7}\\in\textbf{Z}$. Then $b+7$ is a factor of $56$.\nThe factors of $56$ are $1,2,4,7,8,14,28,56$. Of these, only $8,14,28,56$ produce a positive $b$, namely $b=1,7,21,49$ respectively. However, we are given that $b>9$, so only $b=21,49$ are solutions. Thus the answer is $21+49=\\boxed{070}$.']}, 'request': {'context': {'messages': [{'role': 'user', 'content': 'Find the sum of all integer bases $b>9$ for which $17_b$ is a divisor of $97_b.$\n\nPresent the answer in LaTex format: \\boxed{Your answer}'}], 'assistant_prefix': ''}, 'stop_sequences': [], 'generation_kwargs': {'max_gen_toks': 16384, 'temperature': 0.6, 'truncate_context': False, 'do_sample': True, 'top_p': 0.95}}, 'idx': 0, 'task_name': 'aime', 'doc_id': 0, 'native_id': 90, 'label': '70'}
+2026-11-04:21:52:18,892 INFO     [run_eval.py:801] Saving raw requests in /p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/results/Olmo-3-7B/aime-2025/task-000-aime-requests.jsonl...
+2026-11-04:21:52:18,973 INFO     [run_eval.py:883] First instance: {'request_type': 'generate_until', 'doc': {'index': 90, 'problem': 'Find the sum of all integer bases $b>9$ for which $17_b$ is a divisor of $97_b.$', 'query': 'Find the sum of all integer bases $b>9$ for which $17_b$ is a divisor of $97_b.$\n\nPresent the answer in LaTex format: \\boxed{Your answer}', 'year': '2025', 'aime_number': 'AIME_I', 'solution': 'We are tasked with finding the number of integer bases $b>9$ such that $\\cfrac{9b+7}{b+7}\\in\textbf{Z}$. Notice that\\[\\cfrac{9b+7}{b+7}=\\cfrac{9b+63-56}{b+7}=\\cfrac{9(b+7)-56}{b+7}=9-\\cfrac{56}{b+7}\\]so we need only $\\cfrac{56}{b+7}\\in\textbf{Z}$. Then $b+7$ is a factor of $56$.\nThe factors of $56$ are $1,2,4,7,8,14,28,56$. Of these, only $8,14,28,56$ produce a positive $b$, namely $b=1,7,21,49$ respectively. However, we are given that $b>9$, so only $b=21,49$ are solutions. Thus the answer is $21+49=\\boxed{070}$.', 'answer': '70', 'choices': ['We are tasked with finding the number of integer bases $b>9$ such that $\\cfrac{9b+7}{b+7}\\in\textbf{Z}$. Notice that\\[\\cfrac{9b+7}{b+7}=\\cfrac{9b+63-56}{b+7}=\\cfrac{9(b+7)-56}{b+7}=9-\\cfrac{56}{b+7}\\]so we need only $\\cfrac{56}{b+7}\\in\textbf{Z}$. Then $b+7$ is a factor of $56$.\nThe factors of $56$ are $1,2,4,7,8,14,28,56$. Of these, only $8,14,28,56$ produce a positive $b$, namely $b=1,7,21,49$ respectively. However, we are given that $b>9$, so only $b=21,49$ are solutions. Thus the answer is $21+49=\\boxed{070}$.']}, 'idx': 0, 'task_name': 'aime', 'doc_id': 0, 'native_id': 90, 'label': '70'}
+
+  ** Completion prompt: **
+<|im_start|>system
+You are Olmo, a helpful AI assistant built by Ai2. Your date cutoff is December 2024, and your model weights are available at https://huggingface.co/allenai.<|im_end|>
+<|im_start|>user
+Find the sum of all integer bases $b>9$ for which $17_b$ is a divisor of $97_b.$
+
+Present the answer in LaTex format: \boxed{Your answer}<|im_end|>
+<|im_start|>assistant
+<think>
+
+  ** Generate until: **
+    
+
+Running generate_until requests:   0%|          | 0/960 [00:00<?, ?it/s]
+Adding requests:   0%|          | 0/960 [00:00<?, ?it/s][A
+Adding requests:  98%|█████████▊| 943/960 [00:00<00:00, 9427.42it/s][AAdding requests: 100%|██████████| 960/960 [00:00<00:00, 9412.20it/s]
+
+Processed prompts:   0%|          | 0/960 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
+Processed prompts:   0%|          | 1/960 [00:21<5:45:12, 21.60s/it, est. speed input: 25.46 toks/s, output: 22.50 toks/s][A
+Processed prompts:   0%|          | 2/960 [00:35<4:34:36, 17.20s/it, est. speed input: 22.29 toks/s, output: 34.97 toks/s][A
+Processed prompts:   0%|          | 3/960 [00:40<3:04:27, 11.57s/it, est. speed input: 35.36 toks/s, output: 51.75 toks/s][A
+Processed prompts:   0%|          | 4/960 [02:53<15:45:14, 59.33s/it, est. speed input: 11.98 toks/s, output: 33.95 toks/s][A
+Processed prompts:   1%|          | 5/960 [02:56<10:25:52, 39.32s/it, est. speed input: 16.64 toks/s, output: 55.10 toks/s][A
+Processed prompts:   1%|          | 6/960 [03:00<7:11:58, 27.17s/it, est. speed input: 21.12 toks/s, output: 75.95 toks/s] [A
+Processed prompts:   1%|          | 7/960 [03:01<4:53:04, 18.45s/it, est. speed input: 24.59 toks/s, output: 97.67 toks/s][A
+Processed prompts:   1%|          | 8/960 [03:01<3:20:51, 12.66s/it, est. speed input: 28.08 toks/s, output: 119.45 toks/s][A
+Processed prompts:   1%|          | 9/960 [03:01<2:18:37,  8.75s/it, est. speed input: 32.86 toks/s, output: 141.27 toks/s][A
+Processed prompts:   1%|          | 10/960 [03:01<1:37:54,  6.18s/it, est. speed input: 36.29 toks/s, output: 162.83 toks/s][A
+Processed prompts:   1%|          | 11/960 [03:02<1:10:12,  4.44s/it, est. speed input: 40.96 toks/s, output: 184.31 toks/s][A
+Processed prompts:   1%|▏         | 12/960 [03:02<49:49,  3.15s/it, est. speed input: 44.42 toks/s, output: 205.99 toks/s]  [A
+Processed prompts:   1%|▏         | 13/960 [03:02<35:20,  2.24s/it, est. speed input: 47.88 toks/s, output: 227.72 toks/s][A
+Processed prompts:   1%|▏         | 14/960 [03:02<25:49,  1.64s/it, est. speed input: 51.31 toks/s, output: 249.28 toks/s][A
+Processed prompts:   2%|▏         | 15/960 [03:03<19:44,  1.25s/it, est. speed input: 55.95 toks/s, output: 270.66 toks/s][A
+Processed prompts:   2%|▏         | 16/960 [03:03<15:30,  1.01it/s, est. speed input: 59.32 toks/s, output: 291.98 toks/s][A
+Processed prompts:   2%|▏         | 17/960 [03:04<12:20,  1.27it/s, est. speed input: 62.69 toks/s, output: 313.33 toks/s][A
+Processed prompts:   2%|▏         | 19/960 [03:04<07:31,  2.08it/s, est. speed input: 69.54 toks/s, output: 356.55 toks/s][A
+Processed prompts:   2%|▏         | 20/960 [03:04<06:51,  2.28it/s, est. speed input: 72.88 toks/s, output: 377.77 toks/s][A
+Processed prompts:   2%|▏         | 21/960 [03:04<05:56,  2.64it/s, est. speed input: 76.26 toks/s, output: 399.13 toks/s][A
+Processed prompts:   2%|▏         | 22/960 [03:04<04:49,  3.24it/s, est. speed input: 79.66 toks/s, output: 420.67 toks/s][A
+Processed prompts:   2%|▏         | 23/960 [03:05<04:17,  3.63it/s, est. speed input: 83.03 toks/s, output: 442.02 toks/s][A
+Processed prompts:   2%|▎         | 24/960 [03:05<04:16,  3.65it/s, est. speed input: 86.36 toks/s, output: 463.14 toks/s][A
+Processed prompts:   3%|▎         | 25/960 [03:05<03:34,  4.36it/s, est. speed input: 90.99 toks/s, output: 484.59 toks/s][A
+Processed prompts:   3%|▎         | 27/960 [03:05<02:49,  5.51it/s, est. speed input: 97.75 toks/s, output: 527.41 toks/s][A
+Processed prompts:   3%|▎         | 28/960 [03:05<02:35,  6.01it/s, est. speed input: 102.37 toks/s, output: 548.80 toks/s][A
+Processed prompts:   3%|▎         | 29/960 [03:06<03:15,  4.76it/s, est. speed input: 105.62 toks/s, output: 569.53 toks/s][A
+Processed prompts:   3%|▎         | 30/960 [03:06<02:51,  5.42it/s, est. speed input: 108.98 toks/s, output: 590.88 toks/s][A
+Processed prompts:   3%|▎         | 31/960 [03:06<02:48,  5.50it/s, est. speed input: 113.54 toks/s, output: 612.01 toks/s][A
+Processed prompts:   3%|▎         | 32/960 [03:06<02:34,  6.02it/s, est. speed input: 116.89 toks/s, output: 633.28 toks/s][A
+Processed prompts:   4%|▎         | 34/960 [03:06<02:40,  5.75it/s, est. speed input: 124.73 toks/s, output: 675.33 toks/s][A
+Processed prompts:   4%|▍         | 36/960 [03:07<02:35,  5.96it/s, est. speed input: 131.34 toks/s, output: 717.45 toks/s][A
+Processed prompts:   4%|▍         | 37/960 [03:07<02:30,  6.15it/s, est. speed input: 134.65 toks/s, output: 738.53 toks/s][A
+Processed prompts:   4%|▍         | 38/960 [03:07<02:38,  5.80it/s, est. speed input: 139.14 toks/s, output: 759.34 toks/s][A
+Processed prompts:   4%|▍         | 40/960 [03:07<02:20,  6.55it/s, est. speed input: 146.99 toks/s, output: 801.52 toks/s][A
+Processed prompts:   4%|▍         | 41/960 [03:08<02:34,  5.96it/s, est. speed input: 150.22 toks/s, output: 822.16 toks/s][A
+Processed prompts:   4%|▍         | 42/960 [03:08<02:45,  5.55it/s, est. speed input: 153.43 toks/s, output: 842.77 toks/s][A
+Processed prompts:   4%|▍         | 43/960 [03:08<02:48,  5.44it/s, est. speed input: 157.89 toks/s, output: 863.47 toks/s][A
+Processed prompts:   5%|▍         | 44/960 [03:09<04:27,  3.42it/s, est. speed input: 162.00 toks/s, output: 882.34 toks/s][A
+Processed prompts:   5%|▍         | 45/960 [03:09<04:18,  3.53it/s, est. speed input: 165.15 toks/s, output: 902.69 toks/s][A
+Processed prompts:   5%|▍         | 46/960 [03:09<03:54,  3.90it/s, est. speed input: 169.58 toks/s, output: 923.34 toks/s][A
+Processed prompts:   5%|▍         | 47/960 [03:09<03:35,  4.24it/s, est. speed input: 174.00 toks/s, output: 943.97 toks/s][A
+Processed prompts:   5%|▌         | 48/960 [03:10<04:15,  3.58it/s, est. speed input: 178.22 toks/s, output: 963.58 toks/s][A
+Processed prompts:   5%|▌         | 49/960 [03:10<03:39,  4.16it/s, est. speed input: 182.65 toks/s, output: 984.35 toks/s][A
+Processed prompts:   5%|▌         | 51/960 [03:10<02:58,  5.08it/s, est. speed input: 190.30 toks/s, output: 1025.83 toks/s][A
+Processed prompts:   6%|▌         | 56/960 [03:11<02:26,  6.16it/s, est. speed input: 212.34 toks/s, output: 1129.14 toks/s][A
+Processed prompts:   6%|▌         | 57/960 [03:11<02:38,  5.69it/s, est. speed input: 216.60 toks/s, output: 1149.08 toks/s][A
+Processed prompts:   6%|▌         | 58/960 [03:11<02:51,  5.27it/s, est. speed input: 220.85 toks/s, output: 1168.98 toks/s][A
+Processed prompts:   6%|▌         | 59/960 [03:11<02:40,  5.63it/s, est. speed input: 223.70 toks/s, output: 1189.52 toks/s][A
+Processed prompts:   6%|▋         | 60/960 [03:12<03:19,  4.51it/s, est. speed input: 226.59 toks/s, output: 1208.60 toks/s][A
+Processed prompts:   6%|▋         | 61/960 [03:12<02:58,  5.02it/s, est. speed input: 230.96 toks/s, output: 1229.19 toks/s][A
+Processed prompts:   6%|▋         | 62/960 [03:12<03:00,  4.97it/s, est. speed input: 235.23 toks/s, output: 1249.24 toks/s][A
+Processed prompts:   7%|▋         | 63/960 [03:13<05:44,  2.60it/s, est. speed input: 238.65 toks/s, output: 1264.93 toks/s][A
+Processed prompts:   7%|▋         | 64/960 [03:13<05:31,  2.70it/s, est. speed input: 242.73 toks/s, output: 1284.13 toks/s][A
+Processed prompts:   7%|▋         | 65/960 [03:18<24:18,  1.63s/it, est. speed input: 239.76 toks/s, output: 1273.66 toks/s][A
+Processed prompts:   7%|▋         | 66/960 [03:25<47:36,  3.19s/it, est. speed input: 234.34 toks/s, output: 1249.87 toks/s][A
+Processed prompts:   7%|▋         | 67/960 [03:33<1:07:05,  4.51s/it, est. speed input: 228.59 toks/s, output: 1223.99 toks/s][A
+Processed prompts:   7%|▋         | 68/960 [03:35<56:03,  3.77s/it, est. speed input: 229.15 toks/s, output: 1231.63 toks/s]  [A
+Processed prompts:   7%|▋         | 69/960 [03:40<59:59,  4.04s/it, est. speed input: 226.90 toks/s, output: 1224.09 toks/s][A
+Processed prompts:   7%|▋         | 70/960 [03:41<49:21,  3.33s/it, est. speed input: 227.82 toks/s, output: 1233.48 toks/s][A
+Processed prompts:   7%|▋         | 71/960 [03:41<35:15,  2.38s/it, est. speed input: 230.27 toks/s, output: 1252.28 toks/s][A
+Processed prompts:   8%|▊         | 72/960 [03:43<33:48,  2.28s/it, est. speed input: 230.73 toks/s, output: 1259.72 toks/s][A
+Processed prompts:   8%|▊         | 73/960 [03:45<32:28,  2.20s/it, est. speed input: 231.25 toks/s, output: 1266.73 toks/s][A
+Processed prompts:   8%|▊         | 74/960 [03:47<30:48,  2.09s/it, est. speed input: 231.92 toks/s, output: 1274.54 toks/s][A
+Processed prompts:   8%|▊         | 75/960 [03:49<28:44,  1.95s/it, est. speed input: 232.80 toks/s, output: 1283.35 toks/s][A
+Processed prompts:   8%|▊         | 76/960 [03:49<22:10,  1.51s/it, est. speed input: 234.83 toks/s, output: 1298.39 toks/s][A
+Processed prompts:   8%|▊         | 77/960 [03:52<28:49,  1.96s/it, est. speed input: 234.27 toks/s, output: 1299.15 toks/s][A
+Processed prompts:   8%|▊         | 78/960 [03:54<27:56,  1.90s/it, est. speed input: 234.96 toks/s, output: 1306.84 toks/s][A
+Processed prompts:   8%|▊         | 79/960 [03:59<40:17,  2.74s/it, est. speed input: 232.75 toks/s, output: 1298.24 toks/s][A
+Processed prompts:   8%|▊         | 80/960 [04:00<31:57,  2.18s/it, est. speed input: 234.20 toks/s, output: 1308.94 toks/s][A
+Processed prompts:   8%|▊         | 81/960 [04:00<24:57,  1.70s/it, est. speed input: 236.02 toks/s, output: 1322.71 toks/s][A
+Processed prompts:   9%|▊         | 82/960 [04:01<19:18,  1.32s/it, est. speed input: 237.89 toks/s, output: 1335.45 toks/s][A
+Processed prompts:   9%|▊         | 83/960 [04:02<18:17,  1.25s/it, est. speed input: 239.20 toks/s, output: 1346.31 toks/s][A
+Processed prompts:   9%|▉         | 84/960 [04:04<20:22,  1.40s/it, est. speed input: 239.86 toks/s, output: 1353.57 toks/s][A
+Processed prompts:   9%|▉         | 85/960 [04:05<18:50,  1.29s/it, est. speed input: 241.19 toks/s, output: 1364.47 toks/s][A
+Processed prompts:   9%|▉         | 86/960 [04:06<19:48,  1.36s/it, est. speed input: 242.04 toks/s, output: 1372.70 toks/s][A
+Processed prompts:   9%|▉         | 87/960 [04:09<24:41,  1.70s/it, est. speed input: 241.95 toks/s, output: 1375.46 toks/s][A
+Processed prompts:   9%|▉         | 89/960 [04:09<14:55,  1.03s/it, est. speed input: 245.87 toks/s, output: 1402.35 toks/s][A
+Processed prompts:   9%|▉         | 90/960 [04:09<12:07,  1.20it/s, est. speed input: 247.93 toks/s, output: 1417.50 toks/s][A
+Processed prompts:   9%|▉         | 91/960 [04:11<13:30,  1.07it/s, est. speed input: 249.04 toks/s, output: 1427.02 toks/s][A
+Processed prompts:  10%|▉         | 92/960 [04:12<14:29,  1.00s/it, est. speed input: 250.16 toks/s, output: 1436.53 toks/s][A
+Processed prompts:  10%|▉         | 93/960 [04:12<11:24,  1.27it/s, est. speed input: 252.20 toks/s, output: 1452.70 toks/s][A
+Processed prompts:  10%|▉         | 94/960 [04:13<11:46,  1.23it/s, est. speed input: 253.60 toks/s, output: 1463.81 toks/s][A
+Processed prompts:  10%|▉         | 95/960 [04:15<16:17,  1.13s/it, est. speed input: 253.87 toks/s, output: 1468.87 toks/s][A
+Processed prompts:  10%|█         | 96/960 [04:15<12:41,  1.14it/s, est. speed input: 255.85 toks/s, output: 1485.00 toks/s][A
+Processed prompts:  10%|█         | 97/960 [04:16<13:42,  1.05it/s, est. speed input: 256.87 toks/s, output: 1493.63 toks/s][A
+Processed prompts:  10%|█         | 98/960 [04:17<13:40,  1.05it/s, est. speed input: 258.06 toks/s, output: 1504.02 toks/s][A
+Processed prompts:  10%|█         | 99/960 [04:19<17:44,  1.24s/it, est. speed input: 258.28 toks/s, output: 1508.63 toks/s][A
+Processed prompts:  10%|█         | 100/960 [04:22<26:33,  1.85s/it, est. speed input: 257.13 toks/s, output: 1505.24 toks/s][A
+Processed prompts:  11%|█         | 101/960 [04:23<23:03,  1.61s/it, est. speed input: 258.20 toks/s, output: 1514.80 toks/s][A
+Processed prompts:  11%|█         | 103/960 [04:24<13:14,  1.08it/s, est. speed input: 262.11 toks/s, output: 1542.43 toks/s][A
+Processed prompts:  11%|█         | 104/960 [04:24<11:37,  1.23it/s, est. speed input: 263.72 toks/s, output: 1554.90 toks/s][A
+Processed prompts:  11%|█         | 105/960 [04:25<11:15,  1.27it/s, est. speed input: 265.08 toks/s, output: 1566.10 toks/s][A
+Processed prompts:  11%|█         | 106/960 [04:26<10:59,  1.29it/s, est. speed input: 266.42 toks/s, output: 1576.33 toks/s][A
+Processed prompts:  11%|█         | 107/960 [04:26<08:59,  1.58it/s, est. speed input: 268.22 toks/s, output: 1589.59 toks/s][A
+Processed prompts:  11%|█▏        | 108/960 [04:26<08:21,  1.70it/s, est. speed input: 269.80 toks/s, output: 1601.94 toks/s][A
+Processed prompts:  11%|█▏        | 109/960 [04:29<15:25,  1.09s/it, est. speed input: 269.52 toks/s, output: 1603.19 toks/s][A
+Processed prompts:  11%|█▏        | 110/960 [04:29<12:32,  1.13it/s, est. speed input: 271.17 toks/s, output: 1615.95 toks/s][A
+Processed prompts:  12%|█▏        | 111/960 [04:29<10:32,  1.34it/s, est. speed input: 272.79 toks/s, output: 1628.65 toks/s][A
+Processed prompts:  12%|█▏        | 112/960 [04:30<08:20,  1.69it/s, est. speed input: 274.61 toks/s, output: 1641.95 toks/s][A
+Processed prompts:  12%|█▏        | 113/960 [04:30<09:27,  1.49it/s, est. speed input: 275.77 toks/s, output: 1650.89 toks/s][A
+Processed prompts:  12%|█▏        | 114/960 [04:34<21:24,  1.52s/it, est. speed input: 274.24 toks/s, output: 1644.67 toks/s][A
+Processed prompts:  12%|█▏        | 115/960 [04:35<20:32,  1.46s/it, est. speed input: 274.92 toks/s, output: 1651.68 toks/s][A
+Processed prompts:  12%|█▏        | 116/960 [04:36<15:33,  1.11s/it, est. speed input: 275.78 toks/s, output: 1663.83 toks/s][A
+Processed prompts:  12%|█▏        | 117/960 [04:36<11:48,  1.19it/s, est. speed input: 276.68 toks/s, output: 1676.34 toks/s][A
+Processed prompts:  12%|█▏        | 118/960 [04:36<10:26,  1.34it/s, est. speed input: 277.29 toks/s, output: 1687.22 toks/s][A
+Processed prompts:  12%|█▏        | 119/960 [04:37<10:28,  1.34it/s, est. speed input: 278.52 toks/s, output: 1697.22 toks/s][A
+Processed prompts:  12%|█▎        | 120/960 [04:39<16:12,  1.16s/it, est. speed input: 278.38 toks/s, output: 1698.54 toks/s][A
+Processed prompts:  13%|█▎        | 121/960 [04:40<13:36,  1.03it/s, est. speed input: 278.95 toks/s, output: 1709.32 toks/s][A
+Processed prompts:  13%|█▎        | 122/960 [04:40<10:57,  1.28it/s, est. speed input: 279.73 toks/s, output: 1720.80 toks/s][A
+Processed prompts:  13%|█▎        | 123/960 [04:40<08:24,  1.66it/s, est. speed input: 280.66 toks/s, output: 1733.69 toks/s][A
+Processed prompts:  13%|█▎        | 124/960 [04:40<06:36,  2.11it/s, est. speed input: 282.44 toks/s, output: 1747.05 toks/s][A
+Processed prompts:  13%|█▎        | 126/960 [04:41<04:37,  3.00it/s, est. speed input: 284.32 toks/s, output: 1772.16 toks/s][A
+Processed prompts:  13%|█▎        | 127/960 [04:42<07:03,  1.97it/s, est. speed input: 285.22 toks/s, output: 1780.15 toks/s][A
+Processed prompts:  13%|█▎        | 128/960 [04:42<05:45,  2.41it/s, est. speed input: 286.17 toks/s, output: 1792.85 toks/s][A
+Processed prompts:  13%|█▎        | 129/960 [04:43<09:23,  1.48it/s, est. speed input: 285.88 toks/s, output: 1797.68 toks/s][A
+Processed prompts:  14%|█▎        | 130/960 [04:45<11:22,  1.22it/s, est. speed input: 285.78 toks/s, output: 1803.84 toks/s][A
+Processed prompts:  14%|█▎        | 131/960 [04:45<09:32,  1.45it/s, est. speed input: 286.51 toks/s, output: 1814.85 toks/s][A
+Processed prompts:  14%|█▍        | 132/960 [04:45<07:40,  1.80it/s, est. speed input: 288.21 toks/s, output: 1827.71 toks/s][A
+Processed prompts:  14%|█▍        | 133/960 [04:46<07:28,  1.85it/s, est. speed input: 288.79 toks/s, output: 1837.93 toks/s][A
+Processed prompts:  14%|█▍        | 134/960 [04:48<14:01,  1.02s/it, est. speed input: 287.71 toks/s, output: 1838.17 toks/s][A
+Processed prompts:  14%|█▍        | 135/960 [04:48<11:57,  1.15it/s, est. speed input: 288.27 toks/s, output: 1848.37 toks/s][A
+Processed prompts:  14%|█▍        | 136/960 [04:49<11:56,  1.15it/s, est. speed input: 288.49 toks/s, output: 1856.72 toks/s][A
+Processed prompts:  14%|█▍        | 138/960 [04:50<09:18,  1.47it/s, est. speed input: 289.73 toks/s, output: 1878.32 toks/s][A
+Processed prompts:  14%|█▍        | 139/960 [04:56<28:05,  2.05s/it, est. speed input: 284.69 toks/s, output: 1851.78 toks/s][A
+Processed prompts:  15%|█▍        | 140/960 [04:57<22:52,  1.67s/it, est. speed input: 285.17 toks/s, output: 1861.32 toks/s][A
+Processed prompts:  15%|█▍        | 141/960 [05:09<1:02:43,  4.60s/it, est. speed input: 274.73 toks/s, output: 1799.49 toks/s][A
+Processed prompts:  15%|█▍        | 142/960 [05:20<1:27:16,  6.40s/it, est. speed input: 266.23 toks/s, output: 1750.24 toks/s][A
+Processed prompts:  15%|█▍        | 143/960 [05:22<1:08:31,  5.03s/it, est. speed input: 265.88 toks/s, output: 1753.58 toks/s][A
+Processed prompts:  15%|█▌        | 144/960 [05:22<50:04,  3.68s/it, est. speed input: 266.54 toks/s, output: 1764.03 toks/s]  [A
+Processed prompts:  15%|█▌        | 145/960 [05:27<52:09,  3.84s/it, est. speed input: 264.06 toks/s, output: 1752.46 toks/s][A
+Processed prompts:  15%|█▌        | 146/960 [05:30<48:33,  3.58s/it, est. speed input: 262.64 toks/s, output: 1748.37 toks/s][A
+Processed prompts:  15%|█▌        | 147/960 [05:31<39:13,  2.89s/it, est. speed input: 262.57 toks/s, output: 1753.56 toks/s][A
+Processed prompts:  15%|█▌        | 148/960 [05:40<1:05:43,  4.86s/it, est. speed input: 256.18 toks/s, output: 1716.23 toks/s][A
+Processed prompts:  16%|█▌        | 149/960 [05:41<47:09,  3.49s/it, est. speed input: 256.89 toks/s, output: 1726.74 toks/s]  [A
+Processed prompts:  16%|█▌        | 150/960 [05:43<43:51,  3.25s/it, est. speed input: 255.79 toks/s, output: 1724.69 toks/s][A
+Processed prompts:  16%|█▌        | 151/960 [05:50<59:14,  4.39s/it, est. speed input: 251.52 toks/s, output: 1701.36 toks/s][A
+Processed prompts:  16%|█▌        | 152/960 [05:53<53:20,  3.96s/it, est. speed input: 250.31 toks/s, output: 1698.49 toks/s][A
+Processed prompts:  16%|█▌        | 153/960 [06:00<1:05:33,  4.87s/it, est. speed input: 246.25 toks/s, output: 1676.84 toks/s][A
+Processed prompts:  16%|█▌        | 154/960 [06:02<52:19,  3.90s/it, est. speed input: 245.97 toks/s, output: 1680.72 toks/s]  [A
+Processed prompts:  16%|█▌        | 155/960 [06:03<41:26,  3.09s/it, est. speed input: 245.96 toks/s, output: 1686.42 toks/s][A
+Processed prompts:  16%|█▋        | 156/960 [06:04<33:34,  2.51s/it, est. speed input: 245.99 toks/s, output: 1692.35 toks/s][A
+Processed prompts:  16%|█▋        | 157/960 [06:05<26:00,  1.94s/it, est. speed input: 246.37 toks/s, output: 1700.61 toks/s][A
+Processed prompts:  16%|█▋        | 158/960 [06:06<24:28,  1.83s/it, est. speed input: 246.12 toks/s, output: 1704.49 toks/s][A
+Processed prompts:  17%|█▋        | 159/960 [06:08<21:50,  1.64s/it, est. speed input: 246.12 toks/s, output: 1710.14 toks/s][A
+Processed prompts:  17%|█▋        | 160/960 [06:10<23:26,  1.76s/it, est. speed input: 245.55 toks/s, output: 1711.77 toks/s][A
+Processed prompts:  17%|█▋        | 161/960 [06:10<18:38,  1.40s/it, est. speed input: 245.97 toks/s, output: 1720.21 toks/s][A
+Processed prompts:  17%|█▋        | 162/960 [06:11<13:55,  1.05s/it, est. speed input: 246.61 toks/s, output: 1730.29 toks/s][A
+Processed prompts:  17%|█▋        | 163/960 [06:11<10:50,  1.23it/s, est. speed input: 247.22 toks/s, output: 1740.04 toks/s][A
+Processed prompts:  17%|█▋        | 164/960 [06:12<10:31,  1.26it/s, est. speed input: 247.51 toks/s, output: 1747.58 toks/s][A
+Processed prompts:  17%|█▋        | 165/960 [06:12<09:48,  1.35it/s, est. speed input: 247.89 toks/s, output: 1755.47 toks/s][A
+Processed prompts:  17%|█▋        | 166/960 [06:13<11:13,  1.18it/s, est. speed input: 247.94 toks/s, output: 1761.27 toks/s][A
+Processed prompts:  17%|█▋        | 167/960 [06:14<11:53,  1.11it/s, est. speed input: 248.05 toks/s, output: 1767.41 toks/s][A
+Processed prompts:  18%|█▊        | 168/960 [06:15<10:39,  1.24it/s, est. speed input: 248.44 toks/s, output: 1775.42 toks/s][A
+Processed prompts:  18%|█▊        | 169/960 [06:17<14:12,  1.08s/it, est. speed input: 248.09 toks/s, output: 1778.23 toks/s][A
+Processed prompts:  18%|█▊        | 171/960 [06:18<12:04,  1.09it/s, est. speed input: 248.68 toks/s, output: 1793.61 toks/s][A
+Processed prompts:  18%|█▊        | 172/960 [06:22<23:29,  1.79s/it, est. speed input: 246.57 toks/s, output: 1783.55 toks/s][A
+Processed prompts:  18%|█▊        | 173/960 [06:23<20:06,  1.53s/it, est. speed input: 246.81 toks/s, output: 1790.64 toks/s][A
+Processed prompts:  18%|█▊        | 174/960 [06:25<19:22,  1.48s/it, est. speed input: 246.60 toks/s, output: 1794.68 toks/s][A
+Processed prompts:  18%|█▊        | 175/960 [06:25<15:06,  1.16s/it, est. speed input: 247.15 toks/s, output: 1803.80 toks/s][A
+Processed prompts:  18%|█▊        | 176/960 [06:26<15:18,  1.17s/it, est. speed input: 247.14 toks/s, output: 1808.66 toks/s][A
+Processed prompts:  18%|█▊        | 177/960 [06:27<12:19,  1.06it/s, est. speed input: 247.65 toks/s, output: 1817.41 toks/s][A
+Processed prompts:  19%|█▊        | 178/960 [06:27<09:57,  1.31it/s, est. speed input: 248.08 toks/s, output: 1826.22 toks/s][A
+Processed prompts:  19%|█▊        | 179/960 [06:27<07:37,  1.71it/s, est. speed input: 248.73 toks/s, output: 1836.02 toks/s][A
+Processed prompts:  19%|█▉        | 180/960 [06:28<07:27,  1.74it/s, est. speed input: 249.14 toks/s, output: 1843.99 toks/s][A
+Processed prompts:  19%|█▉        | 181/960 [06:28<08:07,  1.60it/s, est. speed input: 249.29 toks/s, output: 1850.73 toks/s][A
+Processed prompts:  19%|█▉        | 182/960 [06:29<07:14,  1.79it/s, est. speed input: 249.79 toks/s, output: 1859.39 toks/s][A
+Processed prompts:  19%|█▉        | 183/960 [06:29<05:34,  2.33it/s, est. speed input: 250.46 toks/s, output: 1869.40 toks/s][A
+Processed prompts:  19%|█▉        | 184/960 [06:29<06:22,  2.03it/s, est. speed input: 250.68 toks/s, output: 1876.57 toks/s][A
+Processed prompts:  19%|█▉        | 186/960 [06:30<04:08,  3.11it/s, est. speed input: 251.92 toks/s, output: 1895.94 toks/s][A
+Processed prompts:  19%|█▉        | 187/960 [06:30<04:06,  3.13it/s, est. speed input: 252.35 toks/s, output: 1904.72 toks/s][A
+Processed prompts:  20%|█▉        | 188/960 [06:31<05:20,  2.41it/s, est. speed input: 252.66 toks/s, output: 1911.84 toks/s][A
+Processed prompts:  20%|█▉        | 189/960 [06:31<06:04,  2.11it/s, est. speed input: 253.00 toks/s, output: 1919.22 toks/s][A
+Processed prompts:  20%|█▉        | 190/960 [06:32<07:43,  1.66it/s, est. speed input: 253.03 toks/s, output: 1924.83 toks/s][A
+Processed prompts:  20%|█▉        | 191/960 [06:33<09:53,  1.30it/s, est. speed input: 253.00 toks/s, output: 1929.54 toks/s][A
+Processed prompts:  20%|██        | 192/960 [06:34<10:41,  1.20it/s, est. speed input: 253.00 toks/s, output: 1934.95 toks/s][A
+Processed prompts:  20%|██        | 193/960 [06:36<11:54,  1.07it/s, est. speed input: 252.88 toks/s, output: 1939.36 toks/s][A
+Processed prompts:  20%|██        | 194/960 [06:38<18:51,  1.48s/it, est. speed input: 251.74 toks/s, output: 1935.85 toks/s][A
+Processed prompts:  20%|██        | 195/960 [06:39<15:14,  1.20s/it, est. speed input: 252.03 toks/s, output: 1943.47 toks/s][A
+Processed prompts:  20%|██        | 196/960 [06:40<13:11,  1.04s/it, est. speed input: 252.23 toks/s, output: 1950.41 toks/s][A
+Processed prompts:  21%|██        | 197/960 [06:41<13:12,  1.04s/it, est. speed input: 252.19 toks/s, output: 1955.56 toks/s][A
+Processed prompts:  21%|██        | 199/960 [06:41<09:01,  1.41it/s, est. speed input: 253.01 toks/s, output: 1968.08 toks/s][A
+Processed prompts:  21%|██        | 200/960 [06:41<07:09,  1.77it/s, est. speed input: 253.55 toks/s, output: 1977.63 toks/s][A
+Processed prompts:  21%|██        | 201/960 [06:42<08:41,  1.46it/s, est. speed input: 253.52 toks/s, output: 1982.47 toks/s][A
+Processed prompts:  21%|██        | 202/960 [06:43<06:55,  1.82it/s, est. speed input: 254.02 toks/s, output: 1991.38 toks/s][A
+Processed prompts:  21%|██        | 203/960 [06:46<17:52,  1.42s/it, est. speed input: 252.35 toks/s, output: 1983.30 toks/s][A
+Processed prompts:  21%|██▏       | 204/960 [06:47<15:07,  1.20s/it, est. speed input: 252.55 toks/s, output: 1989.88 toks/s][A
+Processed prompts:  21%|██▏       | 205/960 [06:48<16:01,  1.27s/it, est. speed input: 252.26 toks/s, output: 1992.78 toks/s][A
+Processed prompts:  21%|██▏       | 206/960 [06:49<13:45,  1.09s/it, est. speed input: 252.46 toks/s, output: 1999.29 toks/s][A
+Processed prompts:  22%|██▏       | 207/960 [06:50<12:03,  1.04it/s, est. speed input: 252.67 toks/s, output: 2006.04 toks/s][A
+Processed prompts:  22%|██▏       | 208/960 [06:53<21:33,  1.72s/it, est. speed input: 251.12 toks/s, output: 1998.79 toks/s][A
+Processed prompts:  22%|██▏       | 209/960 [06:57<27:26,  2.19s/it, est. speed input: 249.72 toks/s, output: 1992.75 toks/s][A
+Processed prompts:  22%|██▏       | 210/960 [06:57<20:37,  1.65s/it, est. speed input: 250.09 toks/s, output: 2001.22 toks/s][A
+Processed prompts:  22%|██▏       | 211/960 [07:02<33:31,  2.69s/it, est. speed input: 247.65 toks/s, output: 1986.68 toks/s][A
+Processed prompts:  22%|██▏       | 212/960 [07:04<31:38,  2.54s/it, est. speed input: 246.95 toks/s, output: 1985.88 toks/s][A
+Processed prompts:  22%|██▏       | 213/960 [07:09<38:40,  3.11s/it, est. speed input: 244.98 toks/s, output: 1974.64 toks/s][A
+Processed prompts:  22%|██▏       | 214/960 [07:10<30:15,  2.43s/it, est. speed input: 245.06 toks/s, output: 1980.88 toks/s][A
+Processed prompts:  22%|██▏       | 215/960 [07:11<25:01,  2.02s/it, est. speed input: 245.05 toks/s, output: 1982.60 toks/s][A
+Processed prompts:  22%|██▎       | 216/960 [07:14<29:32,  2.38s/it, est. speed input: 243.79 toks/s, output: 1976.88 toks/s][A
+Processed prompts:  23%|██▎       | 217/960 [07:30<1:20:25,  6.49s/it, est. speed input: 235.62 toks/s, output: 1913.82 toks/s][A
+Processed prompts:  23%|██▎       | 218/960 [07:36<1:17:41,  6.28s/it, est. speed input: 233.18 toks/s, output: 1898.96 toks/s][A
+Processed prompts:  23%|██▎       | 219/960 [07:37<58:59,  4.78s/it, est. speed input: 233.07 toks/s, output: 1902.52 toks/s]  [A
+Processed prompts:  23%|██▎       | 220/960 [07:38<44:59,  3.65s/it, est. speed input: 233.09 toks/s, output: 1907.43 toks/s][A
+Processed prompts:  23%|██▎       | 221/960 [07:39<35:02,  2.85s/it, est. speed input: 233.13 toks/s, output: 1912.11 toks/s][A
+Processed prompts:  23%|██▎       | 222/960 [07:45<45:21,  3.69s/it, est. speed input: 230.83 toks/s, output: 1895.19 toks/s][A
+Processed prompts:  23%|██▎       | 223/960 [07:45<34:26,  2.80s/it, est. speed input: 230.99 toks/s, output: 1900.98 toks/s][A
+Processed prompts:  23%|██▎       | 224/960 [07:46<26:17,  2.14s/it, est. speed input: 231.22 toks/s, output: 1907.14 toks/s][A
+Processed prompts:  23%|██▎       | 225/960 [07:50<34:30,  2.82s/it, est. speed input: 229.59 toks/s, output: 1897.16 toks/s][A
+Processed prompts:  24%|██▎       | 226/960 [07:54<37:17,  3.05s/it, est. speed input: 228.37 toks/s, output: 1891.31 toks/s][A
+Processed prompts:  24%|██▎       | 227/960 [08:00<47:36,  3.90s/it, est. speed input: 226.09 toks/s, output: 1876.42 toks/s][A
+Processed prompts:  24%|██▍       | 228/960 [08:05<52:38,  4.31s/it, est. speed input: 224.13 toks/s, output: 1864.01 toks/s][A
+Processed prompts:  24%|██▍       | 229/960 [08:08<46:08,  3.79s/it, est. speed input: 223.46 toks/s, output: 1862.15 toks/s][A
+Processed prompts:  24%|██▍       | 230/960 [08:08<32:57,  2.71s/it, est. speed input: 223.88 toks/s, output: 1869.84 toks/s][A
+Processed prompts:  24%|██▍       | 231/960 [08:14<46:06,  3.79s/it, est. speed input: 221.51 toks/s, output: 1854.13 toks/s][A[rank2]:[E1104 22:00:34.136085817 ProcessGroupNCCL.cpp:2068] [PG ID 2 PG GUID 3 Rank 2] Process group watchdog thread terminated with exception: CUDA error: unknown error
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+Exception raised from c10_cuda_check_implementation at /pytorch/c10/cuda/CUDAException.cpp:42 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x80 (0x153ebfe92eb0 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0x111c7 (0x153ebff251c7 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libc10_cuda.so)
+frame #2: c10d::ProcessGroupNCCL::WorkNCCL::finishedGPUExecutionInternal() const + 0x50 (0x153ec0de9640 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #3: c10d::ProcessGroupNCCL::WorkNCCL::isCompleted() + 0x68 (0x153ec0df8e28 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #4: c10d::ProcessGroupNCCL::Watchdog::runLoop() + 0x978 (0x153ec0dfbf48 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #5: c10d::ProcessGroupNCCL::Watchdog::run() + 0xd2 (0x153ec0dfdec2 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #6: <unknown function> + 0xed0a4 (0x153f266d60a4 in /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/libstdc++.so.6)
+frame #7: <unknown function> + 0x8b529 (0x153f2fb13529 in /usr/lib64/libc.so.6)
+frame #8: <unknown function> + 0x110710 (0x153f2fb98710 in /usr/lib64/libc.so.6)
+
+terminate called after throwing an instance of 'c10::DistBackendError'
+  what():  [PG ID 2 PG GUID 3 Rank 2] Process group watchdog thread terminated with exception: CUDA error: unknown error
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+Exception raised from c10_cuda_check_implementation at /pytorch/c10/cuda/CUDAException.cpp:42 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x80 (0x153ebfe92eb0 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0x111c7 (0x153ebff251c7 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libc10_cuda.so)
+frame #2: c10d::ProcessGroupNCCL::WorkNCCL::finishedGPUExecutionInternal() const + 0x50 (0x153ec0de9640 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #3: c10d::ProcessGroupNCCL::WorkNCCL::isCompleted() + 0x68 (0x153ec0df8e28 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #4: c10d::ProcessGroupNCCL::Watchdog::runLoop() + 0x978 (0x153ec0dfbf48 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #5: c10d::ProcessGroupNCCL::Watchdog::run() + 0xd2 (0x153ec0dfdec2 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #6: <unknown function> + 0xed0a4 (0x153f266d60a4 in /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/libstdc++.so.6)
+frame #7: <unknown function> + 0x8b529 (0x153f2fb13529 in /usr/lib64/libc.so.6)
+frame #8: <unknown function> + 0x110710 (0x153f2fb98710 in /usr/lib64/libc.so.6)
+
+Exception raised from run at /pytorch/torch/csrc/distributed/c10d/ProcessGroupNCCL.cpp:2074 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x80 (0x153ebfe92eb0 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0xe1c1a1 (0x153ec0dd51a1 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #2: <unknown function> + 0x9468e6 (0x153ec08ff8e6 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #3: <unknown function> + 0xed0a4 (0x153f266d60a4 in /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/libstdc++.so.6)
+frame #4: <unknown function> + 0x8b529 (0x153f2fb13529 in /usr/lib64/libc.so.6)
+frame #5: <unknown function> + 0x110710 (0x153f2fb98710 in /usr/lib64/libc.so.6)
+
+[1;36m(EngineCore_DP0 pid=228997)[0;0m INFO 11-04 22:01:34 [shm_broadcast.py:466] No available shared memory broadcast block found in 60 seconds. This typically happens when some processes are hanging or doing some time-consuming work (e.g. compilation).
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:52 [multiproc_executor.py:154] Worker proc VllmWorker-2 died unexpectedly, shutting down executor.
+[1;36m(Worker_TP1 pid=229102)[0;0m INFO 11-04 22:01:52 [multiproc_executor.py:558] Parent process exited, terminating worker
+[rank3]:[E1104 22:01:52.195232253 ProcessGroupNCCL.cpp:2068] [PG ID 2 PG GUID 3 Rank 3] Process group watchdog thread terminated with exception: CUDA error: unknown error
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+Exception raised from c10_cuda_check_implementation at /pytorch/c10/cuda/CUDAException.cpp:42 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x80 (0x14e1601aeeb0 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0x111c7 (0x14e1602411c7 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libc10_cuda.so)
+frame #2: c10d::ProcessGroupNCCL::WorkNCCL::finishedGPUExecutionInternal() const + 0x50 (0x14e161105640 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #3: c10d::ProcessGroupNCCL::WorkNCCL::isCompleted() + 0x68 (0x14e161114e28 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #4: c10d::ProcessGroupNCCL::Watchdog::runLoop() + 0x978 (0x14e161117f48 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #5: c10d::ProcessGroupNCCL::Watchdog::run() + 0xd2 (0x14e161119ec2 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #6: <unknown function> + 0xed0a4 (0x14e1c6aec0a4 in /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/libstdc++.so.6)
+frame #7: <unknown function> + 0x8b529 (0x14e1cff29529 in /usr/lib64/libc.so.6)
+frame #8: <unknown function> + 0x110710 (0x14e1cffae710 in /usr/lib64/libc.so.6)
+
+terminate called after throwing an instance of 'c10::DistBackendError'
+[rank0]:[E1104 22:01:52.195275943 ProcessGroupNCCL.cpp:2068] [PG ID 2 PG GUID 3 Rank 0] Process group watchdog thread terminated with exception: CUDA error: unknown error
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+Exception raised from c10_cuda_check_implementation at /pytorch/c10/cuda/CUDAException.cpp:42 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x80 (0x1510477ceeb0 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0x111c7 (0x1510478611c7 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libc10_cuda.so)
+frame #2: c10d::ProcessGroupNCCL::WorkNCCL::finishedGPUExecutionInternal() const + 0x50 (0x15[1;36m(Worker_TP0 pid=229101)[0;0m INFO 11-04 22:01:52 [multiproc_executor.py:558] Parent process exited, terminating worker
+1048725640 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #3: c10d::ProcessGroupNCCL::WorkNCCL::isCompleted() + 0x68 (0x151048734e28 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #4: c10d::ProcessGroupNCCL::Watchdog::runLoop() + 0x978 (0x151048737f48 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #5: c10d::ProcessGroupNCCL::Watchdog::run() + 0xd2 (0x151048739ec2 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #6: <unknown function> + 0xed0a4 (0x1510ae00b0a4 in /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/libstdc++.so.6)
+frame #7: <unknown function> + 0x8b529 (0x1510b7448529 in /usr/lib64/libc.so.6)
+frame #8: <unknown function> + 0x110710 (0x1510b74cd710 in /usr/lib64/libc.so.6)
+
+terminate called after throwing an instance of 'c10::DistBackendError'
+  what():  [PG ID 2 PG GUID 3 Rank 3] Process group watchdog thread terminated with exception: CUDA error: unknown error
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+Exception raised from c10_cuda_check_implementation at /pytorch/c10/cuda/CUDAException.cpp:42 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x80 (0x14e1601aeeb0 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0x111c7 (0x14e1602411c7 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libc10_cuda.so)
+frame #2: c10d::ProcessGroupNCCL::WorkNCCL::finishedGPUExecutionInternal() const + 0x50 (0x14e161105640 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #3: c10d::ProcessGroupNCCL::WorkNCCL::isCompleted() + 0x68 (0x14e161114e28 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #4: c10d::ProcessGroupNCCL::Watchdog::runLoop() + 0x978 (0x14e161117f48 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #5: c10d::ProcessGroupNCCL::Watchdog::run() + 0xd2 (0x14e161119ec2 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #6: <unknown function> + 0xed0a4 (0x14e1c6aec0a4 in /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/libstdc++.so.6)
+frame #7: <unknown function> + 0x8b529 (0x14e1cff29529 in /usr/lib64/libc.so.6)
+frame #8: <unknown function> + 0x110710 (0x14e1cffae710 in /usr/lib64/libc.so.6)
+
+Exception raised from run at /pytorch/torch/csrc/distributed/c10d/ProcessGroupNCCL.cpp:2074 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x80 (0x14e1601aeeb0 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0xe1c1a1 (0x14e1610f11a1 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #2: <unknown function> + 0x9468e6 (0x14e160c1b8e6 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #3: <unknown function> + 0xed0a4 (0x14e1c6aec0a4 in /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/libstdc++.so.6)
+frame #4: <unknown function> + 0x8b529 (0x14e1cff29529 in /usr/lib64/libc.so.6)
+frame #5: <unknown function> + 0x110710 (0x14e1cffae710 in /usr/lib64/libc.so.6)
+
+  what():  [PG ID 2 PG GUID 3 Rank 0] Process group watchdog thread terminated with exception: CUDA error: unknown error
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+Exception raised from c10_cuda_check_implementation at /pytorch/c10/cuda/CUDAException.cpp:42 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x80 (0x1510477ceeb0 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0x111c7 (0x1510478611c7 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libc10_cuda.so)
+frame #2: c10d::ProcessGroupNCCL::WorkNCCL::finishedGPUExecutionInternal() const + 0x50 (0x151048725640 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #3: c10d::ProcessGroupNCCL::WorkNCCL::isCompleted() + 0x68 (0x151048734e28 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #4: c10d::ProcessGroupNCCL::Watchdog::runLoop() + 0x978 (0x151048737f48 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #5: c10d::ProcessGroupNCCL::Watchdog::run() + 0xd2 (0x151048739ec2 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #6: <unknown function> + 0xed0a4 (0x1510ae00b0a4 in /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/libstdc++.so.6)
+frame #7: <unknown function> + 0x8b529 (0x1510b7448529 in /usr/lib64/libc.so.6)
+frame #8: <unknown function> + 0x110710 (0x1510b74cd710 in /usr/lib64/libc.so.6)
+
+Exception raised from run at /pytorch/torch/csrc/distributed/c10d/ProcessGroupNCCL.cpp:2074 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x80 (0x1510477ceeb0 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0xe1c1a1 (0x1510487111a1 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #2: <unknown function> + 0x9468e6 (0x15104823b8e6 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #3: <unknown function> + 0xed0a4 (0x1510ae00b0a4 in /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/libstdc++.so.6)
+frame #4: <unknown function> + 0x8b529 (0x1510b7448529 in /usr/lib64/libc.so.6)
+frame #5: <unknown function> + 0x110710 (0x1510b74cd710 in /usr/lib64/libc.so.6)
+
+[rank1]:[E1104 22:01:52.249505936 ProcessGroupNCCL.cpp:2068] [PG ID 2 PG GUID 3 Rank 1] Process group watchdog thread terminated with exception: CUDA error: unknown error
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+Exception raised from c10_cuda_check_implementation at /pytorch/c10/cuda/CUDAException.cpp:42 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x80 (0x14a584de7eb0 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0x111c7 (0x14a584e7a1c7 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libc10_cuda.so)
+frame #2: c10d::ProcessGroupNCCL::WorkNCCL::finishedGPUExecutionInternal() const + 0x50 (0x14a585d3e640 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #3: c10d::ProcessGroupNCCL::WorkNCCL::isCompleted() + 0x68 (0x14a585d4de28 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #4: c10d::ProcessGroupNCCL::Watchdog::runLoop() + 0x978 (0x14a585d50f48 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #5: c10d::ProcessGroupNCCL::Watchdog::run() + 0xd2 (0x14a585d52ec2 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #6: <unknown function> + 0xed0a4 (0x14a5eb7260a4 in /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/libstdc++.so.6)
+frame #7: <unknown function> + 0x8b529 (0x14a5f4b63529 in /usr/lib64/libc.so.6)
+frame #8: <unknown function> + 0x110710 (0x14a5f4be8710 in /usr/lib64/libc.so.6)
+
+terminate called after throwing an instance of 'c10::DistBackendError'
+  what():  [PG ID 2 PG GUID 3 Rank 1] Process group watchdog thread terminated with exception: CUDA error: unknown error
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+Exception raised from c10_cuda_check_implementation at /pytorch/c10/cuda/CUDAException.cpp:42 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x80 (0x14a584de7eb0 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0x111c7 (0x14a584e7a1c7 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libc10_cuda.so)
+frame #2: c10d::ProcessGroupNCCL::WorkNCCL::finishedGPUExecutionInternal() const + 0x50 (0x14a585d3e640 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #3: c10d::ProcessGroupNCCL::WorkNCCL::isCompleted() + 0x68 (0x14a585d4de28 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #4: c10d::ProcessGroupNCCL::Watchdog::runLoop() + 0x978 (0x14a585d50f48 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #5: c10d::ProcessGroupNCCL::Watchdog::run() + 0xd2 (0x14a585d52ec2 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #6: <unknown function> + 0xed0a4 (0x14a5eb7260a4 in /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/libstdc++.so.6)
+frame #7: <unknown function> + 0x8b529 (0x14a5f4b63529 in /usr/lib64/libc.so.6)
+frame #8: <unknown function> + 0x110710 (0x14a5f4be8710 in /usr/lib64/libc.so.6)
+
+Exception raised from run at /pytorch/torch/csrc/distributed/c10d/ProcessGroupNCCL.cpp:2074 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x80 (0x14a584de7eb0 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0xe1c1a1 (0x14a585d2a1a1 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #2: <unknown function> + 0x9468e6 (0x14a5858548e6 in /p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #3: <unknown function> + 0xed0a4 (0x14a5eb7260a4 in /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/libstdc++.so.6)
+frame #4: <unknown function> + 0x8b529 (0x14a5f4b63529 in /usr/lib64/libc.so.6)
+frame #5: <unknown function> + 0x110710 (0x14a5f4be8710 in /usr/lib64/libc.so.6)
+
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [dump_input.py:69] Dumping input data for V1 LLM engine (v0.11.0) with config: model='/p/scratch/rcfd/kowanietz1/models/Olmo-3-7B', speculative_config=None, tokenizer='/p/scratch/rcfd/kowanietz1/models/Olmo-3-7B-Think-SFT', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=32768, download_dir=None, load_format=auto, tensor_parallel_size=4, pipeline_parallel_size=1, data_parallel_size=1, disable_custom_all_reduce=False, quantization=None, enforce_eager=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_fallback=False, disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser=''), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None), seed=1234, served_model_name=/p/scratch/rcfd/kowanietz1/models/Olmo-3-7B, enable_prefix_caching=True, chunked_prefill_enabled=True, pooler_config=None, compilation_config={"level":3,"debug_dump_path":"","cache_dir":"","backend":"","custom_ops":[],"splitting_ops":["vllm.unified_attention","vllm.unified_attention_with_output","vllm.mamba_mixer2","vllm.mamba_mixer","vllm.short_conv","vllm.linear_attention","vllm.plamo2_mamba_mixer","vllm.gdn_attention","vllm.sparse_attn_indexer"],"use_inductor":true,"compile_sizes":[],"inductor_compile_config":{"enable_auto_functionalized_v2":false},"inductor_passes":{},"cudagraph_mode":[2,1],"use_cudagraph":true,"cudagraph_num_of_warmups":1,"cudagraph_capture_sizes":[512,504,496,488,480,472,464,456,448,440,432,424,416,408,400,392,384,376,368,360,352,344,336,328,320,312,304,296,288,280,272,264,256,248,240,232,224,216,208,200,192,184,176,168,160,152,144,136,128,120,112,104,96,88,80,72,64,56,48,40,32,24,16,8,4,2,1],"cudagraph_copy_inputs":false,"full_cuda_graph":false,"use_inductor_graph_partition":false,"pass_config":{},"max_capture_size":512,"local_cache_dir":null}, 
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [dump_input.py:76] Dumping scheduler output for model execution: SchedulerOutput(scheduled_new_reqs=[], scheduled_cached_reqs=CachedRequestData(req_ids=['2', '13', '22', '64', '67', '69', '76', '100', '125', '196', '236', '240', '241', '242', '244', '245', '247', '248', '249', '250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '277', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287', '288', '289', '290', '291', '292', '293', '294', '295', '296', '297', '298', '299', '300', '301', '302', '303', '304', '305', '306', '307', '308', '309', '310', '311', '312', '313', '314', '315', '316'], resumed_from_preemption=[false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true], new_token_ids=[], new_block_ids=[null, null, null, null, null, null, null, null, null, null, null, null, [[13924], [36206], [10678], [13132]], null, null, null, null, null, null, null, null, null, null, null, null, null, [[45341], [7571], [30534], [28805]], null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, [[19248], [59807], [50819], [3868]], null, null, null, null, null, null, [[58190], [36330], [45852], [39139]], null, null, null, null, null, null, null, null, null, null, null, null, null, null, [[14395], [48485], [16808], [56349]], null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, [[10610], [32276], [23803], [9330]], [[45247, 5279, 29245, 39554, 51116, 15493, 4998, 38274, 10913, 860, 50894, 17171, 17024, 13483, 8523, 61470, 5829, 28193, 47005, 48803, 34913, 56708, 43646, 27943, 46924, 50854, 57798, 16590, 30016, 40291, 11550, 13054, 5624, 5464, 55494, 43089, 29701, 33443, 28155, 4513, 34280, 47893, 30790, 38073, 22064, 16581, 9610, 29742, 30954, 20036, 135, 48804, 11386, 22365, 62321, 11759, 3258, 4695, 24840, 60755, 35022, 62300, 42877, 45413, 37628, 32931, 19561, 12657, 45510, 2257, 21158, 9252, 53214, 48215, 36415, 28333, 50737, 14999, 51953, 55364, 18258, 50272, 45704, 6658, 37557, 40422, 33479, 45143, 13018, 3054, 16465, 16371, 4997, 18771, 24454, 29235, 22842, 34163, 47630, 5253, 25049, 39289, 12284, 61077, 2803, 48088, 35025, 22435, 46040, 34041, 4523, 19627, 34074, 2982, 43222, 37523, 59930, 35223, 25182, 29608, 26622, 56784, 41442, 14862, 53869, 44784, 54880, 16275, 41561, 40705, 12554, 28698, 14664, 36949, 55899, 54839, 16415, 27174, 16252, 10778, 19687, 38015, 20856, 33162, 58466, 40725, 43607, 6068, 62386, 6288, 52912, 19351], [39670, 38646, 37622, 13243, 41483, 46581, 5790, 19030, 53396, 37850, 59885, 12384, 2150, 39140, 5302, 12534, 46906, 53230, 55192, 24998, 21879, 47611, 62498, 58931, 39684, 43543, 35457, 36676, 53926, 62135, 56647, 19504, 39050, 1488, 39093, 25996, 25485, 21095, 3045, 19382, 6253, 44224, 22917, 38062, 34685, 53538, 16692, 40020, 24109, 50999, 45624, 61143, 36068, 45987, 9595, 31225, 39918, 51322, 25864, 12754, 28560, 8815, 25865, 28107, 32960, 60142, 42379, 4948, 2747, 59528, 10793, 36929, 34820, 8604, 60222, 49283, 57916, 34205, 47883, 10817, 52886, 1719, 60803, 47645, 29127, 20494, 58818, 32399, 11053, 7119, 32433, 8539, 8710, 12581, 48931, 7335, 9223, 20391, 1095, 24144, 4154, 58144, 1332, 53834, 59303, 20374, 58282, 8408, 15418, 17718, 37281, 19604, 6318, 54074, 20302, 56997, 4088, 44564, 29694, 1044, 18072, 51895, 38120, 20907, 39475, 6628, 34221, 56304, 29282, 27331, 53849, 18306, 37604, 14191, 33997, 55527, 1689, 44366, 28067, 33428, 55646, 36708, 46647, 30170, 46582, 26633, 57511, 36290, 60206, 36357, 22541, 51418], [2763, 755, 53900, 50277, 58001, 58311, 31131, 29453, 38256, 28516, 33203, 56554, 54533, 3621, 47189, 20631, 42965, 36868, 13882, 21953, 60319, 32231, 51910, 1097, 11503, 59037, 60055, 15722, 41994, 25614, 43378, 48044, 19433, 7285, 41136, 13944, 47001, 6945, 39892, 34975, 50343, 18396, 52307, 52854, 61796, 5603, 60354, 47845, 55090, 14545, 8390, 10829, 15357, 31893, 60417, 13834, 32436, 52682, 26888, 32199, 24119, 59065, 9067, 6820, 23759, 59424, 43651, 1965, 56038, 40462, 29850, 11473, 38017, 3890, 50048, 26303, 23123, 48514, 45418, 1541, 54688, 36116, 23554, 48, 22629, 62203, 8035, 30672, 11812, 38109, 30137, 23410, 27798, 50473, 35381, 30822, 20462, 32106, 55825, 24625, 26298, 2229, 34838, 57640, 42267, 54030, 5452, 55684, 62407, 55294, 34985, 25180, 28591, 45536, 40686, 54782, 5857, 53772, 28754, 13741, 19448, 28536, 51033, 12243, 11029, 19537, 12064, 47785, 5092, 54339, 52277, 17801, 11756, 10058, 47200, 49588, 49652, 21613, 51934, 38491, 519, 15182, 26209, 27564, 15597, 24293, 39241, 1278, 41305, 1857, 50305, 34570], [166, 167, 168, 36885, 23976, 60787, 41456, 15419, 3734, 36631, 7506, 52829, 54177, 10701, 48579, 33528, 45433, 7949, 54772, 36734, 47561, 47221, 31096, 61126, 52347, 9419, 2705, 25076, 33186, 26161, 10164, 35825, 39191, 40032, 28589, 56491, 17669, 13213, 3713, 21837, 27270, 56317, 36117, 8564, 22766, 14324, 34803, 2644, 50683, 36421, 27190, 60334, 56923, 3581, 59951, 54526, 41904, 61071, 40405, 37451, 4803, 59702, 21922, 27884, 91, 36266, 53794, 10232, 811, 40458, 57415, 34937, 21875, 43022, 1356, 34785, 13847, 47357, 38990, 30900, 27685, 33951, 58772, 57339, 18336, 34327, 13673, 55074, 17087, 26668, 56687, 50700, 250, 15184, 45087, 53537, 39293, 59919, 27032, 55011, 1579, 12893, 26780, 26980, 12082, 29878, 55112, 2006, 7415, 14785, 4278, 27281, 42544, 51314, 17324, 29760, 27681, 40554, 40031, 10794, 43448, 34905, 58181, 44705, 29907, 16921, 12909, 38392, 45940, 21455, 25845, 35719, 39527, 22966, 26592, 24036, 34668, 35150, 16850, 18706, 32460, 9294, 16893, 58830, 6760, 46460, 22803, 36904, 60981, 57170, 56354, 48208]], [[45247, 5279, 29245, 39554, 51116, 15493, 4998, 38274, 10913, 860, 50894, 17171, 17024, 13483, 8523, 61470, 55186, 11547, 20977, 35317, 14199, 24410, 23252, 43805, 49558, 48411, 62106, 53600, 5442, 57352, 34155, 44372, 19727, 13459, 12558, 45062, 59691, 56420, 41013, 55371, 47709, 679, 3585, 41202, 44595, 21449, 54562, 50529, 40505, 15036, 40044, 3031, 19907, 22477, 4657, 12392, 58775, 37221, 60251, 34200, 55396, 51994, 5674, 54729, 40313, 61577, 17381, 32847, 31048, 53689, 9855, 39500, 49290, 2232, 50442, 42565, 15708, 55596, 55014, 50151, 40635, 30459, 14511, 43360, 16219, 14372, 54903, 48734, 2194, 1663, 26897, 4230, 39230, 54656, 31578, 37514, 58967, 26493, 23696, 50649, 9814, 51298, 24602, 38533, 29134, 15152, 3992, 11842, 55319, 50093, 53136, 61960, 3000, 61172, 50560, 45568, 12727, 22416, 29696, 27252, 18206, 62609, 19961, 27265, 44587, 6473, 31925, 47021, 20125, 864, 26691, 5195, 14829, 22273, 11487, 31343, 27470, 31555, 6075, 20874, 32152, 62433, 26028, 47786, 3142, 36401, 52624, 51426, 55769, 59175], [39670, 38646, 37622, 13243, 41483, 46581, 5790, 19030, 53396, 37850, 59885, 12384, 2150, 39140, 5302, 12534, 59938, 25680, 48543, 20084, 44276, 18576, 32645, 54731, 62165, 52044, 7157, 48882, 16078, 43821, 24508, 28744, 34672, 44450, 29306, 2299, 5465, 6234, 22618, 61551, 46779, 1861, 44061, 6706, 15226, 18900, 15020, 55550, 42928, 29761, 28731, 4129, 15392, 605, 54901, 3677, 1142, 61684, 19662, 10909, 48207, 1093, 2234, 16935, 50447, 39374, 29607, 7919, 16141, 31840, 11128, 13702, 57810, 33576, 1760, 24592, 60024, 18668, 39142, 8723, 60090, 28462, 60868, 33518, 2441, 17566, 36067, 51197, 27835, 60505, 40134, 61170, 23187, 28149, 32878, 17068, 39714, 58497, 18198, 6117, 32454, 7613, 20290, 37558, 34430, 27984, 40761, 9615, 17846, 11490, 43706, 42705, 31931, 21371, 31802, 53413, 46295, 8857, 48845, 19120, 8887, 15038, 1511, 34944, 16474, 18536, 41114, 6267, 27096, 4237, 37062, 18598, 24754, 55534, 61954, 2524, 40467, 37405, 38826, 51780, 6696, 8070, 12240, 108, 59142, 28452, 25313, 41248, 34958, 20927], [2763, 755, 53900, 50277, 58001, 58311, 31131, 29453, 38256, 28516, 33203, 56554, 54533, 3621, 47189, 20631, 14766, 10932, 29262, 45882, 52916, 46702, 6249, 35875, 15146, 33503, 10722, 57740, 62616, 8477, 46189, 1396, 53765, 46021, 34856, 42257, 6246, 3212, 19366, 51963, 50328, 18313, 25148, 2820, 2118, 39725, 33161, 61169, 11020, 9846, 10356, 18191, 3539, 49735, 54082, 6936, 17753, 51790, 42715, 58193, 31519, 11037, 36852, 19945, 10615, 8579, 54813, 4483, 2423, 2517, 3566, 6481, 42628, 49806, 13662, 1601, 25068, 41083, 5628, 60498, 45784, 6096, 44789, 42111, 59029, 20677, 22952, 15823, 45793, 38404, 48908, 53903, 15197, 21767, 42774, 42432, 49897, 48981, 49338, 32088, 10296, 8747, 20987, 51926, 6385, 40782, 12876, 58862, 55100, 61569, 13734, 18451, 33910, 25304, 49847, 20239, 9893, 29368, 48942, 6493, 928, 14657, 11000, 12751, 55287, 828, 674, 45604, 24577, 3689, 50354, 45777, 58275, 37214, 14297, 18578, 52689, 56907, 14069, 25277, 56432, 43589, 22155, 62136, 11428, 19206, 62518, 44489, 53138, 22934], [166, 167, 168, 36885, 23976, 60787, 41456, 15419, 3734, 36631, 7506, 52829, 54177, 10701, 48579, 33528, 8987, 17959, 5945, 37301, 14322, 53100, 9451, 37029, 19324, 41941, 52250, 49068, 14979, 12422, 14754, 35856, 52610, 29248, 27213, 2885, 37695, 56131, 14388, 5271, 13415, 56582, 44976, 14276, 8873, 52692, 3489, 10028, 9512, 62021, 24802, 11715, 18661, 40271, 3643, 26929, 35640, 19236, 48928, 36479, 58440, 18622, 5865, 36018, 54862, 39047, 22395, 7652, 25246, 58020, 9938, 28852, 11520, 29431, 8531, 10561, 32572, 36620, 22791, 44287, 4726, 20249, 32932, 46148, 24943, 36977, 47407, 14095, 35242, 21876, 24933, 43317, 36486, 32117, 19790, 8633, 31446, 6874, 56660, 53200, 31437, 31790, 53850, 3950, 18156, 54624, 29532, 33425, 28637, 3506, 18703, 13856, 11534, 54305, 37897, 24660, 33669, 51952, 55936, 32570, 44207, 49522, 16834, 21839, 52138, 49505, 23655, 15821, 26759, 4551, 56374, 58377, 24129, 35177, 16839, 46804, 4757, 41328, 55386, 8871, 31966, 16180, 46264, 10372, 10653, 37193, 36001, 58307, 366, 8943]]], num_computed_tokens=[11542, 11542, 11542, 11249, 10980, 10859, 10493, 9638, 9122, 6360, 4375, 4204, 4144, 4071, 3983, 3903, 3813, 3788, 3761, 3732, 3709, 3683, 3666, 3639, 3596, 3061, 2768, 2673, 2564, 2561, 2558, 2553, 2548, 2543, 2540, 2534, 2531, 2526, 2523, 2520, 2517, 2514, 2512, 2510, 2507, 2506, 2503, 2501, 2498, 2496, 2491, 2489, 2487, 2487, 2485, 2483, 2482, 2465, 2462, 2460, 2457, 2455, 2452, 2450, 2448, 2447, 2445, 2444, 2443, 2443, 2442, 2442, 2441, 2440, 2439, 2439, 2439, 2437, 2437, 2436, 2436, 2435, 2434, 2432, 256, 320]), num_scheduled_tokens={100: 1, 277: 1, 244: 1, 307: 1, 309: 1, 67: 1, 315: 2167, 267: 1, 249: 1, 261: 1, 265: 1, 275: 1, 240: 1, 316: 2075, 64: 1, 274: 1, 311: 1, 125: 1, 290: 1, 301: 1, 284: 1, 302: 1, 247: 1, 293: 1, 303: 1, 273: 1, 295: 1, 255: 1, 253: 1, 269: 1, 242: 1, 279: 1, 312: 1, 271: 1, 280: 1, 291: 1, 310: 1, 276: 1, 278: 1, 300: 1, 241: 1, 308: 1, 272: 1, 264: 1, 260: 1, 263: 1, 298: 1, 304: 1, 305: 1, 270: 1, 245: 1, 287: 1, 294: 1, 285: 1, 248: 1, 313: 1, 262: 1, 314: 1, 289: 1, 256: 1, 292: 1, 251: 1, 283: 1, 69: 1, 258: 1, 286: 1, 254: 1, 281: 1, 299: 1, 268: 1, 306: 1, 13: 1, 252: 1, 250: 1, 296: 1, 76: 1, 257: 1, 282: 1, 22: 1, 236: 1, 196: 1, 2: 1, 288: 1, 266: 1, 259: 1, 297: 1}, total_num_scheduled_tokens=4326, scheduled_spec_decode_tokens={}, scheduled_encoder_inputs={}, num_common_prefix_blocks=[0, 0, 0, 3], finished_req_ids=['238'], free_encoder_mm_hashes=[], structured_output_request_ids={}, grammar_bitmask=null, kv_connector_metadata=null)
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710] EngineCore encountered a fatal error.
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710] Traceback (most recent call last):
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 701, in run_engine_core
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]     engine_core.run_busy_loop()
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 728, in run_busy_loop
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]     self._process_engine_step()
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 754, in _process_engine_step
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]     outputs, model_executed = self.step_fn()
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]                               ^^^^^^^^^^^^^^
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 284, in step
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]     model_output = self.execute_model_with_error_logging(
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 270, in execute_model_with_error_logging
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]     raise err
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 261, in execute_model_with_error_logging
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]     return model_fn(scheduler_output)
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/v1/executor/multiproc_executor.py", line 181, in execute_model
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]     (output, ) = self.collective_rpc(
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]                  ^^^^^^^^^^^^^^^^^^^^
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/v1/executor/multiproc_executor.py", line 264, in collective_rpc
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]     result = get_response(w, dequeue_timeout,
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/v1/executor/multiproc_executor.py", line 244, in get_response
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]     status, result = w.worker_response_mq.dequeue(
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/distributed/device_communicators/shm_broadcast.py", line 511, in dequeue
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]     with self.acquire_read(timeout, cancel, indefinite) as buf:
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]   File "/p/home/jusers/kowanietz1/jureca/.local/share/uv/python/cpython-3.12.11-linux-x86_64-gnu/lib/python3.12/contextlib.py", line 137, in __enter__
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]     return next(self.gen)
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]            ^^^^^^^^^^^^^^
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/distributed/device_communicators/shm_broadcast.py", line 455, in acquire_read
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710]     raise RuntimeError("cancelled")
+[1;36m(EngineCore_DP0 pid=228997)[0;0m ERROR 11-04 22:01:56 [core.py:710] RuntimeError: cancelled
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/p/scratch/rcfd/kowanietz1/olmes/oe_eval/run_eval.py", line 1101, in <module>
+    run_eval(args_dict)
+  File "/p/scratch/rcfd/kowanietz1/olmes/oe_eval/run_eval.py", line 888, in run_eval
+    results_for_requests = evaluate(
+                           ^^^^^^^^^
+  File "/p/scratch/rcfd/kowanietz1/olmes/oe_eval/run_eval.py", line 254, in evaluate
+    output = model.generate_until_verbose(requests=requests_generate)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/p/scratch/rcfd/kowanietz1/olmes/oe_eval/models/eleuther_vllm_causallms.py", line 243, in generate_until_verbose
+    cont = self._model_generate(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/lm_eval/models/vllm_causallms.py", line 276, in _model_generate
+    outputs = self.model.generate(
+              ^^^^^^^^^^^^^^^^^^^^
+  File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/entrypoints/llm.py", line 401, in generate
+    outputs = self._run_engine(use_tqdm=use_tqdm)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/entrypoints/llm.py", line 1600, in _run_engine
+    step_outputs = self.llm_engine.step()
+                   ^^^^^^^^^^^^^^^^^^^^^^
+  File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/v1/engine/llm_engine.py", line 265, in step
+    outputs = self.engine_core.get_output()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 670, in get_output
+    raise self._format_exception(outputs) from None
+vllm.v1.engine.exceptions.EngineDeadError: EngineCore encountered an issue. See stack trace (above) for the root cause.
+[1;36m(EngineCore_DP0 pid=228997)[0;0m Process EngineCore_DP0:
+[1;36m(EngineCore_DP0 pid=228997)[0;0m Traceback (most recent call last):
+[1;36m(EngineCore_DP0 pid=228997)[0;0m   File "/p/home/jusers/kowanietz1/jureca/.local/share/uv/python/cpython-3.12.11-linux-x86_64-gnu/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+[1;36m(EngineCore_DP0 pid=228997)[0;0m     self.run()
+[1;36m(EngineCore_DP0 pid=228997)[0;0m   File "/p/home/jusers/kowanietz1/jureca/.local/share/uv/python/cpython-3.12.11-linux-x86_64-gnu/lib/python3.12/multiprocessing/process.py", line 108, in run
+[1;36m(EngineCore_DP0 pid=228997)[0;0m     self._target(*self._args, **self._kwargs)
+[1;36m(EngineCore_DP0 pid=228997)[0;0m   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 712, in run_engine_core
+[1;36m(EngineCore_DP0 pid=228997)[0;0m     raise e
+[1;36m(EngineCore_DP0 pid=228997)[0;0m   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 701, in run_engine_core
+[1;36m(EngineCore_DP0 pid=228997)[0;0m     engine_core.run_busy_loop()
+[1;36m(EngineCore_DP0 pid=228997)[0;0m   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 728, in run_busy_loop
+[1;36m(EngineCore_DP0 pid=228997)[0;0m     self._process_engine_step()
+[1;36m(EngineCore_DP0 pid=228997)[0;0m   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 754, in _process_engine_step
+[1;36m(EngineCore_DP0 pid=228997)[0;0m     outputs, model_executed = self.step_fn()
+[1;36m(EngineCore_DP0 pid=228997)[0;0m                               ^^^^^^^^^^^^^^
+[1;36m(EngineCore_DP0 pid=228997)[0;0m   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 284, in step
+[1;36m(EngineCore_DP0 pid=228997)[0;0m     model_output = self.execute_model_with_error_logging(
+[1;36m(EngineCore_DP0 pid=228997)[0;0m                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[1;36m(EngineCore_DP0 pid=228997)[0;0m   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 270, in execute_model_with_error_logging
+[1;36m(EngineCore_DP0 pid=228997)[0;0m     raise err
+[1;36m(EngineCore_DP0 pid=228997)[0;0m   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 261, in execute_model_with_error_logging
+[1;36m(EngineCore_DP0 pid=228997)[0;0m     return model_fn(scheduler_output)
+[1;36m(EngineCore_DP0 pid=228997)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[1;36m(EngineCore_DP0 pid=228997)[0;0m   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/v1/executor/multiproc_executor.py", line 181, in execute_model
+[1;36m(EngineCore_DP0 pid=228997)[0;0m     (output, ) = self.collective_rpc(
+[1;36m(EngineCore_DP0 pid=228997)[0;0m                  ^^^^^^^^^^^^^^^^^^^^
+[1;36m(EngineCore_DP0 pid=228997)[0;0m   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/v1/executor/multiproc_executor.py", line 264, in collective_rpc
+[1;36m(EngineCore_DP0 pid=228997)[0;0m     result = get_response(w, dequeue_timeout,
+[1;36m(EngineCore_DP0 pid=228997)[0;0m              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[1;36m(EngineCore_DP0 pid=228997)[0;0m   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/v1/executor/multiproc_executor.py", line 244, in get_response
+[1;36m(EngineCore_DP0 pid=228997)[0;0m     status, result = w.worker_response_mq.dequeue(
+[1;36m(EngineCore_DP0 pid=228997)[0;0m                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[1;36m(EngineCore_DP0 pid=228997)[0;0m   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/distributed/device_communicators/shm_broadcast.py", line 511, in dequeue
+[1;36m(EngineCore_DP0 pid=228997)[0;0m     with self.acquire_read(timeout, cancel, indefinite) as buf:
+[1;36m(EngineCore_DP0 pid=228997)[0;0m          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[1;36m(EngineCore_DP0 pid=228997)[0;0m   File "/p/home/jusers/kowanietz1/jureca/.local/share/uv/python/cpython-3.12.11-linux-x86_64-gnu/lib/python3.12/contextlib.py", line 137, in __enter__
+[1;36m(EngineCore_DP0 pid=228997)[0;0m     return next(self.gen)
+[1;36m(EngineCore_DP0 pid=228997)[0;0m            ^^^^^^^^^^^^^^
+[1;36m(EngineCore_DP0 pid=228997)[0;0m   File "/p/scratch/rcfd/kowanietz1/olmes/.venv/lib/python3.12/site-packages/vllm/distributed/device_communicators/shm_broadcast.py", line 455, in acquire_read
+[1;36m(EngineCore_DP0 pid=228997)[0;0m     raise RuntimeError("cancelled")
+[1;36m(EngineCore_DP0 pid=228997)[0;0m RuntimeError: cancelled
+Processed prompts:  24%|██▍       | 231/960 [30:41<1:36:52,  7.97s/it, est. speed input: 221.51 toks/s, output: 1854.13 toks/s]
+Running generate_until requests:   0%|          | 0/960 [30:42<?, ?it/s]
+/p/home/jusers/kowanietz1/jureca/.local/share/uv/python/cpython-3.12.11-linux-x86_64-gnu/lib/python3.12/multiprocessing/resource_tracker.py:279: UserWarning: resource_tracker: There appear to be 4 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+/p/home/jusers/kowanietz1/jureca/.local/share/uv/python/cpython-3.12.11-linux-x86_64-gnu/lib/python3.12/multiprocessing/resource_tracker.py:279: UserWarning: resource_tracker: There appear to be 5 leaked shared_memory objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+srun: Job step aborted: Waiting up to 6 seconds for job step to finish.
+srun: error: jrc0324: task 0: Exited with exit code 143

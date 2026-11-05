@@ -5,7 +5,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:4
-#SBATCH --time=10:00:00
+#SBATCH --time=7:00:00
 #SBATCH --job-name=bbh
 #SBATCH --output=logs/%x-%j.log
 #SBATCH --error=logs/%x-%j.log
@@ -16,6 +16,9 @@ ROOT="/p/scratch/rcfd/kowanietz1"
 REPO="$ROOT/projects/reasoning-posttraining"
 
 module load uv
+module load git/2.50.1
+command -v git
+
 cd "$REPO"
 
 echo "Job ID: $SLURM_JOB_ID"
