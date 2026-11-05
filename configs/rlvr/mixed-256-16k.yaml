@@ -1,0 +1,17 @@
+# @package _global_
+
+defaults:
+  - /rlvr/mixed-32-16k
+  - _self_
+
+data:
+  max_examples: 1024
+
+grpo:
+  output_dir: /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/rlvr/dr-grpo-mixed-256-16k-01
+  max_steps: 1024
+  save_steps: 16
+
+runtime:
+  stop_after_step: 256
+  stop_after_minutes: 900
