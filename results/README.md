@@ -7,7 +7,7 @@
 - Baseline for evaluating improvements across training stages
 
 ### 2. NanoReason-7B-SFT
-- Initial SFT on ~6,000 examples
+- Initial SFT on **6,000 optimizer steps**
 - Introduces structured reasoning behavior through supervised training
 
 ### 3. NanoReason-7B-SFT-Refined
@@ -16,4 +16,4 @@
 
 ### 4. NanoReason-7B-Think
 - Final model trained using [Dr. GRPO](https://arxiv.org/pdf/2503.20783)
-- Performs **512 rollouts** during RLVR
+- Performs **512 optimizer steps** during RLVR
