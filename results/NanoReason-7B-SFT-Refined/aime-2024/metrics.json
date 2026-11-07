@@ -1,1 +1,67 @@
-{"all_primary_scores": ["aime:2024::olmo3:adapt: 0.458333"], "tasks": [{"alias": "aime:2024::olmo3:adapt", "metrics": {"exact_match": 0.0, "exact_match_sub_2024": 0.0, "exact_match_flex": 0.4666666666666667, "exact_match_flex_sub_2024": 0.4666666666666667, "pass_at_1": 0.4583333333333333, "pass_at_4": 0.6460409714497589, "pass_at_8": 0.7010213944585469, "pass_at_16": 0.7458150409243375, "pass_at_32": 0.8, "primary_score": 0.4583333333333333}, "num_instances": 30, "processing_time": 29.356257438659668, "task_config": {"task_name": "aime", "task_core": "aime", "split": "test", "primary_metric": "pass_at_1", "generation_kwargs": {"max_gen_toks": 16384, "temperature": 0.6, "truncate_context": false, "do_sample": true, "stop_sequences": [], "top_p": 0.95, "repeats": 32}, "metric_kwargs": {"maj_at_ks": [], "pass_at_ks": [1, 4, 8, 16, 32]}, "native_id_field": "index", "dataset_path": "allenai/aime-2021-2025", "use_chat_format": true, "version": 0, "metadata": {"years": [2024], "alias": "aime:2024::olmo3:adapt"}}}], "model_config": {"model": "/p/scratch/rcfd/kowanietz1/models/NanoReason-7B-SFT", "trust_remote_code": false, "max_length": 32768, "model_type": "vllm", "dtype": "bfloat16", "tokenizer": "/p/scratch/rcfd/kowanietz1/models/NanoReason-7B-SFT"}}
+{
+  "all_primary_scores": [
+    "aime:2024::olmo3:adapt: 0.458333"
+  ],
+  "tasks": [
+    {
+      "alias": "aime:2024::olmo3:adapt",
+      "metrics": {
+        "exact_match": 0.0,
+        "exact_match_sub_2024": 0.0,
+        "exact_match_flex": 0.4666666666666667,
+        "exact_match_flex_sub_2024": 0.4666666666666667,
+        "pass_at_1": 0.4583333333333333,
+        "pass_at_4": 0.6460409714497589,
+        "pass_at_8": 0.7010213944585469,
+        "pass_at_16": 0.7458150409243375,
+        "pass_at_32": 0.8,
+        "primary_score": 0.4583333333333333
+      },
+      "num_instances": 30,
+      "processing_time": 29.356257438659668,
+      "task_config": {
+        "task_name": "aime",
+        "task_core": "aime",
+        "split": "test",
+        "primary_metric": "pass_at_1",
+        "generation_kwargs": {
+          "max_gen_toks": 16384,
+          "temperature": 0.6,
+          "truncate_context": false,
+          "do_sample": true,
+          "stop_sequences": [],
+          "top_p": 0.95,
+          "repeats": 32
+        },
+        "metric_kwargs": {
+          "maj_at_ks": [],
+          "pass_at_ks": [
+            1,
+            4,
+            8,
+            16,
+            32
+          ]
+        },
+        "native_id_field": "index",
+        "dataset_path": "allenai/aime-2021-2025",
+        "use_chat_format": true,
+        "version": 0,
+        "metadata": {
+          "years": [
+            2024
+          ],
+          "alias": "aime:2024::olmo3:adapt"
+        }
+      }
+    }
+  ],
+  "model_config": {
+    "model": "/p/scratch/rcfd/kowanietz1/models/NanoReason-7B-SFT",
+    "trust_remote_code": false,
+    "max_length": 32768,
+    "model_type": "vllm",
+    "dtype": "bfloat16",
+    "tokenizer": "/p/scratch/rcfd/kowanietz1/models/NanoReason-7B-SFT"
+  }
+}

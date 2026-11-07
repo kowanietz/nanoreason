@@ -6,6 +6,10 @@
 - Original pretrained base model by [Allen AI](https://allenai.org/)
 - Baseline for evaluating improvements across training stages
 
+BBH was intentionally left incomplete because the job's pace implied
+roughly **34 hours** for a full run, and the additional compute cost was not
+justified. Partial results are retained in `Olmo-3-7B/bbh/`.
+
 ### 2. NanoReason-7B-SFT
 - Initial SFT on **6,000 optimizer steps**
 - Introduces structured reasoning behavior through supervised training
