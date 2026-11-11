@@ -54,7 +54,7 @@ for i, question in enumerate(PROMPTS, start=1):
             use_cache=True,
         )
 
-    generated = output[0, inputs["input_ids"].shape[1]:]
+    generated = output[0, inputs["input_ids"].shape[1] :]
     text = tokenizer.decode(
         generated,
         skip_special_tokens=False,
