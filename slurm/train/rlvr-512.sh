@@ -5,17 +5,18 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:4
-#SBATCH --time=16:00:00
+#SBATCH --time=24:00:00
 #SBATCH --signal=TERM@900
-#SBATCH --job-name=dr-grpo-mixed-256-16k
+#SBATCH --job-name=dr-grpo-mixed-512-16k
 #SBATCH --dependency=singleton
 #SBATCH --output=logs/%x-%j.log
 #SBATCH --error=logs/%x-%j.log
 
 set -euo pipefail
 
-ROOT="/p/scratch/rcfd/kowanietz1"
-REPO="$ROOT/projects/reasoning-posttraining"
+ROOT="${NANOREASON_ROOT:?Set NANOREASON_ROOT to your storage directory}"
+REPO="${NANOREASON_REPO:?Set NANOREASON_REPO to the repository checkout}"
+export NANOREASON_ROOT="$ROOT" NANOREASON_REPO="$REPO"
 
 module load uv
 cd "$REPO"
@@ -44,4 +45,4 @@ srun uv run \
   --locked --offline \
   torchrun --standalone --nproc_per_node=4 \
   "$REPO/src/train_rlvr.py" \
-  --config-name=rlvr/mixed-256-16k "$@"
+  --config-name=rlvr/mixed-512-16k "$@"

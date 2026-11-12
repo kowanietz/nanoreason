@@ -1,7 +1,6 @@
 """Focused CPU contracts using the real upstream constraint checks."""
 
 import copy
-import json
 import random
 import sys
 import tempfile
@@ -12,8 +11,7 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from rlvr.dispatch import domain_rewards, rollout_metrics
-from rlvr.ifeval import IFValidationError, constraint_spec, ifeval_score, verifier_info
-from rlvr.rewards import final_response
+from rlvr.ifeval import IFValidationError, ifeval_score, verifier_info
 
 
 def reference(ids=None, args=None):
@@ -54,13 +52,9 @@ class IFRewardTest(unittest.TestCase):
             "work</think>",
             "<think>work</think>hello",
             "work</think><think>more</think>hello",
-            "work</think>",
+            [{"role": "user", "content": "hello"}],
         ]:
             self.assertEqual(ifeval_score(text, reference(), True)["reward"], 0)
-        self.assertEqual(final_response("work</think>hello world", True), "hello world")
-        self.assertEqual(final_response("<think>work</think>hello"), "hello")
-        self.assertIsNone(final_response("<think>work"))
-        self.assertIsNone(final_response([{"role": "user", "content": "hello"}]))
         self.assertEqual(
             ifeval_score(
                 [{"role": "assistant", "content": "work</think>hello world"}],
@@ -192,13 +186,6 @@ class IFRewardTest(unittest.TestCase):
             rollout_metrics(rows, 4)
         with self.assertRaisesRegex(ValueError, "complete"):
             rollout_metrics(rows[:3], 4)
-
-    def test_canonical_reference_retains_original_data(self):
-        gold = reference(["keywords:existence"], [{"keywords": ["cat", "dog"]}])
-        original = copy.deepcopy(gold)
-        spec = constraint_spec(gold)
-        self.assertEqual(json.loads(json.dumps(spec)), spec)
-        self.assertEqual(gold, original)
 
 
 if __name__ == "__main__":

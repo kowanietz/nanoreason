@@ -8,12 +8,12 @@ experiment:
   name: dolci-16k-repetition-3k2
 
 model:
-  name_or_path: /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k
+  name_or_path: ${paths.root}/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k
 
 data:
-  source_path: /p/scratch/rcfd/kowanietz1/datasets/Dolci-Think-SFT-7B/data/*.parquet
-  path: /p/scratch/rcfd/kowanietz1/datasets/reasoning-posttraining/repetition-3k2/examples.parquet
-  repetition_manifest: /p/scratch/rcfd/kowanietz1/datasets/reasoning-posttraining/repetition-3k2/manifest.json
+  source_path: ${paths.root}/datasets/Dolci-Think-SFT-7B/data/*.parquet
+  path: ${paths.root}/datasets/reasoning-posttraining/repetition-3k2/examples.parquet
+  repetition_manifest: ${paths.root}/datasets/reasoning-posttraining/repetition-3k2/manifest.json
   unique_examples: 3200
   holdout_examples: 1000
   selection_seed: 173
@@ -22,8 +22,8 @@ data:
   require_single_pass: false
 
 training:
-  output_dir: /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-repetition-3k2
-  initialization_checkpoint: /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k
+  output_dir: ${paths.root}/checkpoints/reasoning-posttraining/sft/dolci-16k-repetition-3k2
+  initialization_checkpoint: ${paths.root}/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k
   expected_world_size: 4
   learning_rate: 2.0e-6
   warmup_steps: 0

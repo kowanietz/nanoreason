@@ -14,8 +14,9 @@
 
 set -euo pipefail
 
-ROOT="/p/scratch/rcfd/kowanietz1"
-REPO="$ROOT/projects/reasoning-posttraining"
+ROOT="${NANOREASON_ROOT:?Set NANOREASON_ROOT to your storage directory}"
+REPO="${NANOREASON_REPO:?Set NANOREASON_REPO to the repository checkout}"
+export NANOREASON_ROOT="$ROOT" NANOREASON_REPO="$REPO"
 
 module load uv
 cd "$REPO"

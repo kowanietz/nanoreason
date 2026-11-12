@@ -407,10 +407,12 @@ class PreparationTest(unittest.TestCase):
                 validate_reference_answers([reference], prompt=prompt[6:])
 
     def test_list_fields_and_domain_filtering(self):
+        if_row = record("user: Write a sentence.", "ifeval")
+        original_reference = if_row["ground_truth"][:]
         rows, stats = select(
             [
                 record(),
-                record("user: Write a sentence.", "ifeval"),
+                if_row,
                 record(domain="code"),
             ]
         )
@@ -419,6 +421,7 @@ class PreparationTest(unittest.TestCase):
         self.assertEqual(rows[0]["ground_truth"], ["42"])
         self.assertEqual(rows[0]["dataset"], ["math"])
         self.assertTrue(rows[1]["reward_enabled"])
+        self.assertEqual(rows[1]["ground_truth"], original_reference)
         self.assertEqual(json.loads(rows[1]["constraint_spec"])["kwargs"], [None, None])
 
     def test_deterministic_deduplication(self):

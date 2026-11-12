@@ -5,20 +5,20 @@ defaults:
   - _self_
 
 model:
-  name_or_path: /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-repetition-3k2
-  tokenizer_name_or_path: /p/scratch/rcfd/kowanietz1/models/Olmo-3-7B-Think-SFT
+  name_or_path: ${paths.root}/checkpoints/reasoning-posttraining/sft/dolci-16k-repetition-3k2
+  tokenizer_name_or_path: ${paths.root}/models/Olmo-3-7B-Think-SFT
   trust_remote_code: false
   attention_implementation: sdpa
 
 data:
-  directory: /p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/.cache/rlvr-prepared-v3
-  exclusions: /p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/configs/eval/exclusions.json
+  directory: ${paths.repo}/.cache/rlvr-prepared-v3
+  exclusions: ${paths.repo}/configs/eval/exclusions.json
   max_prompt_tokens: 512
   max_examples: 32
   selection_seed: 73
 
 grpo:
-  output_dir: /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/rlvr/dr-grpo-smoke-8k
+  output_dir: ${paths.root}/checkpoints/reasoning-posttraining/rlvr/dr-grpo-smoke-8k
   max_steps: 8
   seed: 73
   learning_rate: 1.0e-6

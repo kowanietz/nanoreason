@@ -1,0 +1,18 @@
+diff --git a/oe_eval/default_configs.py b/oe_eval/default_configs.py
+index f993585..3e52ac5 100644
+--- a/oe_eval/default_configs.py
++++ b/oe_eval/default_configs.py
+@@ -12,0 +13,2 @@ MODEL_DEFAULTS = {
++    "quantization": None,
++    "load_format": None,
+diff --git a/oe_eval/run_eval.py b/oe_eval/run_eval.py
+index 0bd9bf3..5e2677a 100644
+--- a/oe_eval/run_eval.py
++++ b/oe_eval/run_eval.py
+@@ -1089,0 +1090,6 @@ def run_eval(args_dict: dict):
++
++    if eval_model is not None and model_config["model_type"] == "vllm":
++        logger.info("Explicitly shutting down vLLM EngineCore...")
++        eval_model.model.llm_engine.engine_core.shutdown()
++        logger.info("vLLM EngineCore shutdown complete.")
++

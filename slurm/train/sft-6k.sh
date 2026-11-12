@@ -5,7 +5,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:4
-#SBATCH --time=06:00:00
+#SBATCH --time=24:00:00
 #SBATCH --signal=TERM@900
 #SBATCH --job-name=dolci-sft-6k
 #SBATCH --dependency=singleton
@@ -14,8 +14,9 @@
 
 set -euo pipefail
 
-ROOT="/p/scratch/rcfd/kowanietz1"
-REPO="$ROOT/projects/reasoning-posttraining"
+ROOT="${NANOREASON_ROOT:?Set NANOREASON_ROOT to your storage directory}"
+REPO="${NANOREASON_REPO:?Set NANOREASON_REPO to the repository checkout}"
+export NANOREASON_ROOT="$ROOT" NANOREASON_REPO="$REPO"
 CONFIG="sft/packed-6k"
 
 module load uv
@@ -43,6 +44,6 @@ srun uv run \
   --locked --offline \
   torchrun --standalone --nproc_per_node=4 \
   "$REPO/src/train_sft.py" \
-  --config-name "$CONFIG"
+  --config-name "$CONFIG" "$@"
 
 echo "Finished: $(date)"

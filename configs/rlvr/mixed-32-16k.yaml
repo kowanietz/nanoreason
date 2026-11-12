@@ -12,7 +12,7 @@ data:
     ifeval: 1.0
 
 grpo:
-  output_dir: /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/rlvr/dr-grpo-mixed-32-16k-02
+  output_dir: ${paths.root}/checkpoints/reasoning-posttraining/rlvr/dr-grpo-mixed-32-16k-02
   max_steps: 32
   save_steps: 8
   num_completions_to_print: 0

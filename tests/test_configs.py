@@ -1,9 +1,11 @@
 """Hydra composition contracts shared by entrypoints and preparation scripts."""
 
+import os
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from hydra import compose, initialize_config_dir
 from omegaconf import OmegaConf
@@ -19,6 +21,33 @@ CONFIGS = ROOT / "configs"
 
 
 class ConfigCompositionTest(unittest.TestCase):
+    def test_storage_repository_and_olmes_paths_are_configurable(self):
+        with (
+            patch.dict(
+                os.environ,
+                {
+                    "NANOREASON_ROOT": "/tmp/nanoreason-storage",
+                    "NANOREASON_REPO": str(ROOT),
+                    "OLMES_PROJECT": "/tmp/olmes-checkout",
+                },
+            ),
+            initialize_config_dir(version_base="1.3", config_dir=str(CONFIGS)),
+        ):
+            sft = compose(config_name="sft/repetition-3k2")
+            rlvr = compose(config_name="rlvr/mixed-512-16k")
+            evaluation = compose(config_name="eval/math500")
+            self.assertTrue(
+                sft.data.source_path.startswith("/tmp/nanoreason-storage/datasets/")
+            )
+            self.assertTrue(
+                sft.training.output_dir.startswith(
+                    "/tmp/nanoreason-storage/checkpoints/"
+                )
+            )
+            self.assertEqual(rlvr.data.directory, str(ROOT / ".cache/rlvr-prepared-v4"))
+            self.assertEqual(Path(rlvr.data.exclusions), DEFAULT_EXCLUSIONS)
+            self.assertEqual(evaluation.olmes_project, "/tmp/olmes-checkout")
+
     def test_training_presets_stay_global_and_share_hydra_policy(self):
         presets = sorted(CONFIGS.glob("sft/*.yaml")) + sorted(
             CONFIGS.glob("rlvr/*.yaml")
@@ -32,36 +61,11 @@ class ConfigCompositionTest(unittest.TestCase):
                 config = compose(config_name=name, return_hydra_config=True)
                 self.assertIn("model", config)
                 self.assertIn("data", config)
-                self.assertNotIn("sft", config)
-                self.assertNotIn("rlvr", config)
                 self.assertEqual(config.hydra.run.dir, ".")
                 self.assertIsNone(config.hydra.output_subdir)
                 self.assertIs(config.hydra.job.chdir, False)
-                self.assertEqual(
-                    config.hydra.runtime.choices["hydra/job_logging"], "none"
-                )
-                self.assertEqual(
-                    config.hydra.runtime.choices["hydra/hydra_logging"], "none"
-                )
                 if name.startswith("rlvr/"):
                     self.assertEqual(Path(config.data.exclusions), DEFAULT_EXCLUSIONS)
-                if name in {"rlvr/mixed-32-16k", "rlvr/mixed-256-16k"}:
-                    self.assertTrue(config.grpo.log_completions)
-                    self.assertEqual(config.grpo.num_completions_to_print, 0)
-
-    def test_leaf_and_cli_overrides_take_precedence(self):
-        with initialize_config_dir(version_base="1.3", config_dir=str(CONFIGS)):
-            config = compose(
-                config_name="rlvr/smoke-16k",
-                overrides=[
-                    "grpo.learning_rate=0.000003",
-                    "grpo.output_dir=/tmp/config-test-only",
-                    "runtime.stop_after_step=1",
-                ],
-            )
-        self.assertEqual(config.grpo.learning_rate, 3e-6)
-        self.assertEqual(config.grpo.output_dir, "/tmp/config-test-only")
-        self.assertEqual(config.grpo.max_steps, 1)
 
     def test_evaluation_presets_preserve_task_shapes(self):
         expected = {

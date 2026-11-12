@@ -5,7 +5,7 @@ defaults:
   - _self_
 
 data:
-  directory: /p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/.cache/rlvr-prepared-v4
+  directory: ${paths.repo}/.cache/rlvr-prepared-v4
   preprocessing_version: 4
   domains: [math, ifeval]
   selection: balanced
@@ -14,7 +14,7 @@ data:
   source_id: null
 
 grpo:
-  output_dir: /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/rlvr/dr-grpo-pilot-mixed-16k
+  output_dir: ${paths.root}/checkpoints/reasoning-posttraining/rlvr/dr-grpo-pilot-mixed-16k
   max_steps: 8
   max_completion_length: 16384
   vllm_max_model_length: 16896

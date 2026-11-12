@@ -14,8 +14,9 @@
 
 set -euo pipefail
 
-ROOT="/p/scratch/rcfd/kowanietz1"
-REPO="$ROOT/projects/reasoning-posttraining"
+ROOT="${NANOREASON_ROOT:?Set NANOREASON_ROOT to your storage directory}"
+REPO="${NANOREASON_REPO:?Set NANOREASON_REPO to the repository checkout}"
+export NANOREASON_ROOT="$ROOT" NANOREASON_REPO="$REPO"
 CONFIG="sft/repetition-3k2"
 
 MILESTONE="${1:-}"
@@ -28,6 +29,7 @@ case "$MILESTONE" in
     exit 2
     ;;
 esac
+shift
 
 module load uv
 cd "$REPO"
@@ -55,6 +57,6 @@ srun uv run \
   torchrun --standalone --nproc_per_node=4 \
   "$REPO/src/train_sft.py" \
   --config-name "$CONFIG" \
-  "training.stop_after_epoch=$MILESTONE"
+  "$@" "training.stop_after_epoch=$MILESTONE"
 
 echo "Finished: $(date)"

@@ -75,29 +75,33 @@ def main():
         resource_root = ROOT / ".cache/ifevalg/nltk_data"
         olmes_env["NLTK_DATA"] = str(resource_root)
         olmes_env["HF_DATASETS_CACHE"] = str(ROOT / ".cache/olmes-datasets")
-        project = Path(config.olmes_project)
-        revision = subprocess.check_output(
-            ["git", "-C", str(project), "rev-parse", "HEAD"],
-            env={**olmes_env, "GIT_CONFIG_NOSYSTEM": "1"},
-            text=True,
-        ).strip()
-        # OLMES records model/task settings in its metrics files.
-        provenance = {
-            "olmes_revision": revision,
-            "olmes_lock_sha256": hashlib.sha256(
-                (project / "uv.lock").read_bytes()
-            ).hexdigest(),
-            "exclusions_sha256": hashlib.sha256(
-                DEFAULT_EXCLUSIONS.read_bytes()
-            ).hexdigest(),
-        }
-        if not args.dry_run:
-            path = output_dir / "benchmark_provenance.json"
-            if path.exists() and json.loads(path.read_text()) != provenance:
-                raise ValueError(
-                    f"Benchmark provenance changed; choose a new --name: {path}"
-                )
-            path.write_text(json.dumps(provenance, indent=2) + "\n")
+    project = Path(config.olmes_project)
+    revision = subprocess.check_output(
+        ["git", "-C", str(project), "rev-parse", "HEAD"],
+        env={**olmes_env, "GIT_CONFIG_NOSYSTEM": "1"},
+        text=True,
+    ).strip()
+    changes = subprocess.check_output(
+        ["git", "-C", str(project), "diff", "--binary", "HEAD", "--"],
+        env={**olmes_env, "GIT_CONFIG_NOSYSTEM": "1"},
+    )
+    provenance = {
+        "olmes_revision": revision,
+        "olmes_diff_sha256": hashlib.sha256(changes).hexdigest(),
+        "olmes_lock_sha256": hashlib.sha256(
+            (project / "uv.lock").read_bytes()
+        ).hexdigest(),
+        "exclusions_sha256": hashlib.sha256(
+            DEFAULT_EXCLUSIONS.read_bytes()
+        ).hexdigest(),
+    }
+    if not args.dry_run:
+        path = output_dir / "benchmark_provenance.json"
+        if path.exists() and json.loads(path.read_text()) != provenance:
+            raise ValueError(
+                f"Benchmark provenance changed; choose a new --name: {path}"
+            )
+        path.write_text(json.dumps(provenance, indent=2) + "\n")
 
     subprocess.run(
         [

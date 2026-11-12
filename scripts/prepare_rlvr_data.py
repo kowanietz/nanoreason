@@ -387,11 +387,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description="Prepare local Dolci math and IF prompts for RLVR."
     )
-    parser.add_argument(
-        "--source-dir",
-        type=Path,
-        default=Path("/p/scratch/rcfd/kowanietz1/datasets/Dolci-Think-RL-7B"),
-    )
+    parser.add_argument("--source-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--exclusions", type=Path, default=DEFAULT_EXCLUSIONS)
     parser.add_argument("--tokenizer", type=Path)

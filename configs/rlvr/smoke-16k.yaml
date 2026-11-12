@@ -9,7 +9,7 @@ data:
   source_id: data/train-00002-of-00009.parquet:5184
 
 grpo:
-  output_dir: /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/rlvr/dr-grpo-smoke-16k-token-is
+  output_dir: ${paths.root}/checkpoints/reasoning-posttraining/rlvr/dr-grpo-smoke-16k-token-is
   max_steps: 1
   max_completion_length: 16384
   vllm_max_model_length: 16896

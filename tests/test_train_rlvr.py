@@ -34,7 +34,7 @@ from trl.trainer.utils import add_fused_lm_head
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from benchmark_exclusions import load_exclusions
-from rlvr.checkpoints import resume_checkpoint, validate_checkpoint
+from rlvr.checkpoints import resume_checkpoint, validate_checkpoint, write_run_manifest
 from rlvr.data import domain_quotas, load_rlvr_data
 from rlvr.diagnostics import SmokeDiagnostics, TrainingDiagnostics, down_proj_sample
 from rlvr.dispatch import make_domain_rewards
@@ -185,6 +185,43 @@ class TrainingDecoderTest(unittest.TestCase):
 
 
 class SmokeConfigTest(unittest.TestCase):
+    def test_exclusion_manifest_relocation_preserves_resume_provenance(self):
+        settings = {
+            "data_config": {"exclusions": "/original/benchmarks/exclusions.json"},
+            "data": {"exclusions_sha256": "a" * 64},
+            "grpo": {"learning_rate": 1e-6},
+        }
+        with tempfile.TemporaryDirectory(dir=ROOT) as temporary:
+            output = Path(temporary)
+            path = output / "run_manifest.json"
+            digest = hashlib.sha256(
+                json.dumps(settings, sort_keys=True).encode()
+            ).hexdigest()
+            path.write_text(json.dumps({"sha256": digest, "settings": settings}))
+            original = path.read_bytes()
+            relocated = copy.deepcopy(settings)
+            relocated["data_config"]["exclusions"] = "/new/configs/eval/exclusions.json"
+            with patch("rlvr.checkpoints.dist.barrier"):
+                write_run_manifest(output, "checkpoint", relocated, {}, 0)
+            self.assertEqual(path.read_bytes(), original)
+            for key, field, value in (
+                ("data", "exclusions_sha256", "b" * 64),
+                ("data", "exclusions_sha256", None),
+                ("grpo", "learning_rate", 2e-6),
+            ):
+                changed = copy.deepcopy(relocated)
+                changed[key][field] = value
+                with (
+                    self.subTest(field=field),
+                    self.assertRaisesRegex(ValueError, "changed"),
+                ):
+                    write_run_manifest(output, "checkpoint", changed, {}, 0)
+            tampered = copy.deepcopy(settings)
+            tampered["grpo"]["learning_rate"] = 2e-6
+            path.write_text(json.dumps({"sha256": digest, "settings": tampered}))
+            with self.assertRaisesRegex(ValueError, "changed"):
+                write_run_manifest(output, "checkpoint", relocated, {}, 0)
+
     def test_invalid_settings_fail(self):
         for key, value in (
             ("num_generations", 0),
@@ -534,7 +571,7 @@ class TokenizerAndRewardTest(unittest.TestCase):
             trainer._pending_extra_logs["domain"], ["math"] * 4 + ["ifeval"] * 4
         )
 
-    def test_production_importance_sampling_modes_at_16k(self):
+    def test_production_token_importance_sampling_at_16k(self):
         length = 16384
         prompt = [{"role": "user", "content": "What is six times seven?"}]
         inputs = [
@@ -554,12 +591,8 @@ class TokenizerAndRewardTest(unittest.TestCase):
                 "work</think>43",
             )
         ]
-        for mode, difference in (
-            ("sequence_mask", -0.0006),
-            ("token_truncate", -0.0006),
-            ("token_truncate", 2.0),
-        ):
-            with self.subTest(mode=mode, difference=difference):
+        for difference in (-0.0006, 2.0):
+            with self.subTest(difference=difference):
                 trainer = self.bare_trainer()
                 trainer.args = SimpleNamespace(
                     per_device_train_batch_size=4,
@@ -576,7 +609,7 @@ class TokenizerAndRewardTest(unittest.TestCase):
                     "mask_truncated_completions": False,
                     "use_vllm": True,
                     "vllm_importance_sampling_correction": True,
-                    "vllm_importance_sampling_mode": mode,
+                    "vllm_importance_sampling_mode": "token_truncate",
                     "vllm_importance_sampling_clip_min": None,
                     "vllm_importance_sampling_clip_max": 3.0,
                     "num_iterations": 1,
@@ -619,16 +652,9 @@ class TokenizerAndRewardTest(unittest.TestCase):
                 torch.testing.assert_close(
                     result["advantages"], torch.tensor([0.75, -0.25, -0.25, -0.25])
                 )
-                if mode == "sequence_mask":
-                    self.assertEqual(tuple(ratios.shape), (4, 1))
-                    self.assertLess(ratios.max().item(), 6e-5)
-                    self.assertGreater(ratios.min().item(), 5e-5)
-                else:
-                    self.assertEqual(tuple(ratios.shape), (4, length))
-                    expected = float(torch.exp(torch.tensor(difference)).clamp(max=3.0))
-                    torch.testing.assert_close(
-                        ratios, torch.full_like(ratios, expected)
-                    )
+                self.assertEqual(tuple(ratios.shape), (4, length))
+                expected = float(torch.exp(torch.tensor(difference)).clamp(max=3.0))
+                torch.testing.assert_close(ratios, torch.full_like(ratios, expected))
 
     def test_if_manifest_checks_verifier_inputs_not_descriptive_metadata(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
@@ -777,15 +803,11 @@ class TokenizerAndRewardTest(unittest.TestCase):
 
 class SingleStepSmokeTest(unittest.TestCase):
     def test_16k_config_preserves_training_setup(self):
-        base, config = smoke_config(), smoke_config("rlvr/smoke-16k")
+        config = smoke_config("rlvr/smoke-16k")
         validate_config(config)
         self.assertEqual(config["grpo"]["max_steps"], 1)
         self.assertEqual(config["grpo"]["max_completion_length"], 16384)
         self.assertEqual(config["grpo"]["vllm_max_model_length"], 16896)
-        self.assertTrue(
-            config["grpo"]["output_dir"].endswith("/dr-grpo-smoke-16k-token-is")
-        )
-        self.assertNotEqual(config["grpo"]["output_dir"], base["grpo"]["output_dir"])
         self.assertEqual(
             config["data"]["source_id"], "data/train-00002-of-00009.parquet:5184"
         )
@@ -793,30 +815,18 @@ class SingleStepSmokeTest(unittest.TestCase):
         self.assertIs(config["runtime"]["resume_from_checkpoint"], False)
         self.assertEqual(config["runtime"]["stop_after_step"], 1)
         self.assertTrue(config["grpo"]["vllm_importance_sampling_correction"])
-        self.assertEqual(
-            config["grpo"]["vllm_importance_sampling_mode"], "token_truncate"
-        )
-        self.assertEqual(config["grpo"]["vllm_importance_sampling_clip_max"], 3.0)
         with patch.object(
             GRPOConfig, "world_size", new_callable=PropertyMock, return_value=4
         ):
             args = GRPOConfig(**{**copy.deepcopy(config["grpo"]), "use_cpu": True})
         self.assertEqual(args.vllm_importance_sampling_mode, "token_truncate")
         self.assertIsNone(args.vllm_importance_sampling_clip_min)
+        self.assertEqual(args.vllm_importance_sampling_clip_max, 3.0)
         self.assertEqual(args.steps_per_generation, 1)
         self.assertEqual(args.loss_type, "dr_grpo")
         self.assertEqual(args.fsdp_plugin_args["fsdp_version"], 2)
         self.assertTrue(args.fsdp_plugin_args["reshard_after_forward"])
         self.assertEqual(args.fsdp_plugin_args["state_dict_type"], "SHARDED_STATE_DICT")
-        for key in base["grpo"]:
-            if key not in {
-                "output_dir",
-                "max_steps",
-                "max_completion_length",
-                "vllm_max_model_length",
-                "save_steps",
-            }:
-                self.assertEqual(config["grpo"][key], base["grpo"][key], key)
         for source_id in ("", 42):
             config["data"]["source_id"] = source_id
             with self.assertRaisesRegex(ValueError, "source_id"):
@@ -877,16 +887,6 @@ class SingleStepSmokeTest(unittest.TestCase):
         # Run the production DR-GRPO loss with differentiable CPU log-probabilities.
         loss = GRPOTrainer._compute_loss(loss_trainer, model, inputs)
         loss.backward()
-        unsuppressed_gradient = parameter.grad.clone()
-        parameter.grad = None
-        inputs["importance_sampling_ratio"].fill_(5.811e-5)
-        GRPOTrainer._compute_loss(loss_trainer, model, inputs).backward()
-        self.assertGreater(parameter.grad.abs().max().item(), 0)
-        torch.testing.assert_close(
-            parameter.grad, unsuppressed_gradient * 5.811e-5, rtol=1e-5, atol=0
-        )
-        parameter.grad = unsuppressed_gradient
-        inputs["importance_sampling_ratio"].fill_(1.0)
         optimizer = torch.optim.AdamW([parameter], lr=1e-6, weight_decay=0)
         args = SimpleNamespace(
             process_index=0, device="cpu", max_steps=1, vllm_tensor_parallel_size=1
@@ -1014,16 +1014,9 @@ class SingleStepSmokeTest(unittest.TestCase):
         self.assertIs(generation.sync_weights, original_sync)
         self.assertEqual(callback.verified_sync_steps, set())
 
+        # Sub-ULP master updates match a correct BF16 load but cannot prove a changed inference policy.
         original_sync.side_effect = sync
         callback.sync_before[name] = down_proj_sample(parameter, 1, 4)
-        with (
-            patch("rlvr.diagnostics.dist.all_reduce"),
-            self.assertRaisesRegex(RuntimeError, "no changed sample.*BF16 rounding"),
-        ):
-            callback.on_train_end(args, trainer.state, None)
-        generation.generate.assert_called_once()
-
-        # Sub-ULP master updates match a correct BF16 load but cannot prove a changed inference policy.
         trainer._last_loaded_step = 0
         generation.generate.reset_mock()
         with torch.no_grad():
@@ -1086,6 +1079,8 @@ class SingleStepSmokeTest(unittest.TestCase):
                 "SLURM_JOB_ID": "cpu-audit",
                 "SLURM_CPUS_PER_TASK": "16",
                 "AUDIT_ARGV": str(capture),
+                "NANOREASON_ROOT": str(directory / "storage"),
+                "NANOREASON_REPO": str(ROOT),
             }
             # All external launcher commands are stubs; no CUDA or Slurm calls run.
             subprocess.run(

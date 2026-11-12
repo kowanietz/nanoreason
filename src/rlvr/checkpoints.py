@@ -79,10 +79,33 @@ def write_run_manifest(
     digest = hashlib.sha256(json.dumps(settings, sort_keys=True).encode()).hexdigest()
     manifest_path = output / "run_manifest.json"
     if manifest_path.exists():
-        if json.loads(manifest_path.read_text())["sha256"] != digest:
-            raise ValueError(
-                "Training configuration or inputs changed since the first job"
-            )
+        manifest = json.loads(manifest_path.read_text())
+        if manifest["sha256"] != digest:
+            # The exclusion file moved after training; its content hash identifies it.
+            recorded = manifest.get("settings", {})
+            relocated = {
+                **recorded,
+                "data_config": {
+                    **recorded.get("data_config", {}),
+                    "exclusions": settings.get("data_config", {}).get("exclusions"),
+                },
+            }
+            exclusion_hash = settings.get("data", {}).get("exclusions_sha256")
+            if (
+                not exclusion_hash
+                or recorded.get("data", {}).get("exclusions_sha256") != exclusion_hash
+                or hashlib.sha256(
+                    json.dumps(recorded, sort_keys=True).encode()
+                ).hexdigest()
+                != manifest["sha256"]
+                or hashlib.sha256(
+                    json.dumps(relocated, sort_keys=True).encode()
+                ).hexdigest()
+                != digest
+            ):
+                raise ValueError(
+                    "Training configuration or inputs changed since the first job"
+                )
     elif checkpoint or (output.exists() and any(output.iterdir())):
         raise ValueError("Refusing an unmanifested output directory")
     dist.barrier()

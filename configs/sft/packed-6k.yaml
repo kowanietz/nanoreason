@@ -13,11 +13,11 @@ data:
   require_single_pass: true
 
 training:
-  output_dir: /p/scratch/rcfd/kowanietz1/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k
+  output_dir: ${paths.root}/checkpoints/reasoning-posttraining/sft/dolci-16k-packed-6k
   learning_rate: 1.5e-5
   max_steps: 6000
   resume_from_checkpoint: auto
-  stop_after_minutes: 310
+  stop_after_minutes: 1410
   enable_jit_checkpoint: true
   export_final_model: true
 

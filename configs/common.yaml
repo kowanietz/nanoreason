@@ -5,6 +5,10 @@ defaults:
   - override /hydra/job_logging: none
   - override /hydra/hydra_logging: none
 
+paths:
+  root: ${oc.env:NANOREASON_ROOT}
+  repo: ${oc.env:NANOREASON_REPO}
+
 hydra:
   run:
     dir: .

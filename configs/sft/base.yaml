@@ -6,13 +6,13 @@ defaults:
 
 model:
   load_dtype: auto
-  name_or_path: /p/scratch/rcfd/kowanietz1/models/Olmo-3-7B
-  tokenizer_name_or_path: /p/scratch/rcfd/kowanietz1/models/Olmo-3-7B-Think-SFT
+  name_or_path: ${paths.root}/models/Olmo-3-7B
+  tokenizer_name_or_path: ${paths.root}/models/Olmo-3-7B-Think-SFT
   trust_remote_code: true
   attention_implementation: sdpa
 
 data:
-  path: /p/scratch/rcfd/kowanietz1/datasets/Dolci-Think-SFT-7B/data/*.parquet
+  path: ${paths.root}/datasets/Dolci-Think-SFT-7B/data/*.parquet
   max_length: 16384
   overlength_strategy: drop
   packing: true
