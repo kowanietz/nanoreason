@@ -14,5 +14,6 @@ checkpoints/
 .cache/
 .ruff_cache/
 .juice-tmp/
+.juice.toml
 
 notebooks/figures/
