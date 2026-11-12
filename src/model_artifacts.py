@@ -1,4 +1,4 @@
-"""Export and statically validate single-file FP32 NanoReason (OLMo3) models."""
+"""Export and statically validate FP32 or BF16 NanoReason (OLMo3) models."""
 
 import hashlib
 import json
@@ -166,8 +166,6 @@ def validate_model(directory, *, expected_sha256=None):
         "Olmo3ForCausalLM"
     ]:
         raise ValueError("Expected Olmo3ForCausalLM / olmo3")
-    if any(raw.get(name, "float32") != "float32" for name in ("dtype", "torch_dtype")):
-        raise ValueError("Config dtype must match FP32 weights")
     validate_rope(raw)
     try:
         config = AutoConfig.from_pretrained(
@@ -225,10 +223,15 @@ def validate_model(directory, *, expected_sha256=None):
             shapes = {
                 name: tuple(tensors.get_slice(name).get_shape()) for name in names
             }
-            if any(tensors.get_slice(name).get_dtype() != "F32" for name in names):
-                raise ValueError("Expected FP32 tensors")
+            dtypes = {tensors.get_slice(name).get_dtype() for name in names}
     except SafetensorError as error:
         raise ValueError(f"Invalid safetensors: {error}") from error
+    if dtypes not in ({"F32"}, {"BF16"}):
+        raise ValueError(f"Expected uniform FP32 or BF16 tensors, got {dtypes}")
+    dtype = {"F32": "float32", "BF16": "bfloat16"}[next(iter(dtypes))]
+    declarations = [raw[name] for name in ("dtype", "torch_dtype") if name in raw]
+    if not declarations or any(value != dtype for value in declarations):
+        raise ValueError(f"Config dtype must match {dtype} weights")
     with torch.device("meta"):
         model = AutoModelForCausalLM.from_config(config, trust_remote_code=False)
     expected = {name: tuple(value.shape) for name, value in model.state_dict().items()}
@@ -237,7 +240,7 @@ def validate_model(directory, *, expected_sha256=None):
     report = {
         "model": str(directory.resolve()),
         "tensors": len(shapes),
-        "dtype": "FP32",
+        "dtype": "FP32" if dtype == "float32" else "BF16",
         "weight_bytes": files["model.safetensors"].stat().st_size,
         "use_cache": config.use_cache,
     }

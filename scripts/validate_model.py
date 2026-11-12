@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read-only CPU validation of a standalone FP32 NanoReason model; no inference."""
+"""Read-only CPU validation of a standalone FP32 or BF16 NanoReason model."""
 
 import argparse
 import json

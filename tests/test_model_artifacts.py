@@ -29,7 +29,7 @@ from prepare_vllm011 import compatible_config, prepare
 from model_artifacts import export_model, fingerprint, validate_model
 
 
-def tiny_export(path):
+def tiny_export(path, dtype=torch.float32):
     """Real OLMo3 tensors and a usable local chat tokenizer, all only a few KiB."""
     backend = Tokenizer(
         WordLevel({"<unk>": 0, "<eos>": 1, "<pad>": 2, "hello": 3}, unk_token="<unk>")
@@ -66,7 +66,7 @@ def tiny_export(path):
             "sliding_attention": {"rope_type": "default", "rope_theta": 500000},
         },
     )
-    Olmo3ForCausalLM(config).save_pretrained(path)
+    Olmo3ForCausalLM(config).to(dtype=dtype).save_pretrained(path)
     tokenizer.save_pretrained(path)
     (path / "LICENSE").write_text("fixture license\n")
     return path
@@ -81,19 +81,24 @@ class ModelArtifactsTest(unittest.TestCase):
         self.destination = self.root / "release"
 
     def test_export_preserves_exact_files_and_sources(self):
-        before = {p.name: fingerprint(p) for p in self.source.iterdir()}
-        report = export_model(self.source, self.destination)
-        self.assertFalse(report["use_cache"])
-        for name, digest in before.items():
-            original, copied = self.source / name, self.destination / name
-            self.assertEqual(fingerprint(original), digest)
-            self.assertEqual(fingerprint(copied), digest)
-            self.assertNotEqual(original.stat().st_ino, copied.stat().st_ino)
-            self.assertEqual(copied.stat().st_nlink, 1)
-            self.assertFalse(copied.is_symlink())
-        validate_model(self.destination, expected_sha256=before["model.safetensors"])
-        with self.assertRaisesRegex(ValueError, "SHA-256 mismatch"):
-            validate_model(self.destination, expected_sha256="0" * 64)
+        for precision, dtype in (("FP32", torch.float32), ("BF16", torch.bfloat16)):
+            with self.subTest(precision=precision):
+                source = tiny_export(self.root / precision, dtype=dtype)
+                destination = self.root / f"{precision}-export"
+                before = {p.name: fingerprint(p) for p in source.iterdir()}
+                report = export_model(source, destination)
+                self.assertEqual(report["dtype"], precision)
+                self.assertFalse(report["use_cache"])
+                for name, digest in before.items():
+                    original, copied = source / name, destination / name
+                    self.assertEqual(fingerprint(original), digest)
+                    self.assertEqual(fingerprint(copied), digest)
+                    self.assertNotEqual(original.stat().st_ino, copied.stat().st_ino)
+                    self.assertEqual(copied.stat().st_nlink, 1)
+                    self.assertFalse(copied.is_symlink())
+                validate_model(destination, expected_sha256=before["model.safetensors"])
+                with self.assertRaisesRegex(ValueError, "SHA-256 mismatch"):
+                    validate_model(destination, expected_sha256="0" * 64)
 
     def test_inference_source_links_and_tokenizer_donor(self):
         inference = self.root / "inference"
@@ -283,6 +288,36 @@ class ModelArtifactsTest(unittest.TestCase):
         ):
             self.assertEqual(validate_cli.main(), 1)
         self.assertIn("Validation FAILED", error.getvalue())
+
+    def test_bf16_dtype_declarations_must_match_weights(self):
+        source = tiny_export(self.root / "bf16", dtype=torch.bfloat16)
+        config_path = source / "config.json"
+        config = json.loads(config_path.read_text())
+        config["dtype"] = "float32"
+        config_path.write_text(json.dumps(config))
+        with self.assertRaisesRegex(ValueError, "Config dtype"):
+            validate_model(source)
+        config.update(dtype="bfloat16", torch_dtype="float32")
+        config_path.write_text(json.dumps(config))
+        with self.assertRaisesRegex(ValueError, "Config dtype"):
+            validate_model(source)
+        config["torch_dtype"] = "bfloat16"
+        config_path.write_text(json.dumps(config))
+        self.assertEqual(validate_model(source)["dtype"], "BF16")
+
+    def test_mixed_or_unsupported_weight_dtypes_are_rejected(self):
+        path = self.source / "model.safetensors"
+        original = load_file(path)
+        mixed = dict(original)
+        name = next(iter(mixed))
+        mixed[name] = mixed[name].bfloat16()
+        for tensors in (
+            mixed,
+            {name: tensor.half() for name, tensor in original.items()},
+        ):
+            save_file(tensors, path)
+            with self.assertRaisesRegex(ValueError, "uniform FP32 or BF16"):
+                validate_model(self.source)
 
 
 if __name__ == "__main__":

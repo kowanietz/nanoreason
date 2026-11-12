@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Package a merged FP32 NanoReason export, validating before non-overwriting promotion."""
+"""Package a merged NanoReason export without changing its weights or configuration."""
 
 import argparse
 import json
