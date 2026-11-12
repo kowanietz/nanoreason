@@ -1,6 +1,11 @@
 import hashlib
 import json
 import re
+from pathlib import Path
+
+DEFAULT_EXCLUSIONS = (
+    Path(__file__).resolve().parents[1] / "configs/eval/exclusions.json"
+)
 
 NORMALIZATION = {
     "version": "whitespace_casefold_v1",

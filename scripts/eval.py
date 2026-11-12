@@ -6,12 +6,15 @@ import hashlib
 import json
 import os
 import subprocess
+import sys
 from pathlib import Path
 
 from hydra import compose, initialize_config_dir
 from omegaconf import OmegaConf
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
+from benchmark_exclusions import DEFAULT_EXCLUSIONS
 
 
 def main():
@@ -85,7 +88,7 @@ def main():
                 (project / "uv.lock").read_bytes()
             ).hexdigest(),
             "exclusions_sha256": hashlib.sha256(
-                (ROOT / "benchmarks/exclusions.json").read_bytes()
+                DEFAULT_EXCLUSIONS.read_bytes()
             ).hexdigest(),
         }
         if not args.dry_run:

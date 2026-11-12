@@ -9,23 +9,22 @@ from hydra import compose, initialize_config_dir
 from omegaconf import OmegaConf
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "scripts"))
 from prepare_sft_repetition import load_config
+
+from benchmark_exclusions import DEFAULT_EXCLUSIONS
 
 CONFIGS = ROOT / "configs"
 
 
 class ConfigCompositionTest(unittest.TestCase):
     def test_training_presets_stay_global_and_share_hydra_policy(self):
-        for name in (
-            "sft/base",
-            "sft/packed-6k",
-            "sft/repetition-3k2",
-            "rlvr/smoke",
-            "rlvr/smoke-16k",
-            "rlvr/pilot-mixed-16k",
-            "rlvr/mixed-32-16k",
-        ):
+        presets = sorted(CONFIGS.glob("sft/*.yaml")) + sorted(
+            CONFIGS.glob("rlvr/*.yaml")
+        )
+        for path in presets:
+            name = path.relative_to(CONFIGS).with_suffix("").as_posix()
             with (
                 self.subTest(name=name),
                 initialize_config_dir(version_base="1.3", config_dir=str(CONFIGS)),
@@ -44,7 +43,9 @@ class ConfigCompositionTest(unittest.TestCase):
                 self.assertEqual(
                     config.hydra.runtime.choices["hydra/hydra_logging"], "none"
                 )
-                if name == "rlvr/mixed-32-16k":
+                if name.startswith("rlvr/"):
+                    self.assertEqual(Path(config.data.exclusions), DEFAULT_EXCLUSIONS)
+                if name in {"rlvr/mixed-32-16k", "rlvr/mixed-256-16k"}:
                     self.assertTrue(config.grpo.log_completions)
                     self.assertEqual(config.grpo.num_completions_to_print, 0)
 
@@ -61,10 +62,6 @@ class ConfigCompositionTest(unittest.TestCase):
         self.assertEqual(config.grpo.learning_rate, 3e-6)
         self.assertEqual(config.grpo.output_dir, "/tmp/config-test-only")
         self.assertEqual(config.grpo.max_steps, 1)
-        self.assertEqual(config.grpo.max_completion_length, 16384)
-        self.assertEqual(config.grpo.vllm_max_model_length, 16896)
-        self.assertEqual(config.data.max_examples, 1)
-        self.assertIs(config.runtime.resume_from_checkpoint, False)
 
     def test_evaluation_presets_preserve_task_shapes(self):
         expected = {

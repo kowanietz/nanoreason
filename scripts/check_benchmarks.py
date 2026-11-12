@@ -10,6 +10,30 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
+# IFEval key 2785: Google says "at least 3 placeholders" but H4/OLMES says "at least one placeholder".
+# This exact pair is accepted only here. Training exclusions remain unchanged.
+IFEVAL_GOOGLE_2785 = "8cdd05d2afe1a51fd6123668bae435f1ef27b10e773516a90540792eda113e0d"
+IFEVAL_H4_2785 = "cc65ff6173080d6f8ebda0638fb2e12399e403cada46fa1e61d7988fed25a753"
+
+
+def check_questions(identifier, count, observed, expected):
+    """Check counts and hashes, allowing the single known IFEval wording variant."""
+    hashes = set(expected["question_hashes"])
+    known_variant = (
+        identifier == "ifeval"
+        and observed - hashes == {IFEVAL_H4_2785}
+        and hashes - observed == {IFEVAL_GOOGLE_2785}
+    )
+    if count != expected["expected_question_count"] or (
+        observed != hashes and not known_variant
+    ):
+        raise ValueError(
+            f"{count}/{expected['expected_question_count']} documents; "
+            f"{len(observed - hashes)} prompts missing from exclusions, "
+            f"{len(hashes - observed)} exclusion prompts absent from evaluation"
+        )
+    return known_variant
+
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
@@ -30,11 +54,11 @@ def main():
     from oe_eval.tasks.oe_eval_tasks import TASK_REGISTRY
     from oe_eval.utils import update_nested_dict
 
-    from benchmark_exclusions import load_exclusions, question_hash
+    from benchmark_exclusions import DEFAULT_EXCLUSIONS, load_exclusions, question_hash
 
     nltk.word_tokenize("Offline tokenizer check.")
     instructions_util.count_sentences("Offline tokenizer check.")
-    path = ROOT / "benchmarks/exclusions.json"
+    path = DEFAULT_EXCLUSIONS
     load_exclusions(path)
     benchmarks = {b["id"]: b for b in json.loads(path.read_text())["benchmarks"]}
     failures = []
@@ -83,19 +107,19 @@ def main():
                     )
                 observed.update(question_hash(doc[field]) for doc in raw)
                 count += len(raw)
-            expected = benchmarks[identifier]
-            hashes = set(expected["question_hashes"])
-            if count != expected["expected_question_count"] or observed != hashes:
-                raise ValueError(
-                    f"{count}/{expected['expected_question_count']} documents; "
-                    f"{len(observed - hashes)} prompts missing from exclusions, "
-                    f"{len(hashes - observed)} exclusion prompts absent from evaluation"
-                )
+            known_variant = check_questions(
+                identifier, count, observed, benchmarks[identifier]
+            )
         except (ConnectionError, FileNotFoundError, ValueError) as error:
             failures.append(f"{identifier}: {error}")
             continue
+        status = (
+            "known H4 wording variant at key 2785 accepted; exclusions unchanged"
+            if known_variant
+            else "exclusions match"
+        )
         print(
-            f"{identifier}: {count} documents, {len(aliases)} tasks; exclusions match",
+            f"{identifier}: {count} documents, {len(aliases)} tasks; {status}",
             flush=True,
         )
     if failures:

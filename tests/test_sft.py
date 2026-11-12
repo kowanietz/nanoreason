@@ -1,6 +1,7 @@
 """CPU regressions for lossless repetition data and SFT checkpoint contracts."""
 
 import copy
+import hashlib
 import json
 import sys
 import tempfile
@@ -14,6 +15,9 @@ from transformers import TrainerControl, TrainerState
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
+sys.path.insert(0, str(ROOT / "scripts"))
+from prepare_sft_repetition import benchmark_questions
+
 from sft.checkpoints import (
     configure_repetition,
     guard_repetition_destination,
@@ -38,6 +42,17 @@ def repetition_config():
 
 
 class RepetitionPackingTest(unittest.TestCase):
+    def test_final_results_preserve_the_original_exclusion_questions(self):
+        questions, provenance = benchmark_questions()
+        self.assertEqual(len(questions), 1008)
+        self.assertEqual(len(provenance), 4)
+        digest = hashlib.sha256(
+            json.dumps(sorted(questions), ensure_ascii=False).encode()
+        ).hexdigest()
+        self.assertEqual(
+            digest, "e4a051ebc5f531f55f5f07c0c68322c4db9911eee8982a772b735b346d042df4"
+        )
+
     def test_epochs_preserve_examples_without_sampler_padding(self):
         lengths = [3, 4, 2, 5, 2, 6, 1, 7]
         plans = repetition_plan(lengths, 10, 4, 73, 2)

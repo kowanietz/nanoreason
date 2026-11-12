@@ -28,6 +28,7 @@ from omegaconf import OmegaConf
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
+from benchmark_exclusions import normalized
 from sft.checkpoints import guard_repetition_destination
 from sft.data import (
     RepetitionCollator,
@@ -41,10 +42,6 @@ from training_common import make_tokenizer
 
 def sha(data):
     return hashlib.sha256(data).hexdigest()
-
-
-def normalized(text):
-    return re.sub(r"\s+", " ", text).strip().casefold()
 
 
 def first_turn(messages):
@@ -67,7 +64,13 @@ def complete_trace(content):
 
 
 def benchmark_questions():
-    paths = sorted((ROOT / "results/base").glob("*/task-*-requests.jsonl"))
+    # These are the original four exclusion sets; later BBH/IFEval runs are separate.
+    base = ROOT / "results/Olmo-3-7B"
+    paths = sorted(
+        path
+        for benchmark in ("gpqa", "math500", "aime-2024", "aime-2025")
+        for path in (base / benchmark).glob("task-*-requests.jsonl")
+    )
     if not paths:
         raise RuntimeError(
             "No local benchmark questions available for contamination check"

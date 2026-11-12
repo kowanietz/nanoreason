@@ -12,7 +12,7 @@ model:
 
 data:
   directory: /p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/.cache/rlvr-prepared-v3
-  exclusions: /p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/benchmarks/exclusions.json
+  exclusions: /p/scratch/rcfd/kowanietz1/projects/reasoning-posttraining/configs/eval/exclusions.json
   max_prompt_tokens: 512
   max_examples: 32
   selection_seed: 73

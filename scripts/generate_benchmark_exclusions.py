@@ -15,7 +15,12 @@ import pyarrow.parquet as pq
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from benchmark_exclusions import NORMALIZATION, load_exclusions, question_hash
+from benchmark_exclusions import (
+    DEFAULT_EXCLUSIONS,
+    NORMALIZATION,
+    load_exclusions,
+    question_hash,
+)
 
 MATH_REVISION = "6e4ed1a2a79af7d8630a6b768ec859cb5af4d3be"
 AIME_REVISION = "73e1eba765ad5847cdb5d1e2e7aaf7b22b585798"
@@ -239,9 +244,7 @@ def main() -> None:
             )
         ),
     )
-    parser.add_argument(
-        "--output", type=Path, default=ROOT / "benchmarks/exclusions.json"
-    )
+    parser.add_argument("--output", type=Path, default=DEFAULT_EXCLUSIONS)
     parser.add_argument(
         "--check",
         action="store_true",

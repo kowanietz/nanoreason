@@ -265,9 +265,7 @@ def math_rewards(
     if domain is not None and (
         len(domain) != count or any(value != "math" for value in domain)
     ):
-        raise ValueError(
-            "Math rewards require math rows; instruction-following rewards are disabled"
-        )
+        raise ValueError("Math rewards require math rows")
     prefixes = [False] * count if reasoning_prefix is None else reasoning_prefix
     if len(prefixes) != count:
         raise ValueError(

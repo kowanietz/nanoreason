@@ -22,7 +22,12 @@ from prepare_rlvr_data import (
     select_records,
 )
 
-from benchmark_exclusions import NORMALIZATION, load_exclusions, question_hash
+from benchmark_exclusions import (
+    DEFAULT_EXCLUSIONS,
+    NORMALIZATION,
+    load_exclusions,
+    question_hash,
+)
 from rlvr.ifeval import IFValidationError
 from rlvr.rewards import math_reward, math_rewards, validate_reference_answers
 
@@ -98,7 +103,11 @@ class ExclusionManifestTest(unittest.TestCase):
             self.assertEqual(
                 info["sha256"], hashlib.sha256(path.read_bytes()).hexdigest()
             )
-        hashes, info = load_exclusions(ROOT / "benchmarks/exclusions.json")
+        hashes, info = load_exclusions(DEFAULT_EXCLUSIONS)
+        self.assertEqual(
+            info["sha256"],
+            "71c1ffcbb819d994e27f0e38139d408bf3309f806317592743ecdb80d7f22a51",
+        )
         self.assertEqual(
             {b["id"]: b["expected_unique_question_count"] for b in info["benchmarks"]},
             {

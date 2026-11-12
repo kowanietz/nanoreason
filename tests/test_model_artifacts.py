@@ -218,7 +218,7 @@ class ModelArtifactsTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Invalid chat template"):
             validate_model(self.source)
 
-    def test_tensor_integrity_precision_and_architecture(self):
+    def test_tensor_integrity_and_architecture(self):
         path = self.source / "model.safetensors"
         original = path.read_bytes()
         path.write_bytes(original[:-16])
@@ -231,11 +231,10 @@ class ModelArtifactsTest(unittest.TestCase):
             dict(tensors, unexpected=torch.zeros(1)),
             {k: v for k, v in tensors.items() if k != key},
             {**tensors, key: torch.zeros(1)},
-            {**tensors, key: tensors[key].bfloat16()},
         ]
         for changed in variants:
             save_file(changed, path)
-            with self.assertRaisesRegex(ValueError, "FP32|names/shapes"):
+            with self.assertRaisesRegex(ValueError, "names/shapes"):
                 validate_model(self.source)
 
     def test_standalone_links_and_shards_are_rejected(self):

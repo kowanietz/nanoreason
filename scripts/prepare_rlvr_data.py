@@ -16,7 +16,12 @@ from omegaconf import OmegaConf
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from benchmark_exclusions import load_exclusions, normalized, question_hash
+from benchmark_exclusions import (
+    DEFAULT_EXCLUSIONS,
+    load_exclusions,
+    normalized,
+    question_hash,
+)
 from rlvr.checkpoints import fingerprint
 from rlvr.ifeval import (
     IFValidationError,
@@ -388,9 +393,7 @@ def main() -> None:
         default=Path("/p/scratch/rcfd/kowanietz1/datasets/Dolci-Think-RL-7B"),
     )
     parser.add_argument("--output-dir", type=Path, required=True)
-    parser.add_argument(
-        "--exclusions", type=Path, default=ROOT / "benchmarks/exclusions.json"
-    )
+    parser.add_argument("--exclusions", type=Path, default=DEFAULT_EXCLUSIONS)
     parser.add_argument("--tokenizer", type=Path)
     parser.add_argument(
         "--quarantine-invalid-if-references",
