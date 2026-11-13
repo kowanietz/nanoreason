@@ -1,8 +1,8 @@
 # NanoReason
 
-Reasoning post-training of [OLMo 3 7B](https://huggingface.co/allenai/Olmo-3-1025-7B): supervised fine-tuning, [repetition](https://arxiv.org/abs/2602.11149), and reinforcement learning with verifiable rewards (group relative policy optimization).
+Reasoning post-training of [OLMo 3 7B](https://huggingface.co/allenai/Olmo-3-1025-7B): supervised fine-tuning, repetition SFT, and reinforcement learning with verifiable rewards (group relative policy optimization).
 
-Trained on **4× NVIDIA A100 40 GB** (single node). The main training runs account for approximately **210 GPU-hours**
+Trained on **4× NVIDIA A100 40 GB** (single node). The main training runs account for **~210 GPU-hours**
 
 ## Results
 
@@ -19,14 +19,14 @@ Percentages from [`results/`](results/). AIME is mean pass@1 over 32 samples per
 
 Base BBH evaluation was stopped after 4 of 27 tasks to limit compute and energy use, as extrapolation suggested roughly 34 hours for the full evaluation. No aggregate Base BBH score is reported.
 
-| Stage | Training |
-|---|---|
-| **Base** | OLMo 3 7B, evaluated with the [Think-SFT](https://huggingface.co/allenai/Olmo-3-7B-Think-SFT) tokenizer/template |
-| **SFT** | 6,000 steps on [Dolci-Think-SFT-7B](https://huggingface.co/datasets/allenai/Dolci-Think-SFT-7B); 16,384-token packing |
-| **Refined** | 16 [repetition](https://arxiv.org/abs/2602.11149) epochs on 3,200 selected examples (2,784 steps) |
-| **Think** | [Dr. GRPO](https://arxiv.org/abs/2503.20783) on [math and instruction-following rewards](https://huggingface.co/datasets/allenai/Dolci-Think-RL-7B) ; stopped at step 512 |
+| Stage | Model | Training |
+|---|---|---|
+| **Base** | [OLMo-3-1025-7B](https://huggingface.co/allenai/Olmo-3-1025-7B) | OLMo 3 7B, evaluated with the [Think-SFT](https://huggingface.co/allenai/Olmo-3-7B-Think-SFT) tokenizer/template |
+| **SFT** | [NanoReason-7B-SFT](https://huggingface.co/kowanietz/NanoReason-7B-SFT) | 6,000 steps on [Dolci-Think-SFT-7B](https://huggingface.co/datasets/allenai/Dolci-Think-SFT-7B), 16,384-token packing |
+| **Refined** | [NanoReason-7B-SFT-Refined](https://huggingface.co/kowanietz/NanoReason-7B-SFT-Refined) | 16 [repetition](https://arxiv.org/abs/2602.11149) epochs on 3,200 selected examples (2,784 steps) |
+| **Think** | [NanoReason-7B-Think](https://huggingface.co/kowanietz/NanoReason-7B-Think) | [Dr. GRPO](https://arxiv.org/abs/2503.20783) on [math and instruction-following rewards](https://huggingface.co/datasets/allenai/Dolci-Think-RL-7B), stopped at step 512 |
 
-Further benchmark and reasoning analysis in [`notebooks/`](notebooks/). Hugging Face  Model releases coming soon.
+Checkpoints are grouped in the [Hugging Face collection](https://huggingface.co/collections/kowanietz/nanoreason). Further benchmark and reasoning analysis in [`notebooks/`](notebooks/).
 
 ## Setup
 
@@ -138,13 +138,13 @@ sbatch slurm/eval/aime.sh --year 2024 --model "$MODEL" --tokenizer "$MODEL" --na
 sbatch slurm/eval/aime.sh --year 2025 --model "$MODEL" --tokenizer "$MODEL" --name "$NAME"
 ```
 
-Use a new `--name` for each model or rerun. Results and evaluation provenance are saved under `results/`; Slurm logs go to `logs/`. Benchmark settings are in [`configs/eval/`](configs/eval/).
+Use a new `--name` for each model or rerun. Results and evaluation provenance are saved under `results/`. Slurm logs go to `logs/`. Benchmark settings are in [`configs/eval/`](configs/eval/).
 
 ## Reproducibility
 
 - Original prepared datasets, native checkpoints, and some path-sensitive manifests are external to Git. A fresh installation and full training/benchmark rerun have **not** been verified.
 - RLVR resume restores training state, but regenerates rollouts and vLLM RNG. Bitwise reproducibility across restarts or changed environments is **not** established.
-- The results use the recorded evaluation configuration. Historical artifacts are preserved in [`results/`](results/); newer runs should use separate names. The reported ~210 training GPU-hours cover the recorded main runs, not all project compute.
+- The results use the recorded evaluation configuration. Historical artifacts are preserved in [`results/`](results/). Newer runs should use separate names. The reported ~210 training GPU-hours cover the recorded main runs, not all project compute.
 - The current SFT dependency stack passed functional tests but differs from the original experimental environment. Bitwise reproducibility across dependency versions is not guaranteed.
 
 Checks:
@@ -162,4 +162,4 @@ env -u UV_PROJECT_ENVIRONMENT uv run --project "$OLMES_PROJECT" --frozen --offli
   python "$NANOREASON_REPO/scripts/check_benchmarks.py"
 ```
 
-TODO: release footer with hf, zenodo links...
+[Hugging Face collection](https://huggingface.co/collections/kowanietz/nanoreason) - [NanoReason-7B-SFT](https://huggingface.co/kowanietz/NanoReason-7B-SFT) - [NanoReason-7B-SFT-Refined](https://huggingface.co/kowanietz/NanoReason-7B-SFT-Refined) - [NanoReason-7B-Think](https://huggingface.co/kowanietz/NanoReason-7B-Think)
