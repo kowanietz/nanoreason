@@ -57,11 +57,11 @@
     }
   ],
   "model_config": {
-    "model": "/p/scratch/rcfd/kowanietz1/models/NanoReason-7B-SFT",
+    "model": "/p/scratch/rcfd/kowanietz1/models/NanoReason-7B-SFT-Refined",
     "trust_remote_code": false,
     "max_length": 32768,
     "model_type": "vllm",
     "dtype": "bfloat16",
-    "tokenizer": "/p/scratch/rcfd/kowanietz1/models/NanoReason-7B-SFT"
+    "tokenizer": "/p/scratch/rcfd/kowanietz1/models/NanoReason-7B-SFT-Refined"
   }
 }
