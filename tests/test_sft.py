@@ -8,6 +8,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import patch
 
 from hydra import compose, initialize_config_dir
 from omegaconf import OmegaConf
@@ -41,18 +42,76 @@ def repetition_config():
         )
 
 
-class RepetitionPackingTest(unittest.TestCase):
-    def test_final_results_preserve_the_original_exclusion_questions(self):
-        questions, provenance = benchmark_questions()
-        self.assertEqual(len(questions), 1008)
-        self.assertEqual(len(provenance), 4)
-        digest = hashlib.sha256(
-            json.dumps(sorted(questions), ensure_ascii=False).encode()
-        ).hexdigest()
-        self.assertEqual(
-            digest, "e4a051ebc5f531f55f5f07c0c68322c4db9911eee8982a772b735b346d042df4"
+class BenchmarkQuestionsTest(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory(dir=ROOT)
+        self.addCleanup(temporary.cleanup)
+        directory = Path(temporary.name)
+        self.checkout = directory / "checkout"
+        self.private = directory / "private"
+        self.private.mkdir()
+        self.gpqa = self.private / "task-000-gpqa-requests.jsonl"
+        self.gpqa.write_text(
+            json.dumps(
+                {"doc": {"question": "  Synthetic QUESTION\nwith extra whitespace.  "}}
+            )
+            + "\n"
         )
+        self.digest = hashlib.sha256(self.gpqa.read_bytes()).hexdigest()
+        for benchmark in ("math500", "aime-2024", "aime-2025"):
+            path = self.checkout / "results/Olmo-3-7B" / benchmark
+            path.mkdir(parents=True)
+            (path / "task-000-synthetic-requests.jsonl").write_text(
+                json.dumps({"doc": {"problem": f"Synthetic {benchmark} problem."}})
+                + "\n"
+            )
+        for name, value in (
+            ("ROOT", self.checkout),
+            ("GPQA_REQUESTS_SHA256", self.digest),
+        ):
+            patched = patch(f"prepare_sft_repetition.{name}", value)
+            patched.start()
+            self.addCleanup(patched.stop)
 
+    def test_private_questions_preserve_text_normalization_and_provenance(self):
+        questions, provenance = benchmark_questions(self.private)
+        self.assertEqual(
+            questions,
+            {
+                "synthetic question with extra whitespace.",
+                "synthetic math500 problem.",
+                "synthetic aime-2024 problem.",
+                "synthetic aime-2025 problem.",
+            },
+        )
+        self.assertEqual(len(provenance), 4)
+        self.assertIn({"path": str(self.gpqa), "sha256": self.digest}, provenance)
+        for source in provenance:
+            self.assertEqual(
+                source["sha256"],
+                hashlib.sha256(Path(source["path"]).read_bytes()).hexdigest(),
+            )
+
+    def test_missing_or_changed_private_inputs_fail_closed(self):
+        self.gpqa.unlink()
+        with self.assertRaises(FileNotFoundError):
+            benchmark_questions(self.private)
+        self.gpqa.write_text('{"doc": {"question": "Different synthetic question"}}\n')
+        with self.assertRaisesRegex(ValueError, "original baseline SHA-256"):
+            benchmark_questions(self.private)
+
+    def test_private_directory_must_be_external(self):
+        with self.assertRaisesRegex(ValueError, "outside the repository"):
+            benchmark_questions(self.checkout / "private")
+
+    def test_missing_public_benchmark_cannot_silently_reduce_exclusions(self):
+        path = self.checkout / "results/Olmo-3-7B/math500"
+        next(path.iterdir()).unlink()
+        with self.assertRaisesRegex(FileNotFoundError, "math500"):
+            benchmark_questions(self.private)
+
+
+class RepetitionPackingTest(unittest.TestCase):
     def test_epochs_preserve_examples_without_sampler_padding(self):
         lengths = [3, 4, 2, 5, 2, 6, 1, 7]
         plans = repetition_plan(lengths, 10, 4, 73, 2)

@@ -17,3 +17,8 @@ checkpoints/
 .juice.toml
 
 notebooks/figures/
+
+**/gpqa/**/task-*-requests.jsonl
+**/gpqa/**/task-*-recorded-inputs.jsonl
+**/gpqa/**/task-*-predictions.jsonl
+**/logs/gpqa*.log

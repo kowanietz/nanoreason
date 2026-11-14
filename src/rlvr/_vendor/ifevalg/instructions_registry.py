@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Modified for NanoReason by Ben Kowanietz (2026): replaced
+# "from open_instruct.IFEvalG import instructions" with the relative import
+# "from . import instructions" for the vendored package.
+
 """Registry of all instructions."""
 
 from . import instructions

@@ -3,13 +3,13 @@
   "revision": "5db7f11bf7f34596ba9af4cfe5ade1e2dbff8cce",
   "scoring_source": "open_instruct/ground_truth_utils.py:IFEvalVerifier.__call__",
   "modifications": [
-    "Only the two absolute intra-package imports were relocated to relative imports.",
+    "The two absolute intra-package imports were changed to relative imports; both files carry modification notices.",
     "The small scoring loop is integrated in rlvr/ifeval.py with strict reference validation and existing final_response extraction."
   ],
   "license": "Apache-2.0; original copyright headers retained; upstream LICENSE included",
   "vendored_sha256": {
-    "instructions.py": "93fe2c895e389c2939f589c63ce8b86f101a2954e8cea094aa995ff567bb0238",
-    "instructions_registry.py": "597ddb62f4df750465a4603d51b8b86d765ebb3aa7eb7845e3ffaa834da41d9a",
+    "instructions.py": "9c9bd773ea1997e968fde28678f89809a200a101287f3274182405887e9d2fab",
+    "instructions_registry.py": "c5a91e3f46fe15703629ef68a980de602bc5d90720ea42afd2d15c329ba3bd06",
     "instructions_util.py": "b0b21dd189474071c027cc377e7132dcbf7a6c921def4440b3d1df8eccffdcd9"
   },
   "resources": [

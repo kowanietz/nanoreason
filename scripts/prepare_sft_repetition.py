@@ -27,6 +27,9 @@ from hydra import compose, initialize_config_dir
 from omegaconf import OmegaConf
 
 ROOT = Path(__file__).resolve().parents[1]
+GPQA_REQUESTS_SHA256 = (
+    "37231d78f9648e9c2a695b02237c0d2e39ac3e699df01389ef5d35c29680687b"
+)
 sys.path.insert(0, str(ROOT / "src"))
 from benchmark_exclusions import normalized
 from sft.checkpoints import guard_repetition_destination
@@ -63,21 +66,26 @@ def complete_trace(content):
     return bool(match and match[1].strip() and match[2].strip())
 
 
-def benchmark_questions():
+def benchmark_questions(gpqa_requests_dir):
     # These are the original four exclusion sets; later BBH/IFEval runs are separate.
-    base = ROOT / "results/Olmo-3-7B"
-    paths = sorted(
-        path
-        for benchmark in ("gpqa", "math500", "aime-2024", "aime-2025")
-        for path in (base / benchmark).glob("task-*-requests.jsonl")
-    )
-    if not paths:
-        raise RuntimeError(
-            "No local benchmark questions available for contamination check"
+    private = Path(gpqa_requests_dir).expanduser().resolve()
+    if private.is_relative_to(ROOT):
+        raise ValueError("GPQA requests must be stored outside the repository")
+    gpqa = private / "task-000-gpqa-requests.jsonl"
+    if sha(gpqa.read_bytes()) != GPQA_REQUESTS_SHA256:
+        raise ValueError(
+            "Private GPQA requests differ from the original baseline SHA-256"
         )
+    base = ROOT / "results/Olmo-3-7B"
+    paths = [gpqa]
+    for benchmark in ("math500", "aime-2024", "aime-2025"):
+        requests = sorted((base / benchmark).glob("task-*-requests.jsonl"))
+        if not requests:
+            raise FileNotFoundError(f"Missing baseline requests for {benchmark}")
+        paths.extend(requests)
     questions = set()
     provenance = []
-    for path in paths:
+    for path in sorted(paths):
         data = path.read_bytes()
         provenance.append({"path": str(path), "sha256": sha(data)})
         for line in data.splitlines():
@@ -128,7 +136,7 @@ def candidate_rows(files, global_indices, ends):
     return result
 
 
-def prepare(config, dry_run=False):
+def prepare(config, dry_run=False, *, gpqa_requests_dir):
     started = time.monotonic()
     data, training = config["data"], config["training"]
     output = Path(training["output_dir"])
@@ -162,7 +170,7 @@ def prepare(config, dry_run=False):
     if tokenizer.eos_token_id != source_config["eos_token_id"]:
         raise ValueError("Tokenizer EOS differs from source model EOS")
 
-    forbidden, benchmark_provenance = benchmark_questions()
+    forbidden, benchmark_provenance = benchmark_questions(gpqa_requests_dir)
     files = sorted(glob.glob(data["source_path"]))
     if not files:
         raise FileNotFoundError(data["source_path"])
@@ -506,12 +514,22 @@ def main():
         "config", nargs="?", default=str(ROOT / "configs/sft/repetition-3k2.yaml")
     )
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument(
+        "--gpqa-requests-dir",
+        type=Path,
+        required=True,
+        help="Private external directory containing the original baseline GPQA requests",
+    )
     args = parser.parse_args()
 
     os.environ["CUDA_VISIBLE_DEVICES"] = ""
     for variable in ("HF_HUB_OFFLINE", "TRANSFORMERS_OFFLINE", "HF_DATASETS_OFFLINE"):
         os.environ[variable] = "1"
-    prepare(load_config(Path(args.config)), args.dry_run)
+    prepare(
+        load_config(Path(args.config)),
+        args.dry_run,
+        gpqa_requests_dir=args.gpqa_requests_dir,
+    )
 
 
 if __name__ == "__main__":

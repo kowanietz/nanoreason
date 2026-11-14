@@ -89,17 +89,19 @@ env -u UV_PROJECT_ENVIRONMENT uv run --project "$OLMES_PROJECT" --frozen --offli
   python "$NANOREASON_REPO/scripts/check_benchmarks.py" --allow-download
 ```
 
-GPQA requires authorized access. Prepare repetition data **after SFT** and RLVR data **after downloading datasets**:
+[GPQA](https://huggingface.co/datasets/Idavidrein/gpqa) requires authorized access. Do not publish its examples. Repetition preparation requires the original baseline `task-000-gpqa-requests.jsonl` in a private directory outside this checkout and verifies its SHA-256. Prepare repetition data **after SFT** and RLVR data **after downloading datasets**:
 
 ```bash
-.venv-grpo/bin/python scripts/prepare_sft_repetition.py configs/sft/repetition-3k2.yaml
+export GPQA_REQUESTS_DIR=/path/to/private/baseline/gpqa
+.venv-grpo/bin/python scripts/prepare_sft_repetition.py configs/sft/repetition-3k2.yaml \
+  --gpqa-requests-dir "$GPQA_REQUESTS_DIR"
 .venv-grpo/bin/python scripts/prepare_rlvr_data.py \
   --source-dir "$NANOREASON_ROOT/datasets/Dolci-Think-RL-7B" \
   --output-dir "$NANOREASON_REPO/.cache/rlvr-prepared-v4" \
   --quarantine-invalid-if-references
 ```
 
-Repetition excludes matches to the recorded Base evaluation prompts. RLVR filters against [`configs/eval/exclusions.json`](configs/eval/exclusions.json). Both use exact normalized matches and do not detect paraphrases. The full 100,000-example SFT source pool has been verified to contain no exact normalized prompt matches to any evaluated benchmark.
+Repetition excludes bidirectional substrings of whitespace-normalized, casefolded Base benchmark questions of at least 40 characters. RLVR uses exact normalized question hashes from [`configs/eval/exclusions.json`](configs/eval/exclusions.json). Neither detects paraphrases. The full 100,000-example SFT source pool has been verified to contain no exact normalized prompt matches to any evaluated benchmark.
 
 ## Training
 
@@ -142,9 +144,10 @@ Use a new `--name` for each model or rerun. Results and evaluation provenance ar
 
 ## Reproducibility
 
-- Original prepared datasets, native checkpoints, and some path-sensitive manifests are external to Git. A fresh installation and full training/benchmark rerun have **not** been verified.
+- Original prepared datasets, native checkpoints, private GPQA requests/predictions, and some path-sensitive manifests are external to Git. Historical repetition selection requires the original private GPQA requests. Notebook GPQA token/response analyses require private predictions. A fresh installation and full training/benchmark rerun have **not** been verified.
 - RLVR resume restores training state, but regenerates rollouts and vLLM RNG. Bitwise reproducibility across restarts or changed environments is **not** established.
-- The results use the recorded evaluation configuration. Historical artifacts are preserved in [`results/`](results/). Newer runs should use separate names. The reported ~210 training GPU-hours cover the recorded main runs, not all project compute.
+- Vendor modification notices in this revision change verifier hashes. Regenerate prepared RLVR data in a new directory and leave historical manifests unchanged.
+- The results use the recorded evaluation configuration. Aggregate metrics and non-sensitive historical artifacts are in [`results/`](results/). GPQA examples and logs are excluded. Newer runs should use separate names. The reported ~210 training GPU-hours cover the recorded main runs, not all project compute.
 - The current SFT dependency stack passed functional tests but differs from the original experimental environment. Bitwise reproducibility across dependency versions is not guaranteed.
 
 Checks:
@@ -161,5 +164,11 @@ CUDA_VISIBLE_DEVICES='' OMP_NUM_THREADS=1 .venv-grpo/bin/python -m unittest disc
 env -u UV_PROJECT_ENVIRONMENT uv run --project "$OLMES_PROJECT" --frozen --offline \
   python "$NANOREASON_REPO/scripts/check_benchmarks.py"
 ```
+
+## Licensing and third-party code
+
+NanoReason code is licensed under [Apache-2.0](LICENSE), copyright 2026 Ben Kowanietz.
+Vendored [IFEvalG](src/rlvr/_vendor/ifevalg/) is from [Ai2 Open-Instruct](https://github.com/allenai/open-instruct/tree/5db7f11bf7f34596ba9af4cfe5ade1e2dbff8cce/open_instruct/IFEvalG) and retains Google Research copyright headers and the [upstream license and attribution](src/rlvr/_vendor/ifevalg/LICENSE). Two relative-import changes are marked in the files. [UPSTREAM.json](src/rlvr/_vendor/ifevalg/UPSTREAM.json) records the revision and checksums.
+The [OLMES patch](configs/eval/olmes/local.patch) modifies [Ai2 OLMES](https://github.com/allenai/olmes/tree/5a51f502d463b8cdc4a2dcad7d7096c41ff1197e) (Apache-2.0). Retain its upstream license in the external checkout. Models and datasets retain their upstream terms.
 
 [Hugging Face collection](https://huggingface.co/collections/kowanietz/nanoreason) - [NanoReason-7B-SFT](https://huggingface.co/kowanietz/NanoReason-7B-SFT) - [NanoReason-7B-SFT-Refined](https://huggingface.co/kowanietz/NanoReason-7B-SFT-Refined) - [NanoReason-7B-Think](https://huggingface.co/kowanietz/NanoReason-7B-Think)
